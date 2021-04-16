@@ -1,0 +1,1 @@
+montage $1 $2 $3 $4 arreglo_rectangular.jpg
