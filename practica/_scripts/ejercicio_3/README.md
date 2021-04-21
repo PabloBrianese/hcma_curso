@@ -1,0 +1,1 @@
+El archivo guion.sh, solución de este problema debe ser pasado como argumento al comando source en lugar de bash.
