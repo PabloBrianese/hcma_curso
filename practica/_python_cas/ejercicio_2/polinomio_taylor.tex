@@ -1,0 +1,252 @@
+\documentclass{article}
+\usepackage{mathtools}
+\usepackage{physics}
+\begin{document}
+  Sea \(F(x) = e^{- 2 x} \ln(3 x)\).
+  Sus derivadas son
+  \begin{align}
+    \frac{\dd F}{\dd x}
+    &=
+    \frac{\dd}{\dd x} [e^{- 2 x}] \ln(3 x)
+      + e^{- 2 x} \frac{\dd}{\dd x} [\ln(3 x)]
+    \\
+    &=
+    - 2 e^{- 2 x} \ln(3 x)
+      + e^{- 2 x} \frac{1}{x}
+    \\
+    &=
+    e^{- 2 x} \left(
+      - 2  \ln(3 x)
+      + \frac{1}{x} 
+    \right)
+  \end{align}
+  \begin{align}
+    \frac{\dd^2 F}{\dd x^2}
+    &=
+    \frac{\dd}{\dd x} \left[
+      e^{- 2 x} \left(
+        - 2  \ln(3 x)
+        + \frac{1}{x}
+      \right)
+    \right]
+    \\
+    &=
+    \frac{\dd}{\dd x} [e^{- 2 x}] \left(
+        - 2 \ln(3 x)
+        + \frac{1}{x}
+      \right)
+      + e^{- 2 x} \frac{\dd}{\dd x} \left[
+        - 2 \ln(3 x)
+        + \frac{1}{x}
+      \right]
+    \\
+    &=
+    - 2 e^{- 2 x} \left(
+        - 2 \ln(3 x)
+        + \frac{1}{x}
+      \right)
+      + e^{- 2 x} \left(
+        - 2 \frac{1}{x}
+        - \frac{1}{x^2}
+      \right)
+    \\
+    &=
+    e^{- 2 x} \left(
+      4 \ln(3 x)
+      -4 \frac{1}{x}
+      - \frac{1}{x^2}
+    \right)
+  \end{align}
+  \begin{align}
+    \frac{\dd^3 F}{\dd x^3}
+    &=
+    \frac{\dd}{\dd x} \left[
+      e^{- 2 x} \left(
+        4 \ln(3 x)
+        -4 \frac{1}{x}
+        - \frac{1}{x^2}
+      \right)  
+    \right]
+    \\
+    &=
+    \frac{\dd}{\dd x} [e^{- 2 x}] \left(
+      4 \ln(3 x)
+      - 4 \frac{1}{x}
+      - \frac{1}{x^2}
+    \right)
+      + e^{- 2 x} \frac{\dd}{\dd x} \left[
+        4 \ln(3 x)
+        - 4 \frac{1}{x}
+        - \frac{1}{x^2}
+      \right]
+    \\
+    &=
+    - 2 e^{- 2 x} \left(
+      4 \ln(3 x)
+      - 4 \frac{1}{x}
+      - \frac{1}{x^2}
+    \right)
+      + e^{- 2 x} \left[
+        4 \frac{1}{x}
+        + 4 \frac{1}{x^2}
+        + 2 \frac{1}{x^3}
+      \right]
+    \\
+    &=
+    e^{- 2 x} \left(
+      - 8 \ln(3 x)
+      + 12 \frac{1}{x}
+      + 6 \frac{1}{x^2}
+      + 2 \frac{1}{x^3}
+    \right)
+  \end{align}
+  \begin{align}
+    \frac{\dd^4 F}{\dd x^4}
+    &=
+    \frac{\dd}{\dd x} \left[
+      e^{- 2 x} \left(
+        - 8 \ln(3 x)
+        + 12 \frac{1}{x}
+        + 6 \frac{1}{x^2}
+        + 2 \frac{1}{x^3}
+      \right)
+    \right]
+    \\
+    &=
+    \frac{\dd}{\dd x} [e^{- 2 x}] \left(
+      - 8 \ln(3 x)
+      + 12 \frac{1}{x}
+      + 6 \frac{1}{x^2}
+      + 2 \frac{1}{x^3}
+    \right)
+    \\
+    &\qquad
+      + e^{- 2 x} \frac{\dd}{\dd x} \left[
+        - 8 \ln(3 x)
+        + 12 \frac{1}{x}
+        + 6 \frac{1}{x^2}
+        + 2 \frac{1}{x^3}
+      \right]
+    \\
+    &=
+    - 2 e^{- 2 x} \left(
+      - 8 \ln(3 x)
+      + 12 \frac{1}{x}
+      + 6 \frac{1}{x^2}
+      + 2 \frac{1}{x^3}
+    \right)
+    \\
+    &\qquad
+      + e^{- 2 x} \left(
+        - 8 \frac{1}{x}
+        - 12 \frac{1}{x^2}
+        - 12 \frac{1}{x^3}
+        - 6 \frac{1}{x^4}
+      \right)
+    \\
+    &=
+    e^{- 2 x} \left(
+      16 \ln(3 x)
+      - 32 \frac{1}{x}
+      - 24 \frac{1}{x^2}
+      - 16 \frac{1}{x^3}
+      - 6 \frac{1}{x^4}
+    \right)
+  \end{align}
+  
+  En consecuencia
+  \begin{align}
+    F(2) 
+    = e^{- 4} \ln(6)
+  \end{align}
+  \begin{align}
+    \frac{\dd F}{\dd x}(2) 
+    = 
+    e^{- 4} \left(
+      - 2 \ln(6) 
+      + 1/2
+    \right)
+    =
+    \frac{1 - 4 \ln(6)}{2 e^4}
+  \end{align}
+  \begin{align}
+    \frac{\dd^2 F}{\dd x^2}(2)
+    =
+    e^{- 4} \left(
+      4 \ln(6) 
+      - 4 \frac{1}{2} 
+      - \frac{1}{2^2}
+    \right)
+    =
+    \frac{16 \ln(6) - 9}{4 e^4}
+  \end{align}
+  \begin{align}
+    \frac{\dd^3 F}{\dd x^3}(2)
+    &=
+    e^{- 4} \left(
+      - 8 \ln(6)
+      + 12 \frac{1}{2}
+      + 6 \frac{1}{2^2}
+      + 2 \frac{1}{2^3}
+    \right)
+    \\
+    &=
+    e^{- 4} \left(
+      - 8 \ln(6)
+      + 6 
+      + 3 \frac{1}{2}
+      + \frac{1}{2^2}
+    \right)
+    \\
+    &=
+    \frac{- 32 \ln(6) + 31}{4 e^4}
+  \end{align}
+  \begin{align}
+    \frac{\dd^4 F}{\dd x^4}(2)
+    &=
+    e^{- 4} \left(
+      16 \ln(6)
+      - 32 \frac{1}{2}
+      - 24 \frac{1}{2^2}
+      - 16 \frac{1}{2^3}
+      - 6 \frac{1}{2^4}
+    \right)
+    \\
+    &=
+    \frac{128 \ln(6) - 195}{8 e^4}
+  \end{align}
+  
+  Así, el polinomio de Taylor, de orden 4 centrado en 2, para \(F\) es
+  \begin{align}
+    P(x)
+    &=
+    e^{- 4} \ln(6)
+    + \frac{1 - 4 \ln(6)}{2 e^4} 
+      (x - 2)
+    \\
+    &\qquad
+    + \frac{16 \ln(6) - 9}{4 e^4} 
+      \frac{(x - 2)^2}{2}
+    + \frac{- 32 \ln(6) + 31}{4 e^4}
+      \frac{(x - 2)^3}{6}
+    \\
+    &\qquad
+    + \frac{128 \ln(6) - 195}{8 e^4}
+      \frac{(x - 2)^4}{24}
+    \\
+    &=
+    \frac{\ln(6)}{e^4}
+    + \frac{1 - 4 \ln(6)}{2 e^4} 
+      (x - 2)
+    \\
+    &\qquad
+    + \frac{16 \ln(6) - 9}{8 e^4} 
+      (x - 2)^2
+    + \frac{- 32 \ln(6) + 31}{24 e^4}
+      (x - 2)^3
+    \\
+    &\qquad
+    + \frac{128 \ln(6) - 195}{192 e^4}
+      (x - 2)^4
+  \end{align}
+\end{document}
