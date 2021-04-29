@@ -3,3 +3,10 @@
 *Ej2_aux_quality.jpg
 *Ej2_aux_vignette.jpg
 *arreglo_rectangular.jpg
+
+# Archivos de compilacion de LaTeX
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz

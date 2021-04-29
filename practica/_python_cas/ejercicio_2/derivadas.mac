@@ -1,0 +1,22 @@
+print("Función F");
+F: exp(- 2 * x) * log(3 * x);
+
+print("Primera derivada");
+f1: diff(F, x, 1);
+
+at(f1, [x=2]);
+
+print("Segunda derivada");
+f2: diff(F, x, 2);
+
+at(f2, [x=2]);
+
+print("Tercera derivada");
+f3: diff(F, x, 3);
+
+at(f3, [x=2]);
+
+print("Cuarta derivada");
+f4: diff(F, x, 4);
+
+at(f4, [x=2]);
