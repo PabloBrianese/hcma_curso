@@ -1,0 +1,7 @@
+A: matrix([5, 4], [1, 2]);
+
+print("Autovalores de A");
+eigenvalues(A)[1];
+
+print("Autovectores de la matriz A");
+eigenvectors(A)[2];
