@@ -1,0 +1,2 @@
+/*este guion de maxima resuelve una ecuacion diferencial*/
+ode2('diff(y,x,2) + 4*'diff(y,x,1) - 5*y = 0, y, x);
