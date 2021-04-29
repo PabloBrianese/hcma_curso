@@ -1,7 +1,7 @@
 #!/usr/bin/octave -qf
 
 disp("P(x) = 3x^3 -4x^2 + 2x -5");
-P=[3,-4,2,-5]
+P=[3,-4,2,-5];
 
 disp("Raices de P");
 roots(P)
