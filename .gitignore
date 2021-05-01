@@ -10,3 +10,7 @@
 *.fls
 *.log
 *.synctex.gz
+
+# Archivos de datos e imágenes del ejercicio 9
+**/_python_cas/ejercicio_9/**/*.csv
+**/_python_cas/ejercicio_9/**/*.png

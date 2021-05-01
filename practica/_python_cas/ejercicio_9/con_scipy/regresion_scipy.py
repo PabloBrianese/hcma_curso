@@ -19,7 +19,7 @@ ys_reg = gradient * xs + intercept
 
 # Guardar los valores de la recta calculada
 resultados = np.column_stack((xs, ys_reg))
-np.savetxt('regresion_sklearn.csv',
+np.savetxt('regresion_scipy.csv',
            resultados,
            delimiter=',')
 
@@ -35,5 +35,12 @@ ax.set_title('Regresión lineal con SciPy')
 ax.set_xlabel(r'$x$')
 ax.set_ylabel(r'$y$')
 plt.legend()
+
+plt.annotate(
+        f"Gradiente: {round(gradient, 3)}",
+        xy=(-10, 20))
+plt.annotate(
+        f"Término independiente: {round(intercept, 3)}",
+        xy=(-10, 15))
 
 plt.savefig('regresion_scipy.png')
