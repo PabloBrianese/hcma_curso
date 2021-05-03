@@ -27,18 +27,15 @@ def sumar_entradas():
     im1_user = im1.get()
     re2_user = re2.get()
     im2_user = im2.get()
-    
-    re_result = float(re1_user) + float(re2_user)
-    im_result = float(im1_user) + float(im2_user)
-    
-    text_result = f"{re_result} + i {im_result})"
-    
-    var_result.set(text_result)
 
-    z_1 = f'{re1_user} + i {im1_user}'
-    z_2 = f'{re2_user} + i {im2_user}'
-    text_operation = f'({z_1}) + ({z_2}) = '
-    var_operation.set(text_operation)
+    num1 = float(re1_user) + float(im1_user) * 1j
+    num2 = float(re2_user) + float(im2_user) * 1j
+
+    result_str = str(num1 + num2)
+    var_result.set(result_str)
+
+    operation_str = f'{num1} + {num2} = '
+    var_operation.set(operation_str)
 
 # Definir boton para el comando
 sum_button = tk.Button(root,
