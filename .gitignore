@@ -11,6 +11,9 @@
 *.log
 *.synctex.gz
 
-# Archivos de datos e imágenes del ejercicio 9
+# Archivos de datos e imágenes del ejercicio 3-9
 **/_python_cas/ejercicio_9/**/*.csv
 **/_python_cas/ejercicio_9/**/*.png
+
+# Imágenes del ejercicio 3-11
+**/_python_cas/ejercicio_11/**/*.png
