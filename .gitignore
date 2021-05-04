@@ -18,3 +18,6 @@
 # Imágenes del ejercicio 3-11 3-12
 **/_python_cas/ejercicio_11/**/*.png
 **/_python_cas/ejercicio_12/**/*.png
+
+# Archivos de compilación de C
+*.out
