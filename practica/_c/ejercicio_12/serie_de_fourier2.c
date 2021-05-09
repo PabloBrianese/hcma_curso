@@ -1,20 +1,18 @@
 #include <stdio.h>
-#include <stdlib.h>		/* ceil, sin, itoa */
+#include <stdlib.h>		/* ceil, sin, atoi */
 #include <math.h>		/* M_PI */
 
 double funcion (double x);
 double serie_senos(double x, unsigned N);
 
-#define N_MUESTRA 10000
-
-int main () {
+int main (int argc, char *argv[]) {
+	static int N_MUESTRA = 10000;
 	// Variable independiente, valor de la función, serie de fourier
 	double x, f, y;
 
 	// Orden de aproximación en la serie de fourier
-	unsigned N = 0;
-	printf("Ingresar el número de términos que debe incluise en la serie de fourier:\n");
-	scanf("%d", &N);  // El valor de N se obtiene del usuario
+	// El valor de N se obtiene desde la terminal
+	int N =  atoi(argv[1]);
 
 	// Nombre del archivo que contendrá la tabla
 	char nombre_de_archivo[100];
@@ -22,9 +20,9 @@ int main () {
 	// Creamos la tabla como archivo CSV
 	FILE *tabla = fopen(nombre_de_archivo, "w");
 
-	for (int i = 0; i <= N_MUESTRA; ++i) { 
+	for (int i = 0; i < N_MUESTRA; ++i) { 
 		// Calculamos los valores que irán al archivo
-		x = 6 * M_PI * ((double) i / N_MUESTRA) - 3 * M_PI;
+		x = 6.0 * M_PI * ((double) i / (double) N_MUESTRA) - 3.0 * M_PI;
 		f = funcion(x);
 		y = serie_senos(x, N);
 		// Escribimos al archivo en formato CSV
@@ -39,8 +37,8 @@ int main () {
 
 double funcion (double x) {
 	// Onda cuadrada -1, 1, -1, 1, ...
-	return 	-1 * (((int)ceil(x / M_PI) % 2) == 0) 
-			+ 1 * (((int)ceil(x / M_PI) % 2) != 0);
+	int paridad = (int) ceil(x / M_PI) % 2;
+	return 	-1 * (paridad == 0) + 1 * (paridad != 0);
 }
 
 double serie_senos(double x, unsigned N) {
@@ -48,8 +46,8 @@ double serie_senos(double x, unsigned N) {
 	// Inicialización
 	double sum = 0.0;
 	// Suma sobre números impares
-	for (int k = 0; 2*k+1 <= N; ++k) {
-		sum += ((double) 4 / ((2*k+1) * M_PI)) * sin((2*k+1) * x);
-	}
+	for (int i = 1; i < N; i += 2)
+		sum += (4.0 / (i * M_PI)) * sin(i * x);
+
 	return sum;
 }
