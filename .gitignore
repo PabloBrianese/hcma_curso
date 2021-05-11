@@ -11,15 +11,16 @@
 *.log
 *.synctex.gz
 
-# Archivos de datos del ejercicio 3-9 4-12 5-5
+# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6
 **/_python_cas/ejercicio_9/**/*.csv
 **/_c/ejercicio_12/**/*.csv
 **/_cpp_y_numlibs/ejercicio_5/**/*.dat
+**/_cpp_y_numlibs/ejercicio_6/**/*.dat
 
 # Imágenes del ejercicio 3-9 3-11 3-12
 **/_python_cas/ejercicio_9/**/*.png
 **/_python_cas/ejercicio_11/**/*.png
 **/_python_cas/ejercicio_12/**/*.png
 
-# Archivos de compilación de C
+# Archivos de compilación de C/C++
 *.out
