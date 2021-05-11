@@ -1,32 +1,31 @@
-#include <stdio.h> 
-#include <stdlib.h> 
-#include <math.h>
-#include <fstream>
+#include <cstdlib>  /* system */
+#include <cmath>  /* exp, sin */
+#include <array>  /* array */
+#include <fstream>  /* ofstream */
 
-double my_function (double);
+using namespace std;
 
-#define NUM 1000
+double f (double);  // Función a graficar
 
 int main(void) {
-    // Creamos y escribimos en un archivo de texto
-    std::ofstream archivo;
+    // Puntos de muestreo de la función en el intervalo [- 10, 10]
+    array<double, 1000> xs;
+    for (double t = 0.0; t < xs.size(); ++t) 
+        xs[i] = 20 * (t / (xs.size() - 1)) - 10;
+
+    // Creamos un archivo de texto
+    ofstream archivo;
     archivo.open ("tabla.dat");
-    double x;
-    for (int i = 0; i < NUM; i++) {
-        x = 20 * ((double) i / (NUM - 1)) - 10;
-        archivo << 
-            x << " " << my_function(x) 
-            << std::endl;
-    }
+
+    // Escribimos sobre el archivo de texto
+    for (double x : xs) archivo << x << " " << f(x) << endl;
+
+    // Cerramos el archivo de texto
     archivo.close();
 
     // Graficamos con xmgrace
     system("xmgrace tabla.dat");
-
-    return 0; 
 }
 
 // Definimos la función
-double my_function (double x) {         
-    return exp(x) * sin(2 * x);     
-}
+double f (double x) { return exp(x) * sin(2 * x); }
