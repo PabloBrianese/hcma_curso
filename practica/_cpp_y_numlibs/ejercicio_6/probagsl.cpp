@@ -1,7 +1,6 @@
+#include <iostream> /* cout */
 #include <cstdlib>  /* exit, EXIT_FAILURE */
-#include <fstream> /* ofstream */
 #include <string>  /* string */
-#include <vector>  /* vector */
 #include <gsl/gsl_rng.h>  /* gsl_rng_type, gsl_rng, gsl_rng_env_setup, gsl_rng_default, gsl_rng_default_seed, gsl_rng_alloc, gsl_rng_free, gsl_rng_set */
 #include <gsl/gsl_randist.h>  /* gsl_ran_gaussian, gsl_ran_lognormal */
 
@@ -21,25 +20,18 @@ int main(int argc, char* argv[]) {
     const int N = atoi(argv[1]);
 
     // Tipo de generador
-    const gsl_rng_type* T = gsl_rng_default;  // = gsl_rng_mt1997
+    const gsl_rng_type* T = gsl_rng_default;  // default = gsl_rng_mt1997
     // Puntero al generador
     gsl_rng* r = gsl_rng_alloc(T);
     // Semilla del generador
-    gsl_rng_set(r, gsl_rng_default_seed);  // = 0
+    gsl_rng_set(r, gsl_rng_default_seed);  // default = 0
 
-    // Muestreo
-    vector<double> ys;
+    // Muestreo y salida a la consola
     for (int i = 0; i < N; ++i)
-        ys.push_back(aleatorio_preprocesador(r, DIRECTIVA));
+        cout << aleatorio_preprocesador(r, DIRECTIVA) << endl;
 
     // Se libera la memoria usada por el generador
     gsl_rng_free(r);
-
-    // Archivo de datos
-    ofstream datos;
-    datos.open("muestreo_" DIRECTIVA ".dat");
-    for (double y : ys) datos << y << endl;
-    datos.close();
 }
 
 double aleatorio_preprocesador (gsl_rng* r, const string distribution) {
