@@ -1,13 +1,16 @@
-#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include <gsl/gsl_spline.h>
 
-#define N_DATOS 5
-#define N_INTERP 1000
+using namespace std;
 
 int main() {
   // Datos
-  double xa[N_DATOS] = {-4, -2, 0, 3, 5};
-  double ya[N_DATOS] = {10, -6, 2, -1, 8};
+  const size_t N_DATOS = 5;
+  const double xa[N_DATOS] = {-4.0, -2.0, 0.0, 3.0, 5.0};
+  const double ya[N_DATOS] = {10.0, -6.0, 2.0, -1.0, 8.0};
+  const double x_min = *min_element(xa, xa + N_DATOS);
+  const double x_max = *max_element(xa, xa + N_DATOS);
 
   // Inicialización de la interpolación
   gsl_interp_accel* accel_ptr = gsl_interp_accel_alloc();
@@ -16,19 +19,14 @@ int main() {
   gsl_spline_init(spline_ptr, xa, ya, N_DATOS);
 
   // Muestreo de la curva interpolada
-  std::ofstream archivo;
-  archivo.open("gsl_cspline.dat");
-  double x, y;
-  for (int i = 0; i <= N_INTERP; ++i) {
-    x = 9 * (double) i / N_INTERP - 4;
-    y = gsl_spline_eval(spline_ptr, x, accel_ptr);
-    archivo << x << " " << y << std::endl;
+  const int N_INTERP = 1000;
+  double x;
+  for (double t = 0.0; t < N_INTERP; ++t) {
+    x = (x_max - x_min) * t / (N_INTERP - 1) + x_min;
+    cout << x << " " << gsl_spline_eval(spline_ptr, x, accel_ptr) << endl;
   }
-  archivo.close();
-  
+
   // Delocación de la interpolación
   gsl_spline_free(spline_ptr);
   gsl_interp_accel_free(accel_ptr);
-
-  return 0;
 }
