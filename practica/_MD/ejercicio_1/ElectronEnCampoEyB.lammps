@@ -1,0 +1,201 @@
+#Correr con 
+#mpirun -np 2 lammps19 -sf opt < ElectronEnCampoEyB.lammps
+#si se quiere usar la definicion de una variable  desde linea de
+#comandos usar:
+#lammps19 -var extern valor -sf opt < ElectronEnCampoEyB.lammps
+
+
+#probado con lammps-5Jun19
+#
+
+#For style real, these are the units:
+
+#mass = grams/mole
+#distance = Angstroms
+#time = femtoseconds
+#energy = Kcal/mole
+#velocity = Angstroms/femtosecond
+#force = Kcal/mole-Angstrom
+#torque = Kcal/mole
+#temperature = Kelvin
+#pressure = atmospheres
+#dynamic viscosity = Poise
+#charge = multiple of electron charge (1.0 is a proton)
+#dipole = charge*Angstroms
+#electric field = volts/Angstrom
+#density = gram/cm^dim
+
+units real
+boundary	s s s
+dimension 3
+atom_style full
+
+
+
+###############################################################################################
+#tipos con que se asocian las partículas
+variable TipoA1 equal 1
+
+
+#Poner la variable "GenerarMovie" en on/off segun se quiera o no generar la movie
+variable GenerarMovie string "off"
+
+
+###XXX################################################################################################################
+#####################################SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION###############################
+######################################################################################################################
+
+#caja inicial del sistema
+variable xlo equal 0.0
+variable xhi equal 300.0
+variable ylo equal 0.0
+variable yhi equal 300.0
+variable zlo equal 0.0
+variable zhi equal 300.0
+
+
+
+
+variable NumPasosIntegracion equal 1e6
+
+
+variable DTime equal 0.00001
+
+#posición inicial
+variable x_ini equal 0.0
+variable y_ini equal 0.0
+variable z_ini equal 100.0
+
+#velocidad inicial
+variable vx_ini equal 10.0
+variable vy_ini equal 0.0
+variable vz_ini equal 0.0
+
+
+#IntensityMagn=0 lo usamos para "apagar" el campo magnético
+#medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
+#recordar que 1 Kcal/mole = ~ 4184 J/N_A 
+#donde N_A es el número de avogadro
+variable IntensityMagn equal 10.0
+
+#IntensityElectr=0 lo usamos para "apagar" el campo electrico 
+#medida en unidades de volts/Angstrom
+variable IntensityElectr equal 0.1
+
+#Directorio en el que se van a guardar los archivos de salida
+variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
+#creamos el directorio DirectorioOut (si es que no existe...) Ojo, NO crea subdirectorios...
+shell mkdir ${DirectorioOut}
+
+variable Prefix string Z_
+
+variable NombreDeBase string ${Prefix}ElectronEnCampo_PasInt_IntensityMagn${IntensityMagn}_IntensityElectr${IntensityElectr}NumPasosIntegracion${NumPasosIntegracion}Dt${DTime}
+#variable NombreDeBase string ${Prefix}prueba
+
+
+
+
+variable NumFigurasParaMovie equal 200
+variable NumFigurasPNG equal 1
+variable NumFigurasXYZ equal 1
+variable NumDatos equal 1000
+variable NumEstado equal 1
+
+
+
+##No modificar esto que sigue
+variable NumTotalPasos equal ${NumPasosIntegracion}
+variable PasosGuardarFigurasParaMovie equal ${NumPasosIntegracion}/${NumFigurasParaMovie}
+variable PasosGuardarFigurasPNG equal ${NumPasosIntegracion}/${NumFigurasPNG}
+variable PasosGuardarFigurasXYZ equal ${NumPasosIntegracion}/${NumFigurasXYZ}
+variable PasosDatos equal ${NumPasosIntegracion}/${NumDatos}
+variable PasosEstado equal ${NumPasosIntegracion}/${NumEstado}
+##
+
+#esto lo pongo para poder definir variables que usen info de 
+#atomos individuales, como en
+#variable MiVariable equal x[34]
+atom_modify map array
+
+timestep ${DTime}
+
+region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
+
+create_box 1 CAJA_SISTEMA 
+###XXX################################################################################################################
+#####################################SECCCION DE INSERCION DE ATOMOS EN EL SISTEMA####################################
+######################################################################################################################
+
+create_atoms 1 single ${x_ini} ${y_ini} ${z_ini}
+
+
+#masa del electrón en gramos/mol
+#notar que 1 gramos/mol = 1 gr /N_A
+#donde N_A es el número de avogadro
+variable MasaElectron equal 0.00054854
+mass 1 ${MasaElectron}
+
+#seteamos la carga del electrón, consistentemente con el sistema de 
+#unidades de lammps "real"
+variable CargaElectron equal -1
+set type 1 charge ${CargaElectron}
+
+pair_style none
+
+#seteamos la velocidad del electrón
+velocity all set ${vx_ini} ${vy_ini} ${vz_ini}
+
+#seteamos el campo eléctrico externo
+fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
+
+#########comienzo seccion de configuración el campo magnetico externo#################
+#calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
+#B=(0,1,0)
+variable FLx equal -${CargaElectron}*${IntensityMagn}*vz[1]
+variable FLy equal 0
+variable FLz equal ${CargaElectron}*${IntensityMagn}*vx[1]
+
+
+
+fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
+
+#-------------fin seccion de configuración el campo magnetico externo----------------#
+
+
+
+#termostato para la integración a energía constante
+fix termostato all nve
+
+
+if "${GenerarMovie}==on" then &
+"dump		dump_movie all movie ${PasosGuardarFigurasParaMovie} ${DirectorioOut}${NombreDeBase}.mpg type type size 1200 1200 &
+zoom 2.5 axes no 0 0 box no 0"
+		
+
+
+
+variable TrazaX equal x[1]
+variable TrazaY equal y[1]
+variable TrazaZ equal z[1]
+
+fix printTraza all print ${PasosDatos} &
+"${tiempo} ${TrazaX} ${TrazaY} ${TrazaZ}" &
+file ${DirectorioOut}${NombreDeBase}__traza screen no &
+title "#tiempo [fms]   X [Ang]    Y [Ang]       Z [Ang]"
+
+
+
+#Definimos algunas variables utiles para el output de la info termodinamica
+variable tiempo equal time
+variable EnergiaCinetica equal 0.5*${MasaElectron}*(vx[1]*vx[1]+vy[1]*vy[1]+vz[1]*vz[1])
+
+
+
+fix printEnergia all print ${PasosDatos} &
+"${tiempo} ${EnergiaCinetica}" &
+file ${DirectorioOut}${NombreDeBase}__energia_cinetica screen no &
+title "#tiempo [fms] EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
+
+
+run ${NumPasosIntegracion}
+
