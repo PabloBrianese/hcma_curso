@@ -1,0 +1,3 @@
+#[litros/mol] [gr/cc] [atm] [ang**-3] [K]
+# TimeStep v_VolumenMolar v_DensidadMasica_gr_cc v_presion v_DensidadMoleculas v_TemperaturaMedida
+20000 0.296621 0.134677 82.0947 0.00203025 300.042
