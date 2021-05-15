@@ -3,16 +3,17 @@ boundary	s s s
 dimension 3
 atom_style full
 
+# Mejora la cantidad de errores que se imprimen
 neighbor 2.0 bin
 comm_modify cutoff 1.0
 
 
 ################################################################################
-#tipos con que se asocian las partículas
+# tipos con que se asocian las partículas
 variable TipoA1 equal 1
 
 
-#Poner la variable "GenerarMovie" en on/off
+# Poner la variable "GenerarMovie" en on/off
 # segun se quiera o no generar la movie
 variable GenerarMovie string "off"
 
