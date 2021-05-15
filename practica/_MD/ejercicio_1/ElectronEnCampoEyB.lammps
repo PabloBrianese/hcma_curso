@@ -85,7 +85,7 @@ variable IntensityElectr equal 0.1
 #Directorio en el que se van a guardar los archivos de salida
 variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
 #creamos el directorio DirectorioOut (si es que no existe...) Ojo, NO crea subdirectorios...
-shell mkdir ${DirectorioOut}
+shell 'mkdir --parents' ${DirectorioOut}
 
 variable Prefix string Z_
 
