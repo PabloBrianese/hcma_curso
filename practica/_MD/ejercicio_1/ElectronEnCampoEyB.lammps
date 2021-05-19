@@ -1,16 +1,25 @@
-units real
-boundary	s s s
-dimension 3
-atom_style full
 
+units real
+
+atom_style charge
 # Mejora la cantidad de errores que se imprimen
-neighbor 2.0 bin
+neighbor 0.3 bin
 comm_modify cutoff 1.0
+atom_modify	sort 0 1.0
+# esto lo pongo para poder definir variables que usen info de 
+# atomos individuales, como en
+# variable MiVariable equal x[34]
+atom_modify map array
+
+pair_style none  # REVISAR ESTE COMANDO
+
+dimension 3
+boundary	s s s
 
 
 ################################################################################
 # tipos con que se asocian las partículas
-variable TipoA1 equal 1
+variable TipoA1 equal 1  # esta variable no se utiliza en el guion ???
 
 
 # Poner la variable "GenerarMovie" en on/off
@@ -29,8 +38,6 @@ variable ylo equal 0.0
 variable yhi equal 300.0
 variable zlo equal 0.0
 variable zhi equal 300.0
-
-
 
 
 variable NumPasosIntegracion equal 1e6
@@ -70,14 +77,11 @@ variable NombreDeBase string ${Prefix}ElectronEnCampo_PasInt_IntensityMagn${Inte
 #variable NombreDeBase string ${Prefix}prueba
 
 
-
-
 variable NumFigurasParaMovie equal 200
 variable NumFigurasPNG equal 1
 variable NumFigurasXYZ equal 1
 variable NumDatos equal 1000
 variable NumEstado equal 1
-
 
 
 ## No modificar esto que sigue
@@ -89,10 +93,6 @@ variable PasosDatos equal ${NumPasosIntegracion}/${NumDatos}
 variable PasosEstado equal ${NumPasosIntegracion}/${NumEstado}
 ##
 
-# esto lo pongo para poder definir variables que usen info de 
-# atomos individuales, como en
-# variable MiVariable equal x[34]
-atom_modify map array
 
 timestep ${DTime}
 
@@ -116,8 +116,6 @@ mass 1 ${MasaElectron}
 variable CargaElectron equal -1
 set type 1 charge ${CargaElectron}
 
-pair_style none  # REVISAR ESTE COMANDO
-
 # seteamos la velocidad del electrón
 velocity all set ${vx_ini} ${vy_ini} ${vz_ini}
 
@@ -132,7 +130,6 @@ fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 variable FLx equal -${CargaElectron}*${IntensityMagn}*vz[1]
 variable FLy equal 0
 variable FLz equal ${CargaElectron}*${IntensityMagn}*vx[1]
-
 fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
 
 # fin seccion de configuración el campo magnetico externo
@@ -163,8 +160,6 @@ title "#tiempo [fms]   X [Ang]    Y [Ang]       Z [Ang]"
 variable tiempo equal time
 variable EnergiaCinetica equal &
 0.5*${MasaElectron}*(vx[1]*vx[1]+vy[1]*vy[1]+vz[1]*vz[1])
-
-
 
 fix printEnergia all print ${PasosDatos} &
 "${tiempo} ${EnergiaCinetica}" &
