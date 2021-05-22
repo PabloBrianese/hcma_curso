@@ -26,11 +26,11 @@ Para el estilo `real`, estas son las unidades:
 ```
 atom_style charge
 ```
-Define what style of atoms to use in a simulation.
-This determines what attributes are associated with the atoms.
-This command must be used before a simulation is setup via a read_data, read_restart, or create_box command.
+Define que estilo de átomos se usarán en la simulación.
+Esto determina qué atributos están asociados con los átomos.
+Este comando debe ser usado antes de la configuración de una simulación mediante un comando `read_data`, `read_restart`, `create_box`.
 
-The choice of style affects what quantities are stored by each atom, what quantities are communicated between processors to enable forces to be computed, and what quantities are listed in the data file read by the read_data command.
+La elección de estilo afecta qué cantidades son almacenadas por cada átomo, qué cantidades son comunicadas entre procesadores para habilitar el cómputo de las fuerzas, y qué cantidades están listadas en el archivo de datos leído por el comando `read_data`.
 
 ```
 neighbor 0.3 bin
