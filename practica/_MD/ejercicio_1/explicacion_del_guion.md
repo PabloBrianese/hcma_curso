@@ -35,19 +35,16 @@ La elección de estilo afecta qué cantidades son almacenadas por cada átomo, q
 ```
 neighbor 0.3 bin
 ```
-This command sets parameters that affect the building of pairwise neighbor lists.
-All atom pairs within a neighbor cutoff distance equal to the their force cutoff plus the skin distance are stored in the list.
-Typically, the larger the skin distance, the less often neighbor lists need to be built, but more pairs must be checked for possible force interactions every timestep.
-The default value for skin depends on the choice of units for the simulation; see the default values below.
+Este comando fija parámetros que afectan la construcción de las listas de pares de vecinos.
+Todos los pares de átomos que se encuentren a una distancia de corte de vecinos (igual a la distacia de corte de la fuerza más la distancia de piel) son guardados en la lista.
+Típicamente, mientras mayor sea la distancia de piel, menos frecuentemente es necesario construir las listas de vecinos, pero más pares deben ser verificados en cada paso temporal por posibles interacciones mediante fuerzas.
 
-The skin distance is also used to determine how often atoms migrate to new processors if the check option of the neigh_modify command is set to yes.
-Atoms are migrated (communicated) to new processors on the same timestep that neighbor lists are re-built.
+Los valores por defecto dependen de la elección de unidades para la simulación, para el estilo `real` son `skin = 2.0` y `style = bin`.
 
-The style value selects what algorithm is used to build the list.
-The bin style creates the list by binning which is an operation that scales linearly with N/P, the number of atoms per processor where N = total number of atoms and P = number of processors.
+El valor `style` elige que algoritmo es usado para construir la lista.
+El estilo `bin` crea la lista usando cajas, una operación que escala linealmente con N/P, el número de átomos por procesador donde N = número total de átomos y P = número de procesadores.
 
-When a run is finished, counts of the number of neighbors stored in the pairwise list and the number of times neighbor lists were built are printed to the screen and log file.
-See the Run output doc page for details.
+Cuando una ejecución termina, conteos del número de vecinos almacenados en la lista de pares y el número de veces que se construyeron listas de vecinos son impresos a la pantalla y al archivo de registro.
 
 ```
 comm_modify cutoff 1.0
