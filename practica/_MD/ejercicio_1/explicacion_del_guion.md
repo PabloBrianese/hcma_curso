@@ -49,19 +49,16 @@ Cuando una ejecución termina, conteos del número de vecinos almacenados en la 
 ```
 comm_modify cutoff 1.0
 ```
-This command sets parameters that affect the inter-processor communication of atom information that occurs each timestep as coordinates and other properties are exchanged between neighboring processors and stored as properties of ghost atoms.
+Este comando fija los parámetros que afectan la comunicación entre procesadores, de información sobre los átomos, que ocurre en cada paso mientras coordenadas y otras propiedades son intercambiadas entre procesadores vecinos y almacenadas como propiedades de átomos fantasma (`ghost atoms`).
 
 cutoff value = Rcut (distance units) = communicate atoms from this far away
 
-The cutoff keyword allows you to extend the ghost cutoff distance for communication mode single, which is the distance from the borders of a processor’s sub-domain at which ghost atoms are acquired from other processors.
+La palabra clave cutoff permite extender la distancia de corte de fantasmas para el modo de comunicación `single`, que es la distancia a los bordes del subdominio de un procesador a partir de la cual átomos fantasma de otros procesadores son adquiridos.
+Por defecto el corte de fantasmas = corte de vecinos = corte de fuerzas entre pares + piel de vecinos.
+Si el `Rcut` especificado es mayor que el corte de vecinos, entonces átomos adicionales serán adquiridos.
+Si el corte provisto es menor, este valor será ignorado, el corte de fantasmas adquirirá su valor por defecto y se imprimirá una advertencia.
+Especificar un valor de corte de `0.0` reseteará cualquier valor previo a valores por defecto.
 By default the ghost cutoff = neighbor cutoff = pairwise force cutoff + neighbor skin.
-See the neighbor command for more information about the skin distance.
-If the specified Rcut is greater than the neighbor cutoff, then extra ghost atoms will be acquired.
-If the provided cutoff is smaller, the provided value will be ignored, the ghost cutoff is set to the neighbor cutoff and a warning will be printed.
-Specifying a cutoff value of 0.0 will reset any previous value to the default.
-If bonded interactions exist and equilibrium bond length information is available, then also a heuristic based on that bond length is computed.
-It is used as communication cutoff, if there is no pair style present and no comm_modify cutoff command used.
-Otherwise a warning is printed, if this bond based estimate is larger than the communication cutoff used.
 
 ```
 atom_modify	sort 0 1.0
