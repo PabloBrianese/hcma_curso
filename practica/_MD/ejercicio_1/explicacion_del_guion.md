@@ -1,27 +1,26 @@
 ```
 units real
 ```
+Este comando fija el estilo de las unidades usadas en la simulación.
+Determina las unidades de todas las cantidades especificadas en el guionde entrada y archivos de datos, así como las cantidades imprimidas en la pantalla, archivos de registro, y archivos de depósito.
+Tipicamente, este comando es usado al principio del guion de entrada.
 
-This command sets the style of units used for a simulation.
-It determines the units of all quantities specified in the input script and data file, as well as quantities output to the screen, log file, and dump files.
-Typically, this command is used at the very beginning of an input script.
+Para el estilo `real`, estas son las unidades:
 
-For style real, these are the units:
-
-  - mass = grams/mole
-  - distance = Angstroms
-  - time = femtoseconds
-  - energy = Kcal/mole
-  - velocity = Angstroms/femtosecond
-  - force = Kcal/mole-Angstrom
-  - torque = Kcal/mole
-  - temperature = Kelvin
-  - pressure = atmospheres
-  - dynamic viscosity = Poise
-  - charge = multiple of electron charge (1.0 is a proton)
-  - dipole = charge*Angstroms
-  - electric field = volts/Angstrom
-  - density = gram/cm^dim
+  - masa = gramos / mol
+  - distancia = Angstroms
+  - tiempo = femtosegundos
+  - energía = kilocaloría / mol
+  - velocidad = Angstroms / femtosegundo
+  - fuerza = kilocaloría / (mol * Angstrom)
+  - torque = kilocaloría / mol
+  - temperatura = Kelvin
+  - presión = atmósferas
+  - viscosidad dinámica = Poise
+  - carga = multiplo de la carga de un electron (1.0 es un protón)
+  - dipolo = carga * Angstroms
+  - campo eléctrico = voltio / Angstrom
+  - densidad = gramo / cm^dim
 
 
 ```
