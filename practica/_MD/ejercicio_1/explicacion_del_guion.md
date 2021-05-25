@@ -49,7 +49,7 @@ Cuando una ejecución termina, conteos del número de vecinos almacenados en la 
 ```
 comm_modify cutoff 1.0
 ```
-Este comando fija los parámetros que afectan la comunicación entre procesadores, de información sobre los átomos, que ocurre en cada paso mientras coordenadas y otras propiedades son intercambiadas entre procesadores vecinos y almacenadas como propiedades de átomos fantasma (`ghost atoms`).
+Este comando fija los parámetros que afectan la comunicación, de información sobre los átomos, entre procesadores que ocurre en cada paso mientras coordenadas y otras propiedades son intercambiadas entre procesadores vecinos y almacenadas como propiedades de átomos fantasma (`ghost atoms`).
 
 cutoff value = Rcut (distance units) = communicate atoms from this far away
 
@@ -145,33 +145,31 @@ Los archivos de reinicio también almacenan esta configuración.
 ```
 boundary	s s s
 ```
-Set the style of boundaries for the global simulation box in each dimension.
-A single letter assigns the same style to both the lower and upper face of the box.
-Two letters assigns the first style to the lower face and the second style to the upper face.
-The initial size of the simulation box is set by the read_data, read_restart, or create_box commands.
+Fijar el estilo de los bordes para la caja de simulación global en cada dimensión.
+Una única letra asigna el mismo estilo a ambas caras, la superior y la inferior, de la caja.
+El tamaño inicial de la caja de simulación es configurado por los comandos `read_data`, `read_restart`, o `create_box`.
 
-The style p means the box is periodic, so that particles interact across the boundary, and they can exit one end of the box and re-enter the other end.
-A periodic dimension can change in size due to constant pressure boundary conditions or box deformation (see the fix npt and fix deform commands).
-The p style must be applied to both faces of a dimension.
+El estilo `p` significa que la caja es periódica, de modo que las partículas pueden interactuar a travez del borde, y pueden atravezar una cara de la caja y reingresar por la opuesta.
 
-The styles f, s, and m mean the box is non-periodic, so that particles do not interact across the boundary and do not move from one side of the box to the other.
+Los estilos `f`, `s`, y `m` significan que la caja no es periódica, de modo que las partículas no interactúan a través del borde y no se mueven de un lado a otro de la caja.
 
-For style f, the position of the face is fixed.
-If an atom moves outside the face it will be deleted on the next timestep that reneighboring occurs.
-This will typically generate an error unless you have set the thermo_modify lost option to allow for lost atoms.
+Para el estilo `f`, la posición de la cara esta fija.
+Si un átomo se mueve por fuera de la cara, será eliminado en el siguiente paso en el cual se recalculen los vecinos.
+Esto típicamente generará un error a menos que se configure la opción `thermo_modify lost` para permitir la pérdida de átomos.
 
-For style s, the position of the face is set so as to encompass the atoms in that dimension (shrink-wrapping), no matter how far they move.
-Note that when the difference between the current box dimensions and the shrink-wrap box dimensions is large, this can lead to lost atoms at the beginning of a run when running in parallel.
-This is due to the large change in the (global) box dimensions also causing significant changes in the individual sub-domain sizes.
-If these changes are farther than the communication cutoff, atoms will be lost.
-This is best addressed by setting initial box dimensions to match the shrink-wrapped dimensions more closely, by using m style boundaries (see below).
+Para el estilo `s`, la posición de la cara varía para abarcar a todos los átomos en esa dimensión (retractilado), sin importar qué tan lejos estos se muevan.
+Notar que, cuando es grande la diferencia entre las dimensiones actuales de la caja y las dimensiones retractiladas de la caja, es posible que se pierdan átomos al inicio de una simulación si esta se ejecuta en paralelo.
+Esto se debe al gran cambio en las dimensiones (globales) de la caja, que provocan cambios significativos en el tamaño de los subdominios.
+Si estos cambios van más allá del corte de comunicación (`comm_modify cutoff`), se perderán átomos.
+La mejor forma de atender este problema es fijar las dimensiones iniciales de la caja de modo tal que aproximen las dimensiones retractiladas con mayor precisión, usando bordes de estilo `m` (ver aquí debajo).
+<!--- REVISAR ESTA PARTE --->
 
-For style m, shrink-wrapping occurs, but is bounded by the value specified in the data or restart file or set by the create_box command.
-For example, if the upper z face has a value of 50.0 in the data file, the face will always be positioned at 50.0 or above, even if the maximum z-extent of all the atoms becomes less than 50.0.
-This can be useful if you start a simulation with an empty box or if you wish to leave room on one side of the box, e.g.
-for atoms to evaporate from a surface.
+Para el estilo `m`, el retractilado ocurre, pero está acotado por el valor especificado en los archivos de datos o de reinicio o fijada por el comando `create_box`.
+Por ejemplo, si la cara superior de la dimensión z tiene un valor de 50.0 en el archivo de datos, la cara siempre se posicionará en valores de 50.0 o superiores, incluso si la extensión de los átomos en el eje z se vuelve mucho menor a 50.0.
+Esto puede ser útil si se inicia una simulación con una caja vacía o si se desea dejar espacio en un lado de la caja, por ejemplo para que los átomos puedan evaporarse desde una superficie. 
+<!--- no entiendo este último comentario --->
 
-This command cannot be used after the simulation box is defined by a read_data or create_box command or read_restart command.
+Este comando no puede ser utilizado luego de que la caja de simulación sea definida por un comando `read_data` o `create_box` o `read_restart`.
 
 ```
 #########################################
