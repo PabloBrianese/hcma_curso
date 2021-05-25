@@ -118,29 +118,29 @@ Si el corte de vecinos no es definido, el ordenamiento será desactivado.
 ```
 pair_style none
 ```
-Set the formula(s) LAMMPS uses to compute pairwise interactions.
+Fijar la(s) fórmula(s) que LAMMPS utiliza para computar las interacciones entre pares.
 
-none - turn off pairwise interactions
+`none` - apaga las interacciones entre pares
 
-Using a pair style of none means pair forces and energies are not computed.
+Usar un estilo de pares `none` significa que las fuerzas y energías de los pares no son computadas.
 
-With this choice, the force cutoff is 0.0, which means that only atoms within the neighbor skin distance (see the neighbor command) are communicated between processors.
-You must insure the skin distance is large enough to acquire atoms needed for computing bonds, angles, etc.
+Con esta elección, el corte de fuerzas es 0.0, lo cual quiere decir que solo aquellos átomos que se encuentren a distancias menores a la distancia de piel de vecinos son comunicados entre procesadores.
+Se debe asegurar que la distancia de piel sea lo suficientemente grande como para adquirir los átomos que son necesarios para calcular enlaces, ángulos, etc.
 
-A pair style of none will also prevent pairwise neighbor lists from being built.
-However if the neighbor style is bin, data structures for binning are still allocated.
-If the neighbor skin distance is small, then these data structures can consume a large amount of memory.
-So you should either set the neighbor style to nsq or set the skin distance to a larger value.
+Un estilo de pares `none` también evitará que se construyan listas de pares de vecinos.
+Sin embargo, si el estilo de vecinos es `bin`, las estructuras de datos para llevar adelante el encajonamiento son asignadas.
+Si la distancia de piel de vecinos es pequeña, entonces estas estructuras de datos pueden consumir una gran cantidad de memoria.
+Por eso se debería fijar el estilo de vecinos como `nsq` o aumentar la distancia de piel de vecinos.
 
-See the pair_style zero for a way to trigger the building of a neighbor lists, but compute no pairwise interactions.
+Ver el estilo de pares `zero` para hallar una forma de gatillar la construcción de listas de vecinos, pero sin computar las interacciones entre pares.
 
 ```
 dimension 3
 ```
-Set the dimensionality of the simulation.
-By default LAMMPS runs 3d simulations.
-To run a 2d simulation, this command should be used prior to setting up a simulation box via the create_box or read_data commands.
-Restart files also store this setting.
+Fijar la dimensionalidad de la simulación.
+Por defecto LAMMPS ejecuta simulaciones en tres dimensiones.
+Para correr una simulación en dos dimensiones, este comando debe ser usado previamente a la configuración de una caja de simulación mediante los comandos `create_box` o `read_data`.
+Los archivos de reinicio también almacenan esta configuración.
 
 ```
 boundary	s s s
