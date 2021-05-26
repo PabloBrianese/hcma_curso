@@ -177,13 +177,15 @@ Este comando no puede ser utilizado luego de que la caja de simulación sea defi
 variable TipoA1 equal 1
 ```
 Este comando asigna una o más cadenas al nombre de una variable para ser evaluada más adelante en el guión o durante una simulación.
-This command assigns one or more strings to a variable name for evaluation later in the input script or during a simulation.
-
-Así, las variables `variable` pueden ser útiles en varios contextos.
 Una variable puede ser definina y luego referenciada en un guion para convertirse en parte de un nuevo comando.
-Las variables de estilo `equal` almacenan una fórmula que cuando es evaluada produce un (único) valor numérico.
+La referencia puede ser `$x` si el nombre `x` es un único caracter, o como `${LoopVar}` si el nombre `LoopVar` consta de uno o más caracteres.
+Estas pueden ser útiles en varios contextos.
 
-El nombre de la variable puede ser referenciado como `$x` si el nombre `x` es un único caracter, o como `${LoopVar}` si el nombre `LoopVar` consta de uno o más caracteres.
+Para el estilo `string`, una única cadena es asignada a la variable.
+Si esta cadena debe contener espacios en blanco pueden utilizarse comillas, por ejemplo ingresando `'con espacios'`.
+Este comando ejecuta substitución de variables incluso si ingresamos una cadena entre comillas, de modo que la cadena `'una ${variable}'` se procesa como `'una cadena'` si `variable` es previamente declarada igual a `cadena`.
+
+Las variables de estilo `equal` almacenan una fórmula que cuando es evaluada produce un (único) valor numérico.
 
 ```
 # Poner la variable "GenerarMovie" en on/off
