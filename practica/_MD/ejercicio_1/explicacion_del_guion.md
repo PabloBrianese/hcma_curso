@@ -162,12 +162,12 @@ Notar que, cuando es grande la diferencia entre las dimensiones actuales de la c
 Esto se debe al gran cambio en las dimensiones (globales) de la caja, que provocan cambios significativos en el tamaño de los subdominios.
 Si estos cambios van más allá del corte de comunicación (`comm_modify cutoff`), se perderán átomos.
 La mejor forma de atender este problema es fijar las dimensiones iniciales de la caja de modo tal que aproximen las dimensiones retractiladas con mayor precisión, usando bordes de estilo `m` (ver aquí debajo).
-<!--- REVISAR ESTA PARTE --->
+<!-- REVISAR ESTA PARTE -->
 
 Para el estilo `m`, el retractilado ocurre, pero está acotado por el valor especificado en los archivos de datos o de reinicio o fijada por el comando `create_box`.
 Por ejemplo, si la cara superior de la dimensión z tiene un valor de 50.0 en el archivo de datos, la cara siempre se posicionará en valores de 50.0 o superiores, incluso si la extensión de los átomos en el eje z se vuelve mucho menor a 50.0.
 Esto puede ser útil si se inicia una simulación con una caja vacía o si se desea dejar espacio en un lado de la caja, por ejemplo para que los átomos puedan evaporarse desde una superficie. 
-<!--- no entiendo este último comentario --->
+<!-- no entiendo este último comentario -->
 
 Este comando no puede ser utilizado luego de que la caja de simulación sea definida por un comando `read_data` o `create_box` o `read_restart`.
 
@@ -176,15 +176,14 @@ Este comando no puede ser utilizado luego de que la caja de simulación sea defi
 # tipos con que se asocian las partículas
 variable TipoA1 equal 1
 ```
+Este comando asigna una o más cadenas al nombre de una variable para ser evaluada más adelante en el guión o durante una simulación.
 This command assigns one or more strings to a variable name for evaluation later in the input script or during a simulation.
 
-Variables can thus be useful in several contexts.
-A variable can be defined and then referenced elsewhere in an input script to become part of a new input command.
-Variables of style equal store a formula which when evaluated produces a single numeric value.
+Así, las variables `variable` pueden ser útiles en varios contextos.
+Una variable puede ser definina y luego referenciada en un guion para convertirse en parte de un nuevo comando.
+Las variables de estilo `equal` almacenan una fórmula que cuando es evaluada produce un (único) valor numérico.
 
-The Commands parse doc page explains how occurrences of a variable name in an input script line are replaced by the variable’s string.
-The variable name can be referenced as $x if the name “x” is a single character, or as ${LoopVar} if the name “LoopVar” is one or more characters.
-
+El nombre de la variable puede ser referenciado como `$x` si el nombre `x` es un único caracter, o como `${LoopVar}` si el nombre `LoopVar` consta de uno o más caracteres.
 
 ```
 # Poner la variable "GenerarMovie" en on/off
