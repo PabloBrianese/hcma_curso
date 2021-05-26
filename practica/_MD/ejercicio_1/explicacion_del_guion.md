@@ -232,7 +232,7 @@ variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
 # creamos el directorio DirectorioOut (si es que no existe...)
 shell 'mkdir --parents' ${DirectorioOut}
 ```
-El comando `shell` de LAMMPS permite ejecutar un comando en el shell del sistema operativo.
+El comando `shell` de LAMMPS permite ejecutar un comando en la shell del sistema operativo.
 Por ejemplo, permite mover archivos de aquí a allá en preparación para la siguiente sección del guion.
 O puede ejecutar un programa que pre-procese datos para ingresar en LAMMPS.
 O puede ejecutar un programa que post-procese datos de salida de LAMMPS.
@@ -266,12 +266,10 @@ variable PasosEstado equal ${NumPasosIntegracion}/${NumEstado}
 ```
 timestep ${DTime}
 ```
-Set the timestep size for subsequent molecular dynamics simulations.
-See the units command for the time units associated with each choice of units that LAMMPS supports.
+Fijar el tamaño del paso temporal para subsiguientes simulaciones de dinámica molecular.
+Las unidades que se utilizan para interpretar el número ingresado son controladas por el comando `units`.
 
-The default value for the timestep size also depends on the choice of units for the simulation; see the default values below.
-
-real default timestep is 1.0 fs
+El valor por defecto del tamaño del paso también depende de la elección de unidades, para el estilo `real` este valor es de 1.0 femtosegundos.
 
 ```
 region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
