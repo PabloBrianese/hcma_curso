@@ -188,12 +188,6 @@ Este comando ejecuta substitución de variables incluso si ingresamos una cadena
 Las variables de estilo `equal` almacenan una fórmula que cuando es evaluada produce un (único) valor numérico.
 
 ```
-# Poner la variable "GenerarMovie" en on/off
-# segun se quiera o no generar la movie
-variable GenerarMovie string "off"
-```
-
-```
 ####################################################
 # SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION
 ####################################################
@@ -208,7 +202,6 @@ variable zhi equal 300.0
 
 
 variable NumPasosIntegracion equal 1e6
-
 
 variable DTime equal 0.00001
 
@@ -236,19 +229,15 @@ variable IntensityElectr equal 0.1
 ```
 # Directorio en el que se van a guardar los archivos de salida
 variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
-```
-```
 # creamos el directorio DirectorioOut (si es que no existe...)
 shell 'mkdir --parents' ${DirectorioOut}
 ```
-Execute a shell command.
-A few simple file-based shell commands are supported directly, in Unix-style syntax.
-Any command not listed above is passed as-is to the C-library system() call, which invokes the command in a shell.
-
-This is means to invoke other commands from your input script.
-For example, you can move files around in preparation for the next section of the input script.
-Or you can run a program that pre-processes data for input into LAMMPS.
-Or you can run a program that post-processes LAMMPS output data.
+El comando `shell` de LAMMPS permite ejecutar un comando en el shell del sistema operativo.
+Por ejemplo, permite mover archivos de aquí a allá en preparación para la siguiente sección del guion.
+O puede ejecutar un programa que pre-procese datos para ingresar en LAMMPS.
+O puede ejecutar un programa que post-procese datos de salida de LAMMPS.
+Unos pocos comandos sencillos de manipulación de archivos están soportados directamente, usando una sintaxis similar a la de Unix (pueden hallarse en la documentación oficial).
+Cualquier otro comando es pasado, tal como se recibe, a una llamada de la función `system` de la librería estandar de C, que a su vez invoca el comando en la shell.
 
 ```
 variable Prefix string Z_
@@ -462,6 +451,10 @@ V is volume; E is energy.
 This creates a system trajectory consistent with the microcanonical ensemble.
 
 ```
+# Poner la variable "GenerarMovie" en on/off
+# segun se quiera o no generar la movie
+variable GenerarMovie string off
+
 if "${GenerarMovie}==on" then &
 "dump	dump_movie all movie ${PasosGuardarFigurasParaMovie} ${DirectorioOut}${NombreDeBase}.mpg type type size 1200 1200 &
 zoom 2.5 axes no 0 0 box no 0"
