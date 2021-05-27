@@ -291,20 +291,14 @@ Esto quiere decir, por ejemplo, para una región esférica, que un átomo en la 
 ```
 create_box 1 CAJA_SISTEMA 
 ```
-create_box N region-ID
+Este comando crea una caja de simulación basada en la región especificada.
+El argumento `N = 1` determina el número de tipos de átomos que se usarán en esta simulación.
+Y el argumento `region-ID = CAJA_SISTEMA` especifica la ID de la región que será utilizada como dominio de simulación.
+Por lo tanto, el comando `region` debe usarse antes de este.
+También particiona la caja de simulación en una grilla regular tridimensional de ladrillos rectangulares, uno por procesador, basado en el número de procesadores usados y en la configuración del comando `processors`.
+Esta partición puede ser modificada con posterioridad por los comandos `balance` o `fix`.
 
-N = # of atom types to use in this simulation
-
-region-ID = ID of region to use as simulation domain
-
-This command creates a simulation box based on the specified region.
-Thus a region command must first be used to define a geometric domain.
-It also partitions the simulation box into a regular 3d grid of rectangular bricks, one per processor, based on the number of processors being used and the settings of the processors command.
-The partitioning can later be changed by the balance or fix balance commands.
-
-The argument N is the number of atom types that will be used in the simulation.
-
-An atom_style and region must have been previously defined to use this command.
+Para usar este comando, un estilo de átomos debe haber sido previamente definido con el comando `atom_style` y también una región con el comando `region`.
 
 ```
 ################################################################################
