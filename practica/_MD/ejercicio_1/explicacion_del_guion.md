@@ -274,20 +274,19 @@ El valor por defecto del tamaño del paso también depende de la elección de un
 ```
 region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
 ```
-This command defines a geometric region of space.
-Various other commands use regions.
-For example, the region can be filled with atoms via the create_atoms command.
-Or a bounding box around the region, can be used to define the simulation box via the create_box command.
-Or the atoms in the region can be identified as a group via the group command, or deleted via the delete_atoms command.
-Or the surface of the region can be used as a boundary wall via the fix wall/region command.
+Este comando define una región geométrica del espacio.
+Varios otros comandos utilizan regiones.
+Por ejemplo, la región puede ser poblada de átomos por medio del comando `create_atoms`.
+O puede ser usada para definir la caja de simulación por medio de comando `create_box`.
+O puede señalar a los átomos que contiene e identificarlos como un grupo por medio del comando `group`, o eliminarlos por medio del comando `delete_atoms`.
+O puede usarse la superficie de la región como borde por medio del comando `fix wall/region`.
 
-Commands which use regions typically test whether an atom’s position is contained in the region or not.
-For this purpose, coordinates exactly on the region boundary are considered to be interior to the region.
-This means, for example, for a spherical region, an atom on the sphere surface would be part of the region if the sphere were defined with the side in keyword, but would not be part of the region if it were defined using the side out keyword.
-See more details on the side keyword below.
+Los comandos que usan regiones típicamente evalúan si la posición de un átomo está contenida en la región o no.
+Con este propósito, las coordenadas que se ubican exactamente en el borde de la región se consideran parte del interior de la región.
+Esto quiere decir, por ejemplo, para una región esférica, que un átomo en la superficie de la esfera sería parte de la región si la esfera fuera definida con la palabra clave `side in`, pero no formaría parte de la región si fuera definida usando la palabra clave `side out`.
 
-block args = xlo xhi ylo yhi zlo zhi
-  xlo,xhi,ylo,yhi,zlo,zhi = bounds of block in all dimensions (distance units)
+    block args = xlo xhi ylo yhi zlo zhi
+      xlo,xhi,ylo,yhi,zlo,zhi = bounds of block in all dimensions (distance units)
 
 ```
 create_box 1 CAJA_SISTEMA 
