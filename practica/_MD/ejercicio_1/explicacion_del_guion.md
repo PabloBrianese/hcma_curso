@@ -307,22 +307,20 @@ Para usar este comando, un estilo de átomos debe haber sido previamente definid
 
 create_atoms 1 single ${x_ini} ${y_ini} ${z_ini}
 ```
-This command creates atoms (or molecules) on a lattice, or a single atom (or molecule), or a random collection of atoms (or molecules), as an alternative to reading in their coordinates explicitly via a read_data or read_restart command.
-A simulation box must already exist, which is typically created via the create_box command.
-Before using this command, a lattice must also be defined using the lattice command, unless you specify the single style with units = box or the random style.
-For the remainder of this doc page, a created atom or molecule is referred to as a “particle”.
+Este comando crea átomos (o moléculas) en un retículo, o un único átomo (o molécula), o una colección aleatoria de átomos (o moléculas), como alternativa a leer sus coordenadas explícitamente a través de los comandos `read_data` o `read_restart`.
 
-If created particles are individual atoms, they are assigned the specified atom type, though this can be altered via the basis keyword as discussed below.
-If molecules are being created, the type of each atom in the created molecule is specified in the file read by the molecule command, and those values are added to the specified atom type.
-E.g.
-if type = 2, and the file specifies atom types 1,2,3, then each created molecule will have atom types 3,4,5.
+Una caja de simulación, típicamente creada por medio del comando `create_box`, debe existir antes de usar este comando.
+También debe existir un retículo, definido usando el comando `lattice`, a menos que se especifique el estilo `single` con la palabra clave `units box` o el estilo `random`.
+De aquí en más, nos referiremos a un átomo o una molécula creada como "partícula".
 
-For the single style, a single particle is added to the system at the specified coordinates.
-This can be useful for debugging purposes or to create a tiny system with a handful of particles at specified positions.
+Si las partículas creadas son átomos individuales, se les asigna el tipo de átomo especificado, sin embargo esto puede ser alterado por la palabra clave `basis` como se discute abajo.
+Si se están creando moléculas, el tipo de cada átomo en la molécula creada es especificado en el archivo leído por el comando `molecule`, y cuyos valores son sumados al tipo de átomo especificado.
+Por ejemplo, si `type = 2`, y el archivo especifica tipos de átomos 1,2,3, entonces cada molécula creada tendrá tipos de átomos 3,4,5.
 
-An atom_style must be previously defined to use this command.
+Para el estilo `single`, una única partícula es añadida al sistema en las coordenadas especificadas.
+Esto puede ser útil para propositos de depuración o para crear un sistema minúsculo en pocisiones especificadas.
 
-
+Un `atom_style` debe ser previamente definido para usar este comando.
 
 ```
 # masa del electrón en gramos/mol
