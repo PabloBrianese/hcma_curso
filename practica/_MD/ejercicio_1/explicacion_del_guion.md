@@ -328,18 +328,18 @@ Un `atom_style` debe ser previamente definido para usar este comando.
 variable MasaElectron equal 0.00054854
 mass 1 ${MasaElectron}
 ```
-Set the mass for all atoms of one or more atom types.
-Per-type mass values can also be set in the read_data data file using the “Masses” keyword.
-See the units command for what mass units to use.
+Fijar la masa para todos los átomos de uno o más tipos de átomos.
+Estos valores también pueden ser fijados en el archivo de datos `read_data` usando la palabra clave `Masses`.
+Las unidades de masa utilizadas estan determinadas por el comando `units`.
 
-Note that the mass command can only be used if the atom style requires per-type atom mass to be set.
+Notar que el comando `mass` solo puede usarse si el estilo del átomo requiere que la masa de de cada tipo de átomo sea determinada.
 
-This command must come after the simulation box is defined by a read_data, read_restart, or create_box command.
+Este comando debe usarse luego de la definición de la caja de simulación sea definida por un comando `read_data`, `read_restart`, o `create_box`.
 
-All masses must be defined before a simulation is run.
-They must also all be defined before a velocity or fix shake command is used.
+Todas las masas deben ser definidas antes de ejecutar la simulación.
+También deben ser definidas antes de usar un comando `velocity` o `fix shake`.
 
-The mass assigned to any type or atom must be > 0.0.
+La masa asignada a cualquier tipo de átomo debe ser mayor a `0.0`.
 
 ```
 # seteamos la carga del electrón, consistentemente con el sistema de 
@@ -347,22 +347,19 @@ The mass assigned to any type or atom must be > 0.0.
 variable CargaElectron equal -1
 set type 1 charge ${CargaElectron}
 ```
-Set one or more properties of one or more atoms.
-Since atom properties are initially assigned by the read_data, read_restart or create_atoms commands, this command changes those assignments.
-This can be useful for overriding the default values assigned by the create_atoms command (e.g.
-charge = 0.0).
-It can be useful for altering pairwise and molecular force interactions, since force-field coefficients are defined in terms of types.
-It can be used to change the labeling of atoms by atom type or molecule ID when they are output in dump files.
-It can also be useful for debugging purposes; i.e.
-positioning an atom at a precise location to compute subsequent forces or energy.
+Fijar una o más propiedades de uno o más átomos.
+Dado que las propiedades de los átomos son inicialmente asignadas por los comandos `read_data`, `read_restart` o `create_atoms`, este comando cambia esas asignaciones.
+Esto puede ser útil para sobreescribir los valores por defecto asignados por el comando `create_atoms` (por ejemplo `charge = 0.0`).
+Puede ser útil para alterar las interacciones entre pares y las fuerzas moleculares, dado que los coeficientes de los campos de fuerza son definidos en terminos de tipos.
+También puede ser usado para cambiar el rotulado de los átomos según el tipo de átomo o ID molecular cuando se imprimen a archivos de depósito.
+También puede ser útil para la depuración de un guion; por ejemplo para posicionar un átomo en una ubicación precisa para calcular las subsiguientes fuerzas o energía.
 
-Note that the style and ID arguments determine which atoms have their properties reset.
-The remaining keywords specify which properties to reset and what the new values are.
-Some strings like type or mol can be used as a style and/or a keyword.
+Notar que los argumentos `style` e `ID` determinan cuales átomos veran sus propiedades modificadas.
+Las demás palabras claves especifican cuales propiedades son modificadas y cuales son sus nuevos valores.
 
-Keywords x, y, z, and charge set the coordinates or charge of all selected atoms.
-For charge, the atom style being used must support the use of atomic charge.
-Keywords vx, vy, and vz set the velocities of all selected atoms.
+Las palabras clave `x`, `y`, `z`, y `charge` fijan las coordenadas o la carga de todos los átomos seleccionados.
+Para la carga, el estilo de átomo siendo usado debe soportar el uso de carga atómica.
+Las palabras clave `vx`, `vy` y `vz` fijan las velocidades de todos los átomos seleccionados.
 
 ```
 # seteamos la velocidad del electrón
