@@ -393,12 +393,12 @@ fix efield command
 
 fix ID group-ID efield ex ey ez
 
-Add a force F = qE to each charged atom in the group due to an external electric field being applied to the system.
-If the system contains point-dipoles, also add a torque on the dipoles due to the external electric field.
+Añade una fuerza F = qE a cada átomo cargado en el grupo debida la aplicación de un campo eléctrico externo aplicado sobre el sistema.
+Si el sistema contiene dipolos puntuales, el campo eléctrico también añade un torque sobre los dipolos.
 
-For charges, any of the 3 quantities defining the E-field components can be specified as an equal-style or atom-style variable, namely ex, ey, ez.
-If the value is a variable, it should be specified as v_name, where name is the variable name.
-In this case, the variable will be evaluated each timestep, and its value used to determine the E-field component.
+Para cargas, cualquiera de las tres cantidades que definen los componentes del campo eléctrico E, es decir `ex`, `ey`, `ez`, puede ser especificada como una variable de estilo `equal` o `atom`.
+Si el valor es una variable, debe ser especificada como `v_name`, donde `name` es el nombre de la variable.
+En este caso, la variable será evaluada a cada paso, y su valor utilizado para determinar la componente del campo eléctrico.
 
 ```
 ################################################################################
