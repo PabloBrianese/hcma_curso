@@ -365,29 +365,29 @@ Las palabras clave `vx`, `vy` y `vz` fijan las velocidades de todos los átomos 
 # seteamos la velocidad del electrón
 velocity all set ${vx_ini} ${vy_ini} ${vz_ini}
 ```
-Set or change the velocities of a group of atoms in one of several styles.
-For each style, there are required arguments and optional keyword/value parameters.
-Not all options are used by each style.
-Each option has a default as listed below.
+Fijar o cambiar las velocidades de un grupo de átomos en uno o varios estilos.
+Para cada estilo, existen argumentos obligatorios y palabras clave opcionales.
+No todas las opciones son usadas por cada estilo.
+Cada opción tiene un valor por defecto.
 
-The set style sets the velocities of all atoms in the group to the specified values.
-If any component is specified as NULL, then it is not set.
-Any of the vx,vy,vz velocity components can be specified as an equal-style or atom-style variable.
-If the value is a variable, it should be specified as v_name, where name is the variable name.
-In this case, the variable will be evaluated, and its value used to determine the velocity component.
-Note that if a variable is used, the velocity it calculates must be in box units, not lattice units; see the discussion of the units keyword below.
+El estilo `set` fija las velocidades de todos los átomos en el grupo iguales a los valores especificados.
+Si alguna componente es especificada `NULL`, entonces no se configura su valor.
+Cualquiera de los componentes de la velocidad `vx`, `vy`, `vz` puede ser especificada como una variable de estilo `equal` o `atom`.
+Si el valor es una variable, debe ser especificada como `v_name`, donde `name` es el nombre de la variable.
+En este caso las variables serán evaluadas, y su valor usado para determinar la componente de la velocidad.
+Notar que de usar una variable, la velocidad que calcula debe estar en unidades `box` y no en unidades `lattice`.
 
 ```
 # seteamos el campo eléctrico externo
 fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 ```
-Set a fix that will be applied to a group of atoms.
-In LAMMPS, a “fix” is any operation that is applied to the system during timestepping or minimization.
-Examples include updating of atom positions and velocities due to time integration, controlling temperature, applying constraint forces to atoms, enforcing boundary conditions, computing diagnostics, etc.
-There are hundreds of fixes defined in LAMMPS and new ones can be added; see the Modify doc page for details.
+Configurar un arreglo (`fix`) que será aplicado a un grupo de átomos.
+En LAMMPS, un "arreglo" ("fix") es cualquier operación que se aplica al sistema durante la simulación o la minimización.
+Ejemplos de esto incluyen actualizar la posición y velocidades de átomos debido a la integración temporal, controlar la temperatura del sistema, aplicar fuerzas restrictivas a los átomos, hacer cumplir las condiciones de borde, calcular diagnósticos, etc.
+Hay cientos de arreglos definidos en LAMMPS y pueden agragarse otros nuevos.
 
-Fixes perform their operations at different stages of the timestep.
-If 2 or more fixes operate at the same stage of the timestep, they are invoked in the order they were specified in the input script.
+Los arreglos ejecutan sus operaciones en diferentes etapas del paso de la simulación (o minimización).
+Si dos o más arreglos operan en la misma etapa del paso, son invocados en el orden en el que fueron especificados en el guion de entrada.
 
 fix efield command
 
