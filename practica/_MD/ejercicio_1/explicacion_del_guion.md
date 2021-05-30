@@ -381,6 +381,7 @@ Notar que de usar una variable, la velocidad que calcula debe estar en unidades 
 # seteamos el campo eléctrico externo
 fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 ```
+
 Configurar un arreglo (`fix`) que será aplicado a un grupo de átomos.
 En LAMMPS, un "arreglo" ("fix") es cualquier operación que se aplica al sistema durante la simulación o la minimización.
 Ejemplos de esto incluyen actualizar la posición y velocidades de átomos debido a la integración temporal, controlar la temperatura del sistema, aplicar fuerzas restrictivas a los átomos, hacer cumplir las condiciones de borde, calcular diagnósticos, etc.
@@ -413,12 +414,13 @@ fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
 
 # fin seccion de configuración el campo magnetico externo
 ```
-Add fx,fy,fz to the corresponding component of force for each atom in the group.
-This command can be used to give an additional push to atoms in a simulation, such as for a simulation of Poiseuille flow in a channel.
+Añadir `fx`, `fy`, `fz` a las correspondientes componentes de la fuerza para cada átomo en el grupo.
+Este comando puede ser usado para dar un impulso adicional a los átomos en una simulación, tal como para la simulación de un flujo de Poiseuille en un canal.
 
-Any of the 3 quantities defining the force components can be specified as an equal-style or atom-style variable, namely fx, fy, fz.
-If the value is a variable, it should be specified as v_name, where name is the variable name.
-In this case, the variable will be evaluated each timestep, and its value(s) used to determine the force component.
+Cualquiera de las tres cantidades que define los componentes de la fuerza pueden ser especificadas como variables de estilo `equal` o `atom`.
+Si el valor es una variable, debe ser especificada como `v_name`, donde `name` es el nombre de la variable.
+
+En este caso, la variable será evaluada a cada paso, y su valor utilizado para determinar la componente de la fuerza.
 
 ```
 # termostato para la integración a energía constante
@@ -432,102 +434,81 @@ ID, group-ID are documented in fix command
 
 nve = style name of this fix command
 
-Perform constant NVE integration to update position and velocity for atoms in the group each timestep.
-V is volume; E is energy.
-This creates a system trajectory consistent with the microcanonical ensemble.
+Ejecutar una integración con NVE constante para actualizar, a cada paso, la posición y velocidad de los átomos en el grupo.
+La sigla NVE quiere decir: Número constante de partículas, Volúmen constante, y Energía constante.
+Esto resulta en que la trayectoria del sistema es consistente con la colectividad microcanónica.
 
 ```
 # Poner la variable "GenerarMovie" en on/off
 # segun se quiera o no generar la movie
 variable GenerarMovie string off
 
+variable N equal ${PasosGuardarFigurasParaMovie}
+variable file string ${DirectorioOut}${NombreDeBase}.mpg
+variable color string type
+variable diameter string type
+
 if "${GenerarMovie}==on" then &
-"dump	dump_movie all movie ${PasosGuardarFigurasParaMovie} ${DirectorioOut}${NombreDeBase}.mpg type type size 1200 1200 &
-zoom 2.5 axes no 0 0 box no 0"
+"dump	dump_movie all movie $N ${file} ${color} ${diameter} &
+  size 1200 1200 &
+  zoom 2.5 &
+  axes no 0 0 &
+  box no 0"
 ```
-dump ID group-ID style N file color diameter keyword value ...
+El comando `dump` es complejo. Su **estructura** es
 
-ID = user-assigned name for the dump
+    dump ID group-ID style N file color diameter keyword value ...
 
-group-ID = ID of the group of atoms to be imaged
+**Parámetros**
 
-style = image or movie = style of dump command (other styles atom or cfg or dcd or xtc or xyz or local or custom are discussed on the dump doc page)
+    ID = nombre asignado, por el usuario, a este depósito
 
-N = dump every this many timesteps
+    group-ID = ID del grupo de átomos que se imprimirá sobre la imagen
 
-file = name of file to write image to
+    style = image o movie (son los que nos ocupan ahora) = estilo del comando `dump`
 
-color = atom attribute that determines color of each atom
+    N = depositar cada este número de pasos
 
-diameter = atom attribute that determines size of each atom
+    file = nombre del archivo de imagen
 
-zero or more keyword/value pairs may be appended
+    color = atributo del átomo que determina su color
 
-keyword = atom or adiam or bond or line or tri or body or fix or size or view or center or up or zoom or box or axes or subbox or shiny or ssao
+    diameter = atributo del átomo que determina su tamaño
 
-Dump a high-quality rendered image of the atom configuration every N timesteps and save the images either as a sequence of JPEG or PNG or PPM files, or as a single movie file.
-The options for this command as well as the dump_modify command control what is included in the image or movie and how it appears.
-A series of such images can easily be manually converted into an animated movie of your simulation or the process can be automated without writing the intermediate files using the dump movie style; see further details below.
-Other dump styles store snapshots of numerical data associated with atoms in various formats, as discussed on the dump doc page.
+**Palabras clave**
 
-The color and diameter settings determine the color and size of atoms rendered in the image.
-They can be any atom attribute defined for the dump custom command, including type and element.
-This includes per-atom quantities calculated by a compute, fix, or variable, which are prefixed by “c_”, “f_”, or “v_” respectively.
-Note that the diameter setting can be overridden with a numeric value applied to all atoms by the optional adiam keyword.
+    size values = width height = tamaño de las imágenes
+      width = ancho de la imagen en pixeles
+      height = altura de la imagen en pixeles
 
-If type is specified for the color setting, then the color of each atom is determined by its atom type.
-By default the mapping of types to colors is as follows:
+    zoom value = zfactor = tamaño de la caja de simulación en la imagen
+      zfactor = escala el tamaño de la imagen por un factor > 1 para agrandar, 
+                un factor < 1 para encojer
 
-type 1 = red
+    box values = yes/no diam = dibujar el contorno de la caja de simulación
+      yes/no = dibujar o no las líneas de la caja
+      diam = diámetro de las líneas de la caja 
+             como fracción de la dimensión más pequeña de la caja
 
-type 2 = green
+    axes values = yes/no length diam = dibujar los ejes xyz
+      yes/no = dibujar los ejes xyz o no junto a la caja de simulación
+      length = longitud de las líneas de los ejes 
+               como fracción de la respectiva dimensión de la caja
+      diam = diámetro de las líneas de los ejes 
+             como fracción de la dimensión más pequeña de la caja
 
-type 3 = blue
+Depositar una imagen de la configuración de los átomos cada N pasos y guardarlas o bien como una secuencia de archivos JPEG o PNG o PPM, o como un único archivo de video.
+El estilo `style = movie` hace esto último.
 
-type 4 = yellow
+Los parámetros `color` y `diameter` determinan el color y el tamaño de los átomos impresos en la imagen.
+Estos pueden venir dados por cualquier atributo de los átomos que pueda pasarse como valor al comando `dump custom`, incluyendo `type` y `element`.
+Esto incluye cantidades que varíen átomo por átomo, calculadas por un comando `compute`, `fix` o `variable`, que reciben los prefijos `c_`, `f_` o `v_` respectivamente.
 
-type 5 = aqua
+Si `type` es el valor de `color`, entonces el color de cada átomo es determinado por su tipo de átomo.
+Los colores por defecto que produce esta configuración para cada tipo de átomo pueden consultarse en la [documentación](https://docs.lammps.org/dump_image.html).
 
-type 6 = cyan
-
-and repeats itself for types > 6.
-This mapping can be changed by the dump_modify acolor command.
-
-If type is specified for the diameter setting then the diameter of each atom is determined by its atom type.
-By default all types have diameter 1.0.
-This mapping can be changed by the dump_modify adiam command.
-
-size values = width height = size of images
-
-  width = width of image in # of pixels
-
-  height = height of image in # of pixels
-
-zoom value = zfactor = size that simulation box appears in image
-  
-  zfactor = scale image size by factor > 1 to enlarge, factor < 1 to shrink
-  
-  zfactor can be a variable (see below)
-
-box values = yes/no diam = draw outline of simulation box
-
-  yes/no = do or do not draw simulation box lines
-
-  diam = diameter of box lines as fraction of shortest box length
-
-box values = yes/no diam = draw outline of simulation box
-
-  yes/no = do or do not draw simulation box lines
-
-  diam = diameter of box lines as fraction of shortest box length
-
-axes values = yes/no length diam = draw xyz axes
-
-  yes/no = do or do not draw xyz axes lines next to simulation box
-
-  length = length of axes lines as fraction of respective box lengths
-
-  diam = diameter of axes lines as fraction of shortest box length
+Si `type` es el valor de `diameter` entonces el diametro de cada átomo es determinado por su tipo de átomo.
+Por defecto, todos los tipos tienen diamtro `1.0`.
 
 ```
 variable TrazaX equal x[1]
