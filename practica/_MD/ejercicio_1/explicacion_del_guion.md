@@ -563,3 +563,7 @@ Por defecto no se produce salida a un archivo, la palabra cave `screen` es `yes`
 run ${NumPasosIntegracion}
 ```
 Ejecutar la simulación o continuar con la evolución por un número de pasos determinados.
+
+
+    WARNING: Communication cutoff is 0.0. No ghost atoms will be generated. Atoms may get lost
+The communication cutoff defaults to the maximum of what is inferred from pair and bond styles (will be zero, if none are defined) and what is specified via comm_modify cutoff (defaults to 0.0). If this results to 0.0, no ghost atoms will be generated and LAMMPS may lose atoms or use incorrect periodic images of atoms in interaction lists. To avoid, either use pair style zero with a suitable cutoff or use comm_modify cutoff.
