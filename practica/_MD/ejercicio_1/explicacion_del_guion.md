@@ -566,4 +566,9 @@ Ejecutar la simulación o continuar con la evolución por un número de pasos de
 
 
     WARNING: Communication cutoff is 0.0. No ghost atoms will be generated. Atoms may get lost
-The communication cutoff defaults to the maximum of what is inferred from pair and bond styles (will be zero, if none are defined) and what is specified via comm_modify cutoff (defaults to 0.0). If this results to 0.0, no ghost atoms will be generated and LAMMPS may lose atoms or use incorrect periodic images of atoms in interaction lists. To avoid, either use pair style zero with a suitable cutoff or use comm_modify cutoff.
+
+    ADVERTENCIA: La distancia de comunicación es 0.0. No se crearán átomos fantasma. Pueden perderse átomos
+
+La distancia de comunicación es, por defecto, el máximo de lo que puede inferirse a partir de los estilos de pares y de enlaces (será zero, si ninguno de estos está definido) y aquello que sea especificado mediante `comm_modify cutoff` (que por defecto es igual a `0.0`).
+Si resulta ser igual a `0.0`, ningún átomo fantasma será generado y LAMMPS puede perder átomos o usar imágenes periódicas de átomos en las listas de interacciones.
+Para evitar este resultado, usar `pair_style zero` con una distancia de corte adecuada o usar `comm_modify cutoff`.
