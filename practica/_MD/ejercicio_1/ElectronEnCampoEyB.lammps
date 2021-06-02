@@ -1,170 +1,140 @@
-
+# SISTEMA DE UNIDADES PARA EXPRESAR MAGNITUDES
 units real
 
-atom_style charge
-# Mejora la cantidad de errores que se imprimen
-neighbor 0.3 bin
+###################################################################
+# TIPOS DE PARTÍCULAS USADAS EN LA SIMULACIÓN
+atom_style charge  # con carga
+pair_style none  # sin interacciones entre pares
+variable electron equal 1  # solo hay un estilo de ellas
+
+###################################################################
+# ESTRUCTURAS DE DATOS QUE DEBEN CREAR LOS PROCESADORES
+# Evita la construcción y el procesamiento de estructuras de datos innecesarias.
+# LAMMPS se prepara, por defecto, para procesar interacciones entre partículas,
+# pero estas no son necesarias en un sistema con una única partícula.
+neigh_modify once yes
+atom_modify	sort 0 0.0
+# La distancia a partir de la cual se comunican átomos fantasma entre
+# procesadores debe ingresarse manualmente porque no lo hace el estilo de pares
+# y no hay información de enlaces
 comm_modify cutoff 1.0
-atom_modify	sort 0 1.0
-# esto lo pongo para poder definir variables que usen info de 
-# atomos individuales, como en
-# variable MiVariable equal x[34]
+# esto lo pongo para poder definir variables que usen info de átomos
+# individuales, como en `variable MiVariable equal x[34]`
 atom_modify map array
-
-pair_style none  # REVISAR ESTE COMANDO
-
-dimension 3
-boundary	s s s
-
-
-################################################################################
-# tipos con que se asocian las partículas
-variable TipoA1 equal 1  # esta variable no se utiliza en el guion ???
-
-
-# Poner la variable "GenerarMovie" en on/off
-# segun se quiera o no generar la movie
-variable GenerarMovie string "off"
-
 
 ################################################################################
 # SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION
-################################################################################
-
-# caja inicial del sistema
-variable xlo equal 0.0
-variable xhi equal 300.0
-variable ylo equal 0.0
-variable yhi equal 300.0
-variable zlo equal 0.0
-variable zhi equal 300.0
-
-
 variable NumPasosIntegracion equal 1e6
-
-
 variable DTime equal 0.00001
+timestep ${DTime}
 
+################################################################################
+# CONDICIONES INICIALES DEL ELECTRÓN
 # posición inicial
 variable x_ini equal 0.0
 variable y_ini equal 0.0
 variable z_ini equal 100.0
-
 # velocidad inicial
 variable vx_ini equal 10.0
 variable vy_ini equal 0.0
 variable vz_ini equal 0.0
 
+################################################################################
+# CAJA DE SIMULACIÓN
+boundary	s s s
 
-# IntensityMagn=0 lo usamos para "apagar" el campo magnético
-# medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
-# recordar que 1 Kcal/mole = ~ 4184 J/N_A 
-# donde N_A es el número de avogadro
-variable IntensityMagn equal 10.0
-
-# IntensityElectr=0 lo usamos para "apagar" el campo electrico 
-# medida en unidades de volts/Angstrom
-variable IntensityElectr equal 0.1
-
-# Directorio en el que se van a guardar los archivos de salida
-variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
-# creamos el directorio DirectorioOut (si es que no existe...)
-shell 'mkdir --parents' ${DirectorioOut}
-
-variable Prefix string Z_
-
-variable NombreDeBase string ${Prefix}ElectronEnCampo_PasInt_IntensityMagn${IntensityMagn}_IntensityElectr${IntensityElectr}NumPasosIntegracion${NumPasosIntegracion}Dt${DTime}
-#variable NombreDeBase string ${Prefix}prueba
-
-
-variable NumFigurasParaMovie equal 200
-variable NumFigurasPNG equal 1
-variable NumFigurasXYZ equal 1
-variable NumDatos equal 1000
-variable NumEstado equal 1
-
-
-## No modificar esto que sigue
-variable NumTotalPasos equal ${NumPasosIntegracion}
-variable PasosGuardarFigurasParaMovie equal ${NumPasosIntegracion}/${NumFigurasParaMovie}
-variable PasosGuardarFigurasPNG equal ${NumPasosIntegracion}/${NumFigurasPNG}
-variable PasosGuardarFigurasXYZ equal ${NumPasosIntegracion}/${NumFigurasXYZ}
-variable PasosDatos equal ${NumPasosIntegracion}/${NumDatos}
-variable PasosEstado equal ${NumPasosIntegracion}/${NumEstado}
-##
-
-
-timestep ${DTime}
+variable xlo equal ${x_ini}-15.0
+variable xhi equal ${x_ini}+15.0
+variable ylo equal ${y_ini}-15.0
+variable yhi equal ${y_ini}+15.0
+variable zlo equal ${z_ini}-15.0
+variable zhi equal ${z_ini}+15.0
 
 region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
 
-create_box 1 CAJA_SISTEMA 
+create_box 1 CAJA_SISTEMA
 
 ################################################################################
-# SECCCION DE INSERCION DE ATOMOS EN EL SISTEMA
-################################################################################
-
-create_atoms 1 single ${x_ini} ${y_ini} ${z_ini}
+# INSERCION DE ATOMOS EN EL SISTEMA
 
 # masa del electrón en gramos/mol
 # notar que 1 gramos/mol = 1 gr /N_A, donde N_A es el número de avogadro
 variable MasaElectron equal 0.00054854
-mass 1 ${MasaElectron}
+mass ${electron} ${MasaElectron}
 
-# seteamos la carga del electrón, consistentemente con el sistema de 
-# unidades de lammps "real"
-variable CargaElectron equal -1
-set type 1 charge ${CargaElectron}
+create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
 
-# seteamos la velocidad del electrón
-velocity all set ${vx_ini} ${vy_ini} ${vz_ini}
+# seteamos la velocidad inicial del electrón
+set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
+
+# seteamos la carga del electrón, con el sistema de unidades de lammps "real"
+variable cargaElectron equal -1
+set type ${electron} charge ${cargaElectron}
+
+################################################################################
+# SECCIÓN DE CONFIGURACIÓN DE LOS CAMPOS ELÉCTRICO Y MAGNÉTICO
 
 # seteamos el campo eléctrico externo
+# IntensityElectr=0 lo usamos para "apagar" el campo electrico 
+# medida en unidades de volts/Angstrom
+variable IntensityElectr equal 0.1
 fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 
-################################################################################
-# comienzo seccion de configuración el campo magnetico externo
-################################################################################
+# configuración del campo magnetico externo
+# IntensityMagn=0 lo usamos para "apagar" el campo magnético
+# medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
+# recordar que 1 Kcal/mole = ~ 4184 J/N_A, donde N_A es el número de avogadro
+variable IntensityMagn equal 10.0
 # calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
 # B=(0,1,0)
-variable FLx equal -${CargaElectron}*${IntensityMagn}*vz[1]
+variable FLx equal -${cargaElectron}*${IntensityMagn}*vz[1]
 variable FLy equal 0
-variable FLz equal ${CargaElectron}*${IntensityMagn}*vx[1]
+variable FLz equal ${cargaElectron}*${IntensityMagn}*vx[1]
 fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
 
-# fin seccion de configuración el campo magnetico externo
+################################################################################
+# SECCIÓN DE DEPÓSITOS
+# Directorio en el que se van a guardar los archivos de salida
+variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
+shell 'mkdir --parents' ${DirectorioOut}
+
+variable NombreDeBase string ElectronEnCampo_IntensityMagn${IntensityMagn}IntensityElectr${IntensityElectr}NumPasosIntegracion${NumPasosIntegracion}Dt${DTime}
+
+variable NumFigurasParaMovie equal 200
+variable NumDatos equal 1000
+variable PasosVideo equal ${NumPasosIntegracion}/${NumFigurasParaMovie}
+variable PasosDatos equal ${NumPasosIntegracion}/${NumDatos}
 
 
+variable t equal time
+
+# traza, tabla
+variable x equal x[1]
+variable y equal y[1]
+variable z equal z[1]
+fix printTraza all print ${PasosDatos} "$t $x $y $z" &
+  file ${DirectorioOut}${NombreDeBase}__traza &
+  screen no &
+  title "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
+
+# energía cinética, tabla
+variable EnergiaCinetica equal 0.5*${MasaElectron}*(vx[1]^2+vy[1]^2+vz[1]^2)
+fix printEnergia all print ${PasosDatos} "$t ${EnergiaCinetica}" &
+  file ${DirectorioOut}${NombreDeBase}__energia_cinetica &
+  screen no &
+  title "#tiempo [fms]  EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
+
+# traza, video
+variable archivoVideo string ${DirectorioOut}${NombreDeBase}.mpg
+variable color string type
+variable diameter string type
+dump dump_movie all movie ${PasosVideo} ${archivoVideo} ${color} ${diameter} &
+  zoom 0.3 &
+  axes yes 100000.0 50.0 &
+  size 1200 1200
+
+################################################################################
+# INTEGRACIÓN Y ACTUALIZACIÓN DE LAS POSICIONES, VELOCIDADES
 # termostato para la integración a energía constante
-fix termostato all nve
-
-
-if "${GenerarMovie}==on" then &
-"dump		dump_movie all movie ${PasosGuardarFigurasParaMovie} ${DirectorioOut}${NombreDeBase}.mpg type type size 1200 1200 &
-zoom 2.5 axes no 0 0 box no 0"
-		
-
-
-
-variable TrazaX equal x[1]
-variable TrazaY equal y[1]
-variable TrazaZ equal z[1]
-
-fix printTraza all print ${PasosDatos} &
-"${tiempo} ${TrazaX} ${TrazaY} ${TrazaZ}" &
-file ${DirectorioOut}${NombreDeBase}__traza screen no &
-title "#tiempo [fms]   X [Ang]    Y [Ang]       Z [Ang]"
-
-
-# Definimos algunas variables utiles para el output de la info termodinamica
-variable tiempo equal time
-variable EnergiaCinetica equal &
-0.5*${MasaElectron}*(vx[1]*vx[1]+vy[1]*vy[1]+vz[1]*vz[1])
-
-fix printEnergia all print ${PasosDatos} &
-"${tiempo} ${EnergiaCinetica}" &
-file ${DirectorioOut}${NombreDeBase}__energia_cinetica screen no &
-title "#tiempo [fms] EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
-
-
+fix termostato all nve  # actualiza las posiciones y velocidades
 run ${NumPasosIntegracion}
