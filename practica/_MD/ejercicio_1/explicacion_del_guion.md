@@ -32,6 +32,10 @@ Este comando debe ser usado antes de la configuración de una simulación median
 
 La elección de estilo afecta qué cantidades son almacenadas por cada átomo, qué cantidades son comunicadas entre procesadores para habilitar el cómputo de las fuerzas, y qué cantidades están listadas en el archivo de datos leído por el comando `read_data`.
 
+Todos los estilos almacenan coordenadas (`x`, `y`, `z`), velocidades (`vx`, `vy`, `vz`), una ID para cada átomo, y un tipo de átomo.
+Además los estilos que representan particulas puntuales (`charge` es uno de ellos) asignan, mediante el comando `mass`, masa a cada partícula según su tipo de átomo.
+El estilo `charge` añade únicamente la propiedad `charge` a esta base.
+
 ```
 neighbor 0.3 bin
 ```
