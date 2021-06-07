@@ -23,7 +23,7 @@ comm_modify cutoff 1.0
 atom_modify map array
 
 ################################################################################
-# SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION
+# PARAMETROS DE CONTROL DE LA SIMULACION
 variable NumPasosIntegracion equal 1e6
 variable DTime equal 0.00001
 timestep ${DTime}
@@ -124,14 +124,16 @@ fix printEnergia all print ${PasosDatos} "$t ${EnergiaCinetica}" &
   screen no &
   title "#tiempo [fms]  EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
 
-# traza, video
-variable archivoVideo string ${DirectorioOut}${NombreDeBase}.mpg
-variable color string type
-variable diameter string type
-dump dump_movie all movie ${PasosVideo} ${archivoVideo} ${color} ${diameter} &
-  zoom 0.3 &
-  axes yes 100000.0 50.0 &
-  size 1200 1200
+# # traza, video
+# variable archivoVideo string ${DirectorioOut}${NombreDeBase}.mpg
+# variable color string type
+# variable diameter string type
+# dump dump_movie all movie ${PasosVideo} ${archivoVideo} ${color} ${diameter} &
+#   zoom 0.3 &
+#   axes yes 100000.0 100.0 &
+#   size 1200 1200 &
+#   view 80 -30
+
 
 ################################################################################
 # INTEGRACIÓN Y ACTUALIZACIÓN DE LAS POSICIONES, VELOCIDADES
