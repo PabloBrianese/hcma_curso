@@ -20,10 +20,11 @@
 **/_cpp_y_numlibs/ejercicio_8/**/*.dat
 **/_MD/ejercicio_1/**/Datos*
 
-# Imágenes del ejercicio 3-9 3-11 3-12
+# Imágenes del ejercicio 3-9 3-11 3-12 6-1
 **/_python_cas/ejercicio_9/**/*.png
 **/_python_cas/ejercicio_11/**/*.png
 **/_python_cas/ejercicio_12/**/*.png
+**/_MD/ejercicio_1/*.png
 
 # Archivos de compilación de C/C++
 *.out

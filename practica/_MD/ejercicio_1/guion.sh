@@ -8,3 +8,5 @@
 
 
 lmp_ubuntu < ElectronEnCampoEyB.lammps
+
+gnuplot trazaElectron.p
