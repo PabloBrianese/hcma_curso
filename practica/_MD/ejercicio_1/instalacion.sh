@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt install openmpi-bin libjpeg-dev libpng-dev libfftw3-dev
+apt install g++ openmpi-bin libjpeg-dev libpng-dev libfftw3-dev ffmpeg
 
 cd /opt
 git clone -b stable https://github.com/lammps/lammps.git
