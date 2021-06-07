@@ -80,16 +80,17 @@ set type ${electron} charge ${cargaElectron}
 variable IntensityElectr equal 0.1
 fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 
-# # configuración del campo magnetico externo
-# # medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
-# # recordar que 1 Kcal/mole = ~ 4184 J/N_A, donde N_A es el número de avogadro
-# variable IntensityMagn equal 10.0
-# # calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
-# # B=(0,1,0)
-# variable FLx equal -${cargaElectron}*${IntensityMagn}*vz[1]
-# variable FLy equal 0
-# variable FLz equal ${cargaElectron}*${IntensityMagn}*vx[1]
-# fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
+# configuración del campo magnetico externo
+# IntensityMagn=0 lo usamos para "apagar" el campo magnético
+# medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
+# recordar que 1 Kcal/mole = ~ 4184 J/N_A, donde N_A es el número de avogadro
+variable IntensityMagn equal 0.0
+# calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
+# B=(0,1,0)
+variable FLx equal -${cargaElectron}*${IntensityMagn}*vz[1]
+variable FLy equal 0
+variable FLz equal ${cargaElectron}*${IntensityMagn}*vx[1]
+fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
 
 ################################################################################
 # SECCIÓN DE DEPÓSITOS
