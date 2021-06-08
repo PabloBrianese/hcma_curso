@@ -117,12 +117,12 @@ fix printTraza all print ${PasosDatos} "$t $x $y $z" &
   screen no &
   title "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
 
-# energía cinética, tabla
-variable EnergiaCinetica equal 0.5*${MasaElectron}*(vx[1]^2+vy[1]^2+vz[1]^2)
-fix printEnergia all print ${PasosDatos} "$t ${EnergiaCinetica}" &
-  file ${DirectorioOut}${NombreDeBase}__energia_cinetica &
-  screen no &
-  title "#tiempo [fms]  EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
+# # energía cinética, tabla
+# variable EnergiaCinetica equal 0.5*${MasaElectron}*(vx[1]^2+vy[1]^2+vz[1]^2)
+# fix printEnergia all print ${PasosDatos} "$t ${EnergiaCinetica}" &
+#   file ${DirectorioOut}${NombreDeBase}__energia_cinetica &
+#   screen no &
+#   title "#tiempo [fms]  EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
 
 # # traza, video
 # variable archivoVideo string ${DirectorioOut}${NombreDeBase}.mpg
