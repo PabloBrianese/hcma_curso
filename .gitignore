@@ -31,3 +31,6 @@
 
 # Archivos de registro de LAMMPS
 **/log.lammps
+
+# Entornos de ejecución de Python
+**/_MD/ejercicio_1/python/env/*
