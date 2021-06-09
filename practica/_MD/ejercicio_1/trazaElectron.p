@@ -3,7 +3,7 @@ set terminal png size 1000,1000
 
 file_name = system('ls ./DatosElectronEnCampoElectromagnetico/ElectronEnCampo_IntensityMagn*IntensityElectr*NumPasosIntegracion*Dt*__traza')
 
-set output 'trazaElectron.png'
+set output './DatosElectronEnCampoElectromagnetico/trazaElectron.png'
 
 set view 80 -30
 
