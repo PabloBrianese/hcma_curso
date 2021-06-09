@@ -58,7 +58,7 @@ create_box 1 CAJA_SISTEMA
 # INSERCION DE ATOMOS EN EL SISTEMA
 
 # masa del electrón en gramos/mol
-# notar que 1 gramos/mol = 1 gr /N_A, donde N_A es el número de avogadro
+# notar que 1 gramos/mol = 1 gr * N_A, donde N_A es la constante de avogadro
 variable MasaElectron equal 0.00054854
 mass ${electron} ${MasaElectron}
 
