@@ -5,8 +5,4 @@ file_name = system('ls ./DatosElectronEnCampoElectromagnetico/ElectronEnCampo_In
 
 set output './DatosElectronEnCampoElectromagnetico/trazaElectron.png'
 
-set view 80 -30
-
-set zrange [99:101]
-
 splot file_name using 2:3:4 with lines
