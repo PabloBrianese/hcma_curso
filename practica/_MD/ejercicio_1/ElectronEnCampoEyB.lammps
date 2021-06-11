@@ -115,7 +115,7 @@ variable z equal z[1]
 fix printTraza all print ${PasosDatos} "$t $x $y $z" &
   file ${DirectorioOut}${NombreDeBase}__traza &
   screen no &
-  title "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
+  title "#tiempo [s]  X [m]  Y [m]  Z [m]" # "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
 
 # # energía cinética, tabla
 # variable EnergiaCinetica equal 0.5*${MasaElectron}*(vx[1]^2+vy[1]^2+vz[1]^2)
