@@ -68,7 +68,7 @@ create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
 set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
 
 # seteamos la carga del electrón, con el sistema de unidades de lammps "real"
-variable cargaElectron equal -1
+variable cargaElectron equal -1.0 # -6.02214076e23
 set type ${electron} charge ${cargaElectron}
 
 ################################################################################
@@ -85,12 +85,12 @@ fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 # medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
 # recordar que 1 Kcal/mole = ~ 4184 J/N_A, donde N_A es el número de avogadro
 variable IntensityMagn equal 0.0
-# calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
-# B=(0,1,0)
-variable FLx equal -${cargaElectron}*${IntensityMagn}*vz[1]
-variable FLy equal 0
-variable FLz equal ${cargaElectron}*${IntensityMagn}*vx[1]
-fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
+# # calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
+# # B=(0,1,0)
+# variable FLx equal -${cargaElectron}*${IntensityMagn}*vz[1]
+# variable FLy equal 0
+# variable FLz equal ${cargaElectron}*${IntensityMagn}*vx[1]
+# fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
 
 ################################################################################
 # SECCIÓN DE DEPÓSITOS
