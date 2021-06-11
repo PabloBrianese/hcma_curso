@@ -1,5 +1,5 @@
 # SISTEMA DE UNIDADES PARA EXPRESAR MAGNITUDES
-units real
+units si  # real
 
 ###################################################################
 # TIPOS DE PARTÍCULAS USADAS EN LA SIMULACIÓN
@@ -25,7 +25,7 @@ atom_modify map array
 ################################################################################
 # PARAMETROS DE CONTROL DE LA SIMULACION
 variable NumPasosIntegracion equal 1e6
-variable DTime equal 0.00001
+variable DTime equal 1e-20 # segundos  # 1e-5 #femtosegundos
 timestep ${DTime}
 
 ################################################################################
@@ -33,9 +33,9 @@ timestep ${DTime}
 # posición inicial
 variable x_ini equal 0.0
 variable y_ini equal 0.0
-variable z_ini equal 100.0
+variable z_ini equal 1e-8 # metros  # 100.0 # Angstroms
 # velocidad inicial
-variable vx_ini equal 10.0
+variable vx_ini equal 1e6 # metros / segundos  # 10.0 # Angstroms / femtosegundos
 variable vy_ini equal 0.0
 variable vz_ini equal 0.0
 
@@ -59,7 +59,7 @@ create_box 1 CAJA_SISTEMA
 
 # masa del electrón en gramos/mol
 # notar que 1 gramos/mol = 1 gr * N_A, donde N_A es la constante de avogadro
-variable MasaElectron equal 0.00054854
+variable MasaElectron equal 9.109384e-31 # kilogramos  # 0.00054854 # gramos / mol
 mass ${electron} ${MasaElectron}
 
 create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
@@ -68,7 +68,7 @@ create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
 set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
 
 # seteamos la carga del electrón, con el sistema de unidades de lammps "real"
-variable cargaElectron equal -1.0 # -6.02214076e23
+variable cargaElectron equal -1.602176e-19 # Coulombs  # -1.0 # carga elemental  # -6.02214076e23  # carga elemental / mol
 set type ${electron} charge ${cargaElectron}
 
 ################################################################################
@@ -77,7 +77,7 @@ set type ${electron} charge ${cargaElectron}
 # seteamos el campo eléctrico externo
 # IntensityElectr=0 lo usamos para "apagar" el campo electrico 
 # medida en unidades de volts/Angstrom
-variable IntensityElectr equal 0.1
+variable IntensityElectr equal 1e9 # voltios / metros  # 0.1 # voltios / Angstroms
 fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 
 # configuración del campo magnetico externo
