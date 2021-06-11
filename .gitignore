@@ -24,7 +24,7 @@
 **/_python_cas/ejercicio_9/**/*.png
 **/_python_cas/ejercicio_11/**/*.png
 **/_python_cas/ejercicio_12/**/*.png
-**/_MD/ejercicio_1/*.png
+**/_MD/ejercicio_1/**/*.png
 
 # Archivos de compilación de C/C++
 *.out
