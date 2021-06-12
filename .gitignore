@@ -19,6 +19,7 @@
 **/_cpp_y_numlibs/ejercicio_7/**/*.dat
 **/_cpp_y_numlibs/ejercicio_8/**/*.dat
 **/_MD/ejercicio_1/**/Datos*
+**/_MD/ejercicio_1/**/*.dat
 
 # Imágenes del ejercicio 3-9 3-11 3-12 6-1
 **/_python_cas/ejercicio_9/**/*.png
