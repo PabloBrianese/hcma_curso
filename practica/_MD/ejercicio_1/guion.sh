@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#Correr con 
+#Correr con
 #mpirun -np 2 lammps19 -sf opt < ElectronEnCampoEyB.lammps
 #si se quiere usar la definicion de una variable  desde linea de
 #comandos usar:
