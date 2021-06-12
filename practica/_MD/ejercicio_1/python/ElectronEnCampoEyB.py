@@ -1,6 +1,5 @@
 import numpy as np
 from scipy.integrate import solve_ivp
-import matplotlib.pyplot as plt
 
 initialPosition = (0.0, 0.0, 1e-8) # metros  # (0.0, 0.0, 100.0)  # angstroms
 initialVelocity = (1e6, 0.0, 0.0) # metros / segundos  # (10.0, 0.0, 0.0)  # angstroms / femtosegundos
@@ -20,15 +19,13 @@ ts = np.linspace(*t_span, 1000)
 initialConditions = np.array(initialPosition + initialVelocity)
 sol = solve_ivp(derivative, t_span, initialConditions, t_eval=ts)
 
-xs = sol.y[0, :].T
-ys = sol.y[1, :].T
-zs = sol.y[2, :].T
+xs = sol.y[0, :]
+ys = sol.y[1, :]
+zs = sol.y[2, :]
 
-fig = plt.figure()
-ax = plt.axes(projection = '3d')
-ax.plot(xs=xs, ys=ys, zs=zs)
-ax.set_xlabel('x')
-ax.set_ylabel('y')
-ax.set_zlabel('z')
-
-plt.savefig('pvi.png')
+np.savetxt(
+  'traza.dat',
+  np.column_stack((ts, xs, ys, zs)),
+  delimiter=" ",
+  header="t [s]  x [m]  y [m]  z [m]",
+)

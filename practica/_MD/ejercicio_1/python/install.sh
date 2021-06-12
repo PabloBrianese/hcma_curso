@@ -6,6 +6,6 @@ python3 -m venv
 
 source env/bin/activate
 
-python3 -m pip install numpy matplotlib scipy
+python3 -m pip install numpy scipy
 
 deactivate
