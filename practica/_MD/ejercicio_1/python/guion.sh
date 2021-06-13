@@ -2,6 +2,6 @@
 
 source env/bin/activate
 
-python3 ElectronEnCampoEyB.py
+python3 electronEnCampoElectrico.py
 
 deactivate
