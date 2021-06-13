@@ -24,7 +24,7 @@ ys = sol.y[1, :]
 zs = sol.y[2, :]
 
 np.savetxt(
-  'traza.dat',
+  'electronEnCampoElectrico.dat',
   np.column_stack((ts, xs, ys, zs)),
   delimiter=" ",
   header="t [s]  x [m]  y [m]  z [m]",
