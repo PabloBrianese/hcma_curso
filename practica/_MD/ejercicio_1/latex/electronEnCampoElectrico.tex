@@ -1,20 +1,22 @@
 \documentclass{article}
+\usepackage[spanish]{babel}
 
 \usepackage{unitsdef}
 \usepackage{physics}
 
+\title{Movimiento de un electrón expuesto a un campo eléctrico constante}
+
+\author{Pablo Brianese}
+
 \begin{document}
+  \maketitle
   Estudiamos el movimiento de una partícula cargada (electrón) en un campo eléctrico externo constante.
   En este caso, mediante la resolución analítica de las ecuaciones que gobiernan este movimiento.
   Luego compararemos los resultados obtenidos con las simulaciones.
 
-  En unidades del Sistema Internacional, la masa del electrón es \(m = 9.109384 \cdot 10^{-31} \kilogram\) y su carga \(q = -1.602176 \cdot 10^{-19} \coulomb\).
-  En \(t = 0\) la partícula parte de la posición \(\vec{r}_0 = (0, 0, 10^{- 8}) \meter\) con una velocidad \(\vec{v}_0 = (10^6, 0, 0) \per{\meter}{\second}\).
-  Mientras, el campo eléctrico es constantemente \(\vec{E} = (0, 10^9, 0) \per{\volt}{\meter}\).
-  Luego, la fuerza que recibe esta partícula del campo externo es \(\vec{F} = q \vec{E}\).
-  Por lo tanto, su movimiento queda determinado por la ecuación para su aceleración \(m \vec{a} = q \vec{E}\), y las condiciones iniciales \(\vec{r}(0) = \vec{r}_0\), \(\vec{v}(0) = \vec{v}_0\).
-
-  La solución a esta ecuación diferencial es
+  Una partícula de masa \(m\) y carga \(q\) expuesta a un campo eléctrico \(\vec{E}\) recibe una fuerza \(\vec{F} = q \vec{E}\).
+  Así, su movimiento queda determinado por la ecuación para su aceleración \(m \vec{a} = q \vec{E}\), su posición inicial \(\vec{r}_0\) y su velocidad inicial \(\vec{v}_0\).
+  La solución a este problema de valores iniciales puede derivarse, usando que el campo eléctrico es constante, como sigue
   \begin{align}
     m \vec{a}
       &=
@@ -40,4 +42,9 @@
       &=
       \frac{q}{m} \vec{E} \cdot \frac{t^2}{2} + \vec{v}_0 \cdot t + \vec{r}_0
   \end{align}
+
+  En unidades del Sistema Internacional, la masa del electrón es \(m = 9.109384 \cdot 10^{-31} \kilogram\) y su carga \(q = -1.602176 \cdot 10^{-19} \coulomb\).
+  En \(t = 0\) la partícula parte de la posición \(\vec{r}_0 = (0, 0, 10^{- 8}) \meter\) con una velocidad \(\vec{v}_0 = (10^6, 0, 0) \per{\meter}{\second}\).
+  Mientras, el campo eléctrico es constantemente \(\vec{E} = (0, 10^9, 0) \per{\volt}{\meter}\).
+
 \end{document}
