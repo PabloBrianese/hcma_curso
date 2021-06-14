@@ -1,6 +1,6 @@
 #!/bin/bash
 
-apt install python3 python3-pip python3-venv
+apt install python3 python3-pip python3-venv gnuplot
 
 python3 -m venv
 
