@@ -23,7 +23,7 @@ ys = r[1, :]
 zs = r[2, :]
 
 np.savetxt(
-  '../dat/solucionAnalitica.dat',
+  'dat/solucionAnalitica.dat',
   np.column_stack((ts, xs, ys, zs)),
   delimiter=" ",
   header="t [s]  x [m]  y [m]  z [m]",
