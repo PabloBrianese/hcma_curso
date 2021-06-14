@@ -7,6 +7,6 @@
 #lammps19 -var extern valor -sf opt < ElectronEnCampoEyB.lammps
 
 
-lmp_ubuntu < ElectronEnCampoEyB.lammps
+lmp_ubuntu < electronEnCampoElectrico.lammps
 
-gnuplot trazaElectron.p
+gnuplot electronEnCampoElectrico.p
