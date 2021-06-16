@@ -1,9 +1,9 @@
 
 set title "Solución Analítica"
 
-file_name='dat/solucionAnalitica.dat'
+file_name='dat/electronEnCampoElectrico.dat'
 
-set output 'dat/solucionAnalitica.png'
+set output 'dat/electronEnCampoElectrico.png'
 
 set terminal png
 
