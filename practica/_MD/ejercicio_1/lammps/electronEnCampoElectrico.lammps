@@ -68,7 +68,7 @@ set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
 set type ${electron} charge -1.602176e-19 # Coulombs  # -1.0 # carga elemental  # -6.02214076e23  # carga elemental / mol
 
 ################################################################################
-# SECCIÓN DE CONFIGURACIÓN DE LOS CAMPOS ELÉCTRICO Y MAGNÉTICO
+# SECCIÓN DE CONFIGURACIÓN DEL CAMPO ELÉCTRICO
 
 # seteamos el campo eléctrico externo
 # IntensityElectr=0 lo usamos para "apagar" el campo electrico 
