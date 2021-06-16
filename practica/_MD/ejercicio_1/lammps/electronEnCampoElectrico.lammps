@@ -25,8 +25,7 @@ atom_modify map array
 ################################################################################
 # PARAMETROS DE CONTROL DE LA SIMULACION
 variable NumPasosIntegracion equal 1e6
-variable DTime equal 1e-20 # segundos  # 1e-5 #femtosegundos
-timestep ${DTime}
+timestep 1e-20 # segundos  # 1e-5 #femtosegundos
 
 ################################################################################
 # CONDICIONES INICIALES DEL ELECTRÓN
@@ -57,19 +56,16 @@ create_box 1 CAJA_SISTEMA
 ################################################################################
 # INSERCION DE ATOMOS EN EL SISTEMA
 
-# masa del electrón en gramos/mol
-# notar que 1 gramos/mol = 1 gr * N_A, donde N_A es la constante de avogadro
-variable MasaElectron equal 9.109384e-31 # kilogramos  # 0.00054854 # gramos / mol
-mass ${electron} ${MasaElectron}
+# masa del electrón
+mass ${electron} 9.109384e-31 # kilogramos  # 0.00054854 # gramos / mol
 
 create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
 
 # seteamos la velocidad inicial del electrón
 set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
 
-# seteamos la carga del electrón, con el sistema de unidades de lammps "real"
-variable cargaElectron equal -1.602176e-19 # Coulombs  # -1.0 # carga elemental  # -6.02214076e23  # carga elemental / mol
-set type ${electron} charge ${cargaElectron}
+# seteamos la carga del electrón
+set type ${electron} charge -1.602176e-19 # Coulombs  # -1.0 # carga elemental  # -6.02214076e23  # carga elemental / mol
 
 ################################################################################
 # SECCIÓN DE CONFIGURACIÓN DE LOS CAMPOS ELÉCTRICO Y MAGNÉTICO
@@ -80,60 +76,24 @@ set type ${electron} charge ${cargaElectron}
 variable IntensityElectr equal 1e9 # voltios / metros  # 0.1 # voltios / Angstroms
 fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 
-# configuración del campo magnetico externo
-# IntensityMagn=0 lo usamos para "apagar" el campo magnético
-# medida en unidades de (Kcal/mole)*fms/(qp*Angstrom^2)
-# recordar que 1 Kcal/mole = ~ 4184 J/N_A, donde N_A es el número de avogadro
-variable IntensityMagn equal 0.0
-# # calculamos las componentes de la fuerza de Lorentz q(v x B), asumimos
-# # B=(0,1,0)
-# variable FLx equal -${cargaElectron}*${IntensityMagn}*vz[1]
-# variable FLy equal 0
-# variable FLz equal ${cargaElectron}*${IntensityMagn}*vx[1]
-# fix fix_campo_magnetico all addforce v_FLx v_FLy v_FLz
-
 ################################################################################
 # SECCIÓN DE DEPÓSITOS
+
 # Directorio en el que se van a guardar los archivos de salida
-variable DirectorioOut string ./DatosElectronEnCampoElectromagnetico/
-shell 'mkdir --parents' ${DirectorioOut}
+shell 'mkdir --parents' dat
 
-variable NombreDeBase string ElectronEnCampo_IntensityMagn${IntensityMagn}IntensityElectr${IntensityElectr}NumPasosIntegracion${NumPasosIntegracion}Dt${DTime}
-
-variable NumFigurasParaMovie equal 200
 variable NumDatos equal 1000
-variable PasosVideo equal ${NumPasosIntegracion}/${NumFigurasParaMovie}
 variable PasosDatos equal ${NumPasosIntegracion}/${NumDatos}
 
-
-variable t equal time
-
 # traza, tabla
+variable t equal time
 variable x equal x[1]
 variable y equal y[1]
 variable z equal z[1]
 fix printTraza all print ${PasosDatos} "$t $x $y $z" &
-  file ${DirectorioOut}${NombreDeBase}__traza &
+  file "dat/electronEnCampoElectrico.dat" &
   screen no &
-  title "#tiempo [s]  X [m]  Y [m]  Z [m]" # "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
-
-# # energía cinética, tabla
-# variable EnergiaCinetica equal 0.5*${MasaElectron}*(vx[1]^2+vy[1]^2+vz[1]^2)
-# fix printEnergia all print ${PasosDatos} "$t ${EnergiaCinetica}" &
-#   file ${DirectorioOut}${NombreDeBase}__energia_cinetica &
-#   screen no &
-#   title "#tiempo [fms]  EnergiaCineticaTotal [grams.angs^2/(mole.fms^2)]"
-
-# # traza, video
-# variable archivoVideo string ${DirectorioOut}${NombreDeBase}.mpg
-# variable color string type
-# variable diameter string type
-# dump dump_movie all movie ${PasosVideo} ${archivoVideo} ${color} ${diameter} &
-#   zoom 0.3 &
-#   axes yes 100000.0 100.0 &
-#   size 1200 1200 &
-#   view 80 -30
-
+  title "# t [s]  x [m]  y [m]  z [m]"  # "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
 
 ################################################################################
 # INTEGRACIÓN Y ACTUALIZACIÓN DE LAS POSICIONES, VELOCIDADES
