@@ -1,0 +1,101 @@
+# SISTEMA DE UNIDADES PARA EXPRESAR MAGNITUDES
+units real
+
+###################################################################
+# TIPOS DE PARTÍCULAS USADAS EN LA SIMULACIÓN
+atom_style charge  # con carga
+pair_style none  # sin interacciones entre pares
+variable electron equal 1  # solo hay un estilo de ellas
+
+###################################################################
+# ESTRUCTURAS DE DATOS QUE DEBEN CREAR LOS PROCESADORES
+# Evita la construcción y el procesamiento de estructuras de datos innecesarias.
+# LAMMPS se prepara, por defecto, para procesar interacciones entre partículas,
+# pero estas no son necesarias en un sistema con una única partícula.
+neigh_modify once yes
+atom_modify	sort 0 0.0
+# La distancia a partir de la cual se comunican átomos fantasma entre
+# procesadores debe ingresarse manualmente porque no lo hace el estilo de pares
+# y no hay información de enlaces
+comm_modify cutoff 1.0
+# esto lo pongo para poder definir variables que usen info de átomos
+# individuales, como en `variable MiVariable equal x[34]`
+atom_modify map array
+
+################################################################################
+# PARAMETROS DE CONTROL DE LA SIMULACION
+variable NumPasosIntegracion equal 1e6
+timestep 1e-5 #femtosegundos
+
+################################################################################
+# CONDICIONES INICIALES DEL ELECTRÓN
+# posición inicial
+variable x_ini equal 0.0
+variable y_ini equal 0.0
+variable z_ini equal 100.0 # Angstroms
+# velocidad inicial
+variable vx_ini equal 10.0 # Angstroms / femtosegundos
+variable vy_ini equal 0.0
+variable vz_ini equal 0.0
+
+################################################################################
+# CAJA DE SIMULACIÓN
+boundary	s s s
+
+variable xlo equal ${x_ini}-15.0
+variable xhi equal ${x_ini}+15.0
+variable ylo equal ${y_ini}-15.0
+variable yhi equal ${y_ini}+15.0
+variable zlo equal ${z_ini}-15.0
+variable zhi equal ${z_ini}+15.0
+
+region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
+
+create_box 1 CAJA_SISTEMA
+
+################################################################################
+# INSERCION DE ATOMOS EN EL SISTEMA
+
+# masa del electrón
+mass ${electron} 0.00054854 # gramos / mol
+
+create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
+
+# seteamos la velocidad inicial del electrón
+set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
+
+# seteamos la carga del electrón
+set type ${electron} charge -1 # carga elemental  # -6.02214076e23  # carga elemental / mol
+
+################################################################################
+# SECCIÓN DE CONFIGURACIÓN DEL CAMPO ELÉCTRICO
+
+# seteamos el campo eléctrico externo
+variable intensityElectr equal 0.1 # voltios / Angstroms
+# Calculamos la fuerza F = q E
+fix fix_campo_electrico all efield 0.0 ${intensityElectr} 0.0
+
+################################################################################
+# SECCIÓN DE DEPÓSITOS
+
+# Directorio en el que se van a guardar los archivos de salida
+shell 'mkdir --parents' dat
+
+variable NumDatos equal 1000
+variable PasosDatos equal ${NumPasosIntegracion}/${NumDatos}
+
+# traza, tabla
+variable t equal time
+variable x equal x[1]
+variable y equal y[1]
+variable z equal z[1]
+fix printTraza all print ${PasosDatos} "$t $x $y $z" &
+  file "dat/electronEnCampoElectrico.dat" &
+  screen no &
+  title "# t [fms]  x [Ang]  y [Ang]  z [Ang]"
+
+################################################################################
+# INTEGRACIÓN Y ACTUALIZACIÓN DE LAS POSICIONES, VELOCIDADES
+# termostato para la integración a energía constante
+fix termostato all nve  # actualiza las posiciones y velocidades
+run ${NumPasosIntegracion}
