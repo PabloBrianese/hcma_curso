@@ -3,6 +3,6 @@
 source ../env/bin/activate
 
 python3 electronEnCampoElectrico.py
-gnuplot electronEnCampoElectrico.p
+gnuplot -e "title='Solución Analítica" ../../electronEnCampoElectrico.p
 
 deactivate

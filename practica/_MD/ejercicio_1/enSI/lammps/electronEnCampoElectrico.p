@@ -1,5 +1,5 @@
 
-set title "Integración con SciPy"
+set title "Simulación con LAMMPS"
 
 file_name='dat/electronEnCampoElectrico.dat'
 

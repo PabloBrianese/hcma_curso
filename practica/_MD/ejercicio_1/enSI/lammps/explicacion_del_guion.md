@@ -1,5 +1,3 @@
-# NO SE ENCUENTRA AL DÍA CON EL GUIÓN, pero contiene descripciones útiles de muchos comandos
-
 ```
 units real
 ```

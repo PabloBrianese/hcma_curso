@@ -1,5 +1,5 @@
 # SISTEMA DE UNIDADES PARA EXPRESAR MAGNITUDES
-units real
+units si  # real
 
 ###################################################################
 # TIPOS DE PARTÍCULAS USADAS EN LA SIMULACIÓN
@@ -25,16 +25,16 @@ atom_modify map array
 ################################################################################
 # PARAMETROS DE CONTROL DE LA SIMULACION
 variable NumPasosIntegracion equal 1e6
-timestep 1e-5 #femtosegundos
+timestep 1e-20 # segundos  # 1e-5 #femtosegundos
 
 ################################################################################
 # CONDICIONES INICIALES DEL ELECTRÓN
 # posición inicial
 variable x_ini equal 0.0
 variable y_ini equal 0.0
-variable z_ini equal 100.0 # Angstroms
+variable z_ini equal 1e-8 # metros  # 100.0 # Angstroms
 # velocidad inicial
-variable vx_ini equal 10.0 # Angstroms / femtosegundos
+variable vx_ini equal 1e6 # metros / segundos  # 10.0 # Angstroms / femtosegundos
 variable vy_ini equal 0.0
 variable vz_ini equal 0.0
 
@@ -57,7 +57,7 @@ create_box 1 CAJA_SISTEMA
 # INSERCION DE ATOMOS EN EL SISTEMA
 
 # masa del electrón
-mass ${electron} 0.00054854 # gramos / mol
+mass ${electron} 9.109384e-31 # kilogramos  # 0.00054854 # gramos / mol
 
 create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
 
@@ -65,15 +65,16 @@ create_atoms ${electron} single ${x_ini} ${y_ini} ${z_ini}
 set type ${electron} vx ${vx_ini} vy ${vy_ini} vz ${vz_ini}
 
 # seteamos la carga del electrón
-set type ${electron} charge -1 # carga elemental  # -6.02214076e23  # carga elemental / mol
+set type ${electron} charge -1.602176e-19 # Coulombs  # -1.0 # carga elemental  # -6.02214076e23  # carga elemental / mol
 
 ################################################################################
 # SECCIÓN DE CONFIGURACIÓN DEL CAMPO ELÉCTRICO
 
 # seteamos el campo eléctrico externo
-variable intensityElectr equal 0.1 # voltios / Angstroms
-# Calculamos la fuerza F = q E
-fix fix_campo_electrico all efield 0.0 ${intensityElectr} 0.0
+# IntensityElectr=0 lo usamos para "apagar" el campo electrico 
+# medida en unidades de volts/Angstrom
+variable IntensityElectr equal 1e9 # voltios / metros  # 0.1 # voltios / Angstroms
+fix fix_campo_electrico all efield 0.0 ${IntensityElectr} 0.0
 
 ################################################################################
 # SECCIÓN DE DEPÓSITOS
@@ -92,7 +93,7 @@ variable z equal z[1]
 fix printTraza all print ${PasosDatos} "$t $x $y $z" &
   file "dat/electronEnCampoElectrico.dat" &
   screen no &
-  title "# t [fms]  x [Ang]  y [Ang]  z [Ang]"
+  title "# t [s]  x [m]  y [m]  z [m]"  # "#tiempo [fms]  X [Ang]  Y [Ang]  Z [Ang]"
 
 ################################################################################
 # INTEGRACIÓN Y ACTUALIZACIÓN DE LAS POSICIONES, VELOCIDADES
