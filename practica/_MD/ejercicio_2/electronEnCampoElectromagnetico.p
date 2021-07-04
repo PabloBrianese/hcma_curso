@@ -3,9 +3,9 @@
 set title left
 set title title
 
-file_name='dat/electronEnCampoElectrico.dat'
+file_name='dat/electronEnCampoElectromagnetico.dat'
 
-set output 'dat/electronEnCampoElectrico.png'
+set output 'dat/electronEnCampoElectromagnetico.png'
 
 set terminal png
 

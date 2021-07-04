@@ -108,7 +108,7 @@ variable x equal x[1]
 variable y equal y[1]
 variable z equal z[1]
 fix printTraza all print ${PasosDatos} "$t $x $y $z" &
-  file "dat/electronEnCampoElectrico.dat" &
+  file "dat/electronEnCampoElectromagnetico.dat" &
   screen no &
   title "# t [fms]  x [Ang]  y [Ang]  z [Ang]"
 
