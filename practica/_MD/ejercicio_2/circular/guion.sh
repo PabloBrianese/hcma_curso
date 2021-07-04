@@ -11,6 +11,7 @@
 lmp_ubuntu \
   -v Ex 0 -v Ey 0 -v Ez 0 \
   -v Bx 0 -v By 1 -v Bz 0 \
-  -in electronEnCampoElectromagnetico.lammps
+  -in ../electronEnCampoElectromagnetico.lammps\
+  -log none
 
 gnuplot -e "title='Simulación con LAMMPS'" ../electronEnCampoElectromagnetico.p
