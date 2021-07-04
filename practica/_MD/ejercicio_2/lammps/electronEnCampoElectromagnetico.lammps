@@ -72,17 +72,11 @@ set type ${electron} charge ${electronCharge} # carga elemental  # -6.02214076e2
 # SECCIÓN DE CONFIGURACIÓN DEL CAMPO ELÉCTRICO
 
 # seteamos el campo eléctrico externo
-variable intensityElectr equal 0.1 # voltios / Angstroms
-# Calculamos la fuerza F = q E
-fix fix_campo_electrico all efield 0.0 ${intensityElectr} 0.0
+fix fix_campo_electrico all efield ${Ex} ${Ey} ${Ez}
 
 ################################################################################
 # SECCIÓN DE CONFIGURACIÓN DEL CAMPO MAGNÉTICO
 # calculamos las componentes de la fuerza de Lorentz q(v x B)
-variable Bx equal 0
-variable By equal 1
-variable Bz equal 0
-
 variable crossProductx equal vy[1]*${Bz}-vz[1]*${By}
 variable crossProducty equal vz[1]*${Bx}-vx[1]*${Bz}
 variable crossProductz equal vx[1]*${By}-vy[1]*${Bx}
