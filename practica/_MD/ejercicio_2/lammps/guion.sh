@@ -7,6 +7,6 @@
 #lammps19 -var extern valor -sf opt < ElectronEnCampoEyB.lammps
 
 
-lmp_ubuntu < electronEnCampoElectrico.lammps
+lmp_ubuntu < electronEnCampoElectromagnetico.lammps
 
 gnuplot -e "title='Simulación con LAMMPS'" ../electronEnCampoElectrico.p
