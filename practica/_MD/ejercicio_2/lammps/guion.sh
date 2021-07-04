@@ -9,4 +9,4 @@
 
 lmp_ubuntu < electronEnCampoElectromagnetico.lammps
 
-gnuplot -e "title='Simulación con LAMMPS'" ../electronEnCampoElectrico.p
+gnuplot -e "title='Simulación con LAMMPS'" ../electronEnCampoElectromagnetico.p
