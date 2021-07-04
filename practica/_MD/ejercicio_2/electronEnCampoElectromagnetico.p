@@ -9,10 +9,6 @@ set output 'dat/electronEnCampoElectromagnetico.png'
 
 set terminal png
 
-set xrange [-15:15]
-set yrange [-100:0]
-set zrange [50:150]
-
 set xlabel 'x [Angstrom]'
 set xlabel offset -1,-1
 set ylabel 'y [Angstrom]'
