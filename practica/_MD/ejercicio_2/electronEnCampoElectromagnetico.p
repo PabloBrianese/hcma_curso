@@ -9,7 +9,7 @@ set output 'dat/electronEnCampoElectrico.png'
 
 set terminal png
 
-set xrange [0:100]
+set xrange [-15:15]
 set yrange [-100:0]
 set zrange [50:150]
 
