@@ -1,0 +1,229 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage{mathtools}
+
+\DeclarePairedDelimiterX{\norm}[1]{\lVert}{\rVert}{#1}
+
+\usepackage{bm}
+\newcommand{\uvec}[1]{\boldsymbol{\hat{\textbf{#1}}}}
+
+\title{Geometría de la traza del movimiento de un electron expuesto a un campo electromagnético externo}
+\author{Pablo Brianese}
+\begin{document}
+  \maketitle
+  En unidades del Sistema Internacional, la ecuación del movimiento para una partícula de masa \(m\), carga \(q\), expuesta a un campo electromagnético externo es
+  \begin{align}
+    \label{equation:movementOfChargedParticleExposedToElectromagneticField}
+    m \vec{a}
+    =
+    q \vec{E} + q \vec{v} \times \vec{B}
+  \end{align}
+  Esta ecuación diferencial es lineal.
+  Esto nos permite resolverla por partes.
+  Sabemos que, cuando el campo elétrico es constante, la solución \(\vec{f}\) a la ecuación 
+  \begin{align}
+    &m \frac{d^2 \vec{f}}{d t^2} = q \vec{E}
+    &&\text{está dada por}
+    &&\vec{f} = \frac{q}{m} \vec{E} \frac{t^2}{2} + \left.\frac{d \vec{f}}{d t}\right|_0 t + \vec{f}_0
+  \end{align}
+  Si conseguimos hallar la solución \(\vec{g}\) a la ecuación
+  \begin{align}
+    m \frac{d^2 \vec{g}}{d t^2} = q \frac{d \vec{g}}{d t} \times \vec{B}
+  \end{align}
+  Entonces \(\vec{r} = \vec{f} + \vec{g}\) satisface \eqref{equation:movementOfChargedParticleExposedToElectromagneticField}.
+  \begingroup
+  \allowdisplaybreaks
+  \begin{align}
+    m \frac{d^2 \vec{g}}{d t^2}
+      &=
+      q \frac{d \vec{g}}{d t} \times \vec{B}
+    \\
+    \frac{d^2 \vec{g}}{d t^2}
+      &=
+      \frac{q}{m} \begin{vmatrix}
+        \uvec{\i} &\uvec{\j} &\uvec{k} \\
+        \frac{d g_x}{d t} &\frac{d g_y}{d t} &\frac{d g_z}{d t} \\
+        B_x &B_y & B_z
+      \end{vmatrix}
+      \\
+      &\left\{
+        \begin{aligned}
+          \frac{d^2 g_x}{d t^2}
+            &=
+            \frac{q}{m}
+            \begin{vmatrix}
+              \frac{d g_y}{d t} &\frac{d g_z}{d t} \\
+              B_y &B_z
+            \end{vmatrix}
+          \\
+          \frac{d^2 g_y}{d t^2}
+          &=
+          \frac{q}{m}
+          \begin{vmatrix}
+            \frac{d g_z}{d t} &\frac{d g_x}{d t} \\
+            B_z &B_x
+          \end{vmatrix}
+          \\
+          \frac{d^2 g_z}{d t^2}
+          &=
+          \frac{q}{m}
+          \begin{vmatrix}
+            \frac{d g_x}{d t} &\frac{d g_y}{d t} \\
+            B_x &B_y
+          \end{vmatrix}
+      \end{aligned}
+      \right.
+    \\
+    &\left\{
+      \begin{aligned}
+        \frac{d^2 g_x}{d t^2}
+          &=
+          \frac{q}{m} B_z \frac{d g_y}{d t}
+          - \frac{q}{m} B_y \frac{d g_z}{d t}
+        \\
+        \frac{d^2 g_y}{d t^2}
+          &=
+          \frac{q}{m} B_x \frac{d g_z}{d t}
+          - \frac{q}{m} B_z \frac{d g_x}{d t}
+        \\
+        \frac{d^2 g_z}{d t^2}
+        &=
+        \frac{q}{m} B_y \frac{d g_x}{d t}
+        - \frac{q}{m} B_x \frac{d g_y}{d t}
+    \end{aligned}
+    \right.
+    \\
+    &\left\{
+      \begin{aligned}
+        \frac{d^2 g_x}{d t^2}
+          &=
+          0 \frac{d g_x}{d t}
+          + \frac{q}{m} B_z \frac{d g_y}{d t}
+          - \frac{q}{m} B_y \frac{d g_z}{d t}
+        \\
+        \frac{d^2 g_y}{d t^2}
+          &=
+          - \frac{q}{m} B_z \frac{d g_x}{d t}
+          + 0 \frac{d g_y}{d t}
+          + \frac{q}{m} B_x \frac{d g_z}{d t}
+        \\
+        \frac{d^2 g_z}{d t^2}
+          &=
+          \frac{q}{m} B_y \frac{d g_x}{d t}
+          - \frac{q}{m} B_x \frac{d g_y}{d t}
+          + 0 \frac{d g_z}{d t}
+    \end{aligned}
+    \right.
+    \\
+    \frac{d^2 \vec{g}}{d t^2}
+    &=
+    \begin{pmatrix}
+      0 
+      &\frac{q}{m} B_z
+      &- \frac{q}{m} B_y
+      \\
+      - \frac{q}{m} B_z
+      &0
+      &\frac{q}{m} B_x
+      \\
+      \frac{q}{m} B_y
+      &- \frac{q}{m} B_x
+      &0
+    \end{pmatrix}
+    \frac{d \vec{g}}{d t}
+    \\
+    \frac{d^2 \vec{g}}{d t^2}
+    &=
+    A \frac{d \vec{g}}{d t}
+    \\
+    \frac{d \vec{g}}{d t}
+    &=
+    e^{A t} \left. \frac{d \vec{g}}{d t} \right|_0
+    \\
+    \vec{g}
+    &=
+    A^{- 1} e^{A t} \left. \frac{d \vec{g}}{d t} \right|_0 + \vec{g}_0
+    \end{align}
+  \endgroup
+
+  \begin{align}
+    A
+    &=
+    \begin{pmatrix}
+      0 
+      &\frac{q}{m} B_z
+      &- \frac{q}{m} B_y
+      \\
+      - \frac{q}{m} B_z
+      &0
+      &\frac{q}{m} B_x
+      \\
+      \frac{q}{m} B_y
+      &- \frac{q}{m} B_x
+      &0
+    \end{pmatrix}
+  \end{align}
+  autovalores de A 
+  \begingroup
+  \allowdisplaybreaks
+  \begin{align}
+    \det(\lambda - A)
+    &=
+    \begin{vmatrix}
+      \lambda
+      &- \frac{q}{m} B_z
+      &\frac{q}{m} B_y
+      \\
+      \frac{q}{m} B_z
+      &\lambda
+      &- \frac{q}{m} B_x
+      \\
+      - \frac{q}{m} B_y
+      &\frac{q}{m} B_x
+      &\lambda
+    \end{vmatrix}
+    \\
+    &=
+      \lambda
+      \begin{vmatrix}
+        \lambda & - \frac{q}{m} B_x \\
+        \frac{q}{m} B_x & \lambda
+      \end{vmatrix}
+    \\
+      &\quad
+      + \frac{q}{m} B_z
+      \begin{vmatrix}
+        \frac{q}{m} B_z &- \frac{q}{m} B_x \\
+        - \frac{q}{m} B_y &\lambda
+      \end{vmatrix}
+    \\
+      &\quad
+      + \frac{q}{m} B_y
+      \begin{vmatrix}
+        \frac{q}{m} B_z &\lambda \\
+        - \frac{q}{m} B_y &\frac{q}{m} B_x
+      \end{vmatrix}
+    \\
+    &=
+    \lambda (\lambda^2 + \frac{q^2}{m^2} B_x^2)
+    \\
+      &\quad
+      + \frac{q}{m} B_z (\frac{q}{m} B_z \lambda - \frac{q^2}{m^2} B_x B_y)
+      + \frac{q}{m} B_y (\frac{q^2}{m^2} B_x B_z + \frac{q}{m} B_y \lambda)
+    \\
+    &=
+    \lambda^3 + \frac{q^2}{m^2} B_x^2 \lambda
+    \\
+      &\quad
+      + \frac{q^2}{m^2} B_z^2 \lambda - \frac{q^3}{m^3} B_x B_y B_z
+      + \frac{q^3}{m^3} B_x B_y B_z + \frac{q^2}{m^2} B_y^2 \lambda
+    \\
+    &=
+    \lambda (\lambda^2 + \norm*{\frac{q}{m}\vec{B}}_2^2)
+    \\
+    &=
+    \lambda (\lambda - i \norm*{\frac{q}{m}\vec{B}}_2) (\lambda + i \norm*{\frac{q}{m}\vec{B}}_2)
+  \end{align}
+  \endgroup
+  autoespacios de A
+\end{document}
