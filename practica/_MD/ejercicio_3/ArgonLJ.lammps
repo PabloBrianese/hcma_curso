@@ -7,6 +7,7 @@ atom_style atomic
 # para evitar problemas por la condición de contorno periodica
 variable epsilon_A1vA1 equal 0.2432088
 variable sigma_A1vA1 equal 3.432
+variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
 variable cota_max_mol_size equal ${sigma_A1vA1}
 variable argonMass equal 39.948
 
@@ -14,13 +15,9 @@ variable argonMass equal 39.948
 #tipos con que se asocian los atomos 
 variable argonType equal 1
 
-
-variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
-
-###XXX################################################################################################################
-#####################################SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION###############################
-######################################################################################################################
-#temp en K
+################################################################################
+# SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION ###########################
+################################################################################
 variable Temperatura equal 300.0
 
 #Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req
