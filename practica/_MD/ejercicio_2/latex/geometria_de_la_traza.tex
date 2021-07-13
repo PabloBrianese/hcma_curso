@@ -1,229 +1,337 @@
 \documentclass{article}
 \usepackage[spanish]{babel}
+\usepackage[hidelinks]{hyperref}
 \usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
 
+\newcommand{\realNumbers}{\mathbb{R}}
 \DeclarePairedDelimiterX{\norm}[1]{\lVert}{\rVert}{#1}
 
 \usepackage{bm}
 \newcommand{\uvec}[1]{\boldsymbol{\hat{\textbf{#1}}}}
 
+\newtheorem{lemma}{Lema}
+\newtheorem{physicalLaw}{Ley}
+\newtheorem{theorem}{Teorema}
+
 \title{Geometría de la traza del movimiento de un electron expuesto a un campo electromagnético externo}
 \author{Pablo Brianese}
 \begin{document}
   \maketitle
-  En unidades del Sistema Internacional, la ecuación del movimiento para una partícula de masa \(m\), carga \(q\), expuesta a un campo electromagnético externo es
-  \begin{align}
-    \label{equation:movementOfChargedParticleExposedToElectromagneticField}
-    m \vec{a}
-    =
-    q \vec{E} + q \vec{v} \times \vec{B}
-  \end{align}
-  Esta ecuación diferencial es lineal.
-  Esto nos permite resolverla por partes.
-  Sabemos que, cuando el campo elétrico es constante, la solución \(\vec{f}\) a la ecuación 
-  \begin{align}
-    &m \frac{d^2 \vec{f}}{d t^2} = q \vec{E}
-    &&\text{está dada por}
-    &&\vec{f} = \frac{q}{m} \vec{E} \frac{t^2}{2} + \left.\frac{d \vec{f}}{d t}\right|_0 t + \vec{f}_0
-  \end{align}
-  Si conseguimos hallar la solución \(\vec{g}\) a la ecuación
-  \begin{align}
-    m \frac{d^2 \vec{g}}{d t^2} = q \frac{d \vec{g}}{d t} \times \vec{B}
-  \end{align}
-  Entonces \(\vec{r} = \vec{f} + \vec{g}\) satisface \eqref{equation:movementOfChargedParticleExposedToElectromagneticField}.
-  \begingroup
-  \allowdisplaybreaks
-  \begin{align}
-    m \frac{d^2 \vec{g}}{d t^2}
-      &=
-      q \frac{d \vec{g}}{d t} \times \vec{B}
-    \\
-    \frac{d^2 \vec{g}}{d t^2}
-      &=
-      \frac{q}{m} \begin{vmatrix}
-        \uvec{\i} &\uvec{\j} &\uvec{k} \\
-        \frac{d g_x}{d t} &\frac{d g_y}{d t} &\frac{d g_z}{d t} \\
-        B_x &B_y & B_z
-      \end{vmatrix}
-      \\
-      &\left\{
-        \begin{aligned}
-          \frac{d^2 g_x}{d t^2}
-            &=
-            \frac{q}{m}
-            \begin{vmatrix}
-              \frac{d g_y}{d t} &\frac{d g_z}{d t} \\
-              B_y &B_z
-            \end{vmatrix}
-          \\
-          \frac{d^2 g_y}{d t^2}
-          &=
-          \frac{q}{m}
-          \begin{vmatrix}
-            \frac{d g_z}{d t} &\frac{d g_x}{d t} \\
-            B_z &B_x
-          \end{vmatrix}
-          \\
-          \frac{d^2 g_z}{d t^2}
-          &=
-          \frac{q}{m}
-          \begin{vmatrix}
-            \frac{d g_x}{d t} &\frac{d g_y}{d t} \\
-            B_x &B_y
-          \end{vmatrix}
-      \end{aligned}
-      \right.
-    \\
-    &\left\{
-      \begin{aligned}
-        \frac{d^2 g_x}{d t^2}
-          &=
-          \frac{q}{m} B_z \frac{d g_y}{d t}
-          - \frac{q}{m} B_y \frac{d g_z}{d t}
-        \\
-        \frac{d^2 g_y}{d t^2}
-          &=
-          \frac{q}{m} B_x \frac{d g_z}{d t}
-          - \frac{q}{m} B_z \frac{d g_x}{d t}
-        \\
-        \frac{d^2 g_z}{d t^2}
-        &=
-        \frac{q}{m} B_y \frac{d g_x}{d t}
-        - \frac{q}{m} B_x \frac{d g_y}{d t}
-    \end{aligned}
-    \right.
-    \\
-    &\left\{
-      \begin{aligned}
-        \frac{d^2 g_x}{d t^2}
-          &=
-          0 \frac{d g_x}{d t}
-          + \frac{q}{m} B_z \frac{d g_y}{d t}
-          - \frac{q}{m} B_y \frac{d g_z}{d t}
-        \\
-        \frac{d^2 g_y}{d t^2}
-          &=
-          - \frac{q}{m} B_z \frac{d g_x}{d t}
-          + 0 \frac{d g_y}{d t}
-          + \frac{q}{m} B_x \frac{d g_z}{d t}
-        \\
-        \frac{d^2 g_z}{d t^2}
-          &=
-          \frac{q}{m} B_y \frac{d g_x}{d t}
-          - \frac{q}{m} B_x \frac{d g_y}{d t}
-          + 0 \frac{d g_z}{d t}
-    \end{aligned}
-    \right.
-    \\
-    \frac{d^2 \vec{g}}{d t^2}
-    &=
-    \begin{pmatrix}
-      0 
-      &\frac{q}{m} B_z
-      &- \frac{q}{m} B_y
-      \\
-      - \frac{q}{m} B_z
-      &0
-      &\frac{q}{m} B_x
-      \\
-      \frac{q}{m} B_y
-      &- \frac{q}{m} B_x
-      &0
-    \end{pmatrix}
-    \frac{d \vec{g}}{d t}
-    \\
-    \frac{d^2 \vec{g}}{d t^2}
-    &=
-    A \frac{d \vec{g}}{d t}
-    \\
-    \frac{d \vec{g}}{d t}
-    &=
-    e^{A t} \left. \frac{d \vec{g}}{d t} \right|_0
-    \\
-    \vec{g}
-    &=
-    A^{- 1} e^{A t} \left. \frac{d \vec{g}}{d t} \right|_0 + \vec{g}_0
+  % \begin{abstract}
+  %   Un resumen porque quedó largo y difícil de leer.
+  % \end{abstract}
+  \begin{physicalLaw}
+    La ecuación del movimiento para una partícula de masa \(m\), carga \(q\), expuesta a un campo electromagnético externo es
+    \begin{align}
+      \label{equation:movementOfChargedParticleExposedToElectromagneticField}
+      m \vec{a}
+      =
+      q \vec{E} + q \vec{v} \times \vec{B}
     \end{align}
-  \endgroup
+    En unidades SI.
+  \end{physicalLaw}
 
+  Esta ecuación diferencial es lineal.
+  Eso nos permite resolverla primero analizando el campo eléctrico, y después el campo magnético.
+  Sabemos que cuando el campo elétrico es constante y el campo magnético es nulo
+  \begin{theorem}
+    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{E}\), donde el campo eléctrico \(\vec{E}\) es constante, está dada por \(\vec{r} = \frac{q}{m} \vec{E} \frac{t^2}{2} + \vec{v}_0 t + \vec{r}_0\).
+  \end{theorem}
+
+  Ahora buscamos la solución \(\vec{r}\), en el caso que el campo eléctrico es nulo y el campo magnético es constante, a la ecuación
   \begin{align}
-    A
+    m \vec{a}
     &=
-    \begin{pmatrix}
-      0 
-      &\frac{q}{m} B_z
-      &- \frac{q}{m} B_y
-      \\
-      - \frac{q}{m} B_z
-      &0
-      &\frac{q}{m} B_x
-      \\
-      \frac{q}{m} B_y
-      &- \frac{q}{m} B_x
-      &0
-    \end{pmatrix}
+    q \vec{v} \times \vec{B}
   \end{align}
-  autovalores de A 
-  \begingroup
-  \allowdisplaybreaks
-  \begin{align}
-    \det(\lambda - A)
-    &=
-    \begin{vmatrix}
-      \lambda
-      &- \frac{q}{m} B_z
-      &\frac{q}{m} B_y
+
+  \begin{theorem}
+    \label{theorem:velocity_dot_magneticFieldIsConstant}
+    El producto punto, \(\vec{v} \cdot \vec{B}\), es constante.
+  \end{theorem}
+  \begin{proof}
+    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
+    Multiplicamos por el campo magnético para obtener \(m \vec{a} \cdot \vec{B} = q (\vec{v} \times \vec{B}) \cdot \vec{B}\).
+    Porque el producto cruz \(\vec{v} \times \vec{B}\) es ortogonal a \(\vec{B}\), el lado derecho de la ecuación es nulo.
+    Resulta \(\vec{a} \cdot \vec{B} = 0\).
+    Pero el producto punto es lineal, luego conmuta con la derivación.
+    Por lo tanto \(\frac{d}{d t} (\vec{v} \cdot \vec{B}) = 0\).
+  \end{proof}
+
+  \begin{theorem}
+    \label{theorem:modulusOfVelocityIsConstant}
+    El módulo de la velocidad, \(v\), es constante.
+  \end{theorem}
+  \begin{proof}
+    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
+    Multiplicamos por la velocidad para obtener \(m \vec{a} \cdot \vec{v} = q (\vec{v} \times \vec{B}) \cdot \vec{v}\).
+    Porque el producto cruz \(\vec{v} \times \vec{B}\) es ortogonal a \(\vec{v}\), el lado derecho de la ecuación es nulo.
+    Resulta \(\vec{a} \cdot \vec{v} = 0\).
+    Esto nos permite calcular \(\frac{d}{d t} v^2 = 2 \vec{v} \cdot \frac{d \vec{v}}{d t} = 2 \vec{a} \cdot \vec{v} = 0\).
+  \end{proof}
+
+  Fijemos una base ortonormal \(\{\bar{b}_1, \bar{b}_2\}\) del plano ortogonal a \(\vec{B}\).
+  Esto nos permite definir dos escalares \(\alpha = \vec{v} \cdot \bar{b}_1\), \(\beta = \vec{v} \cdot \bar{b}_2\) que describen a la proyección ortogonal de \(\vec{v}\) sobre dicho plano.
+  Sin mayor esfuerzo \(\{\bar{b}_1, \bar{b}_2, \bar{B} = \vec{B} / B\}\) es una base ortonormal de \(\realNumbers^3\).
+  Pediremos además que \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) esté orientada positivamente.
+  Con mayor claridad, lo que pedimos es que se verifiquen las ecuaciones \(\bar{b}_1 \times \bar{b}_2 = \bar{B}\), \(\bar{b}_2 \times \bar{B} = \bar{b}_1\), \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
+  Eso nos ayudará a calcular productos cruz.
+  La siguientes propiedades se derivan de esta construcción
+  \begin{theorem}
+    Las variables \(\alpha\), \(\beta\) nos proveen las identidades
+    \begin{align}
+      \label{equation:alphaBetaFormulaForVelocity}
+      \vec{v}
+      &=
+      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
       \\
-      \frac{q}{m} B_z
-      &\lambda
-      &- \frac{q}{m} B_x
+      \label{equation:alphaBetaFormulaForModulusOfVelocity}
+      v_0^2
+      &=
+      \alpha^2 + \beta^2 + (\vec{v}_0 \cdot \bar{B})^2
       \\
-      - \frac{q}{m} B_y
-      &\frac{q}{m} B_x
-      &\lambda
-    \end{vmatrix}
-    \\
-    &=
-      \lambda
-      \begin{vmatrix}
-        \lambda & - \frac{q}{m} B_x \\
-        \frac{q}{m} B_x & \lambda
-      \end{vmatrix}
-    \\
-      &\quad
-      + \frac{q}{m} B_z
-      \begin{vmatrix}
-        \frac{q}{m} B_z &- \frac{q}{m} B_x \\
-        - \frac{q}{m} B_y &\lambda
-      \end{vmatrix}
-    \\
-      &\quad
-      + \frac{q}{m} B_y
-      \begin{vmatrix}
-        \frac{q}{m} B_z &\lambda \\
-        - \frac{q}{m} B_y &\frac{q}{m} B_x
-      \end{vmatrix}
-    \\
-    &=
-    \lambda (\lambda^2 + \frac{q^2}{m^2} B_x^2)
-    \\
-      &\quad
-      + \frac{q}{m} B_z (\frac{q}{m} B_z \lambda - \frac{q^2}{m^2} B_x B_y)
-      + \frac{q}{m} B_y (\frac{q^2}{m^2} B_x B_z + \frac{q}{m} B_y \lambda)
-    \\
-    &=
-    \lambda^3 + \frac{q^2}{m^2} B_x^2 \lambda
-    \\
-      &\quad
-      + \frac{q^2}{m^2} B_z^2 \lambda - \frac{q^3}{m^3} B_x B_y B_z
-      + \frac{q^3}{m^3} B_x B_y B_z + \frac{q^2}{m^2} B_y^2 \lambda
-    \\
-    &=
-    \lambda (\lambda^2 + \norm*{\frac{q}{m}\vec{B}}_2^2)
-    \\
-    &=
-    \lambda (\lambda - i \norm*{\frac{q}{m}\vec{B}}_2) (\lambda + i \norm*{\frac{q}{m}\vec{B}}_2)
-  \end{align}
-  \endgroup
-  autoespacios de A
-\end{document}
+      \label{equation:alphaBetaFormulaForCrossProduct}
+      \vec{v} \times \vec{B}
+      &=
+      B (- \alpha \bar{b}_2 + \beta \bar{b}_1)
+      \\
+      \label{equation:alphaBetaFormulaForAcceleration}
+      \vec{a}
+      &=
+      \frac{d \alpha}{d t} \bar{b}_1 + \frac{d \beta}{d t} \bar{b}_2
+    \end{align}
+  \end{theorem}
+  \begin{proof}
+    \eqref{equation:alphaBetaFormulaForVelocity}
+    es consecuencia de la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
+    La fórmula \(\vec{v} \cdot \bar{B} = \vec{v}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:velocity_dot_magneticFieldIsConstant}.
+
+    \eqref{equation:alphaBetaFormulaForModulusOfVelocity}
+    se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
+    La igualdad \(v^2 = v_0^2\) se debe al teorema \ref{theorem:modulusOfVelocityIsConstant}.
+
+    \eqref{equation:alphaBetaFormulaForCrossProduct}
+    se debe a la orientación positiva de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
+    Esta hace que \(\bar{b}_1 \times \bar{b}_2 = \bar{B}\), \(\bar{b}_2 \times \bar{B} = \bar{b}_1\), \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
+    Y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
+
+    \eqref{equation:alphaBetaFormulaForAcceleration}
+    se debe a la ecuación \eqref{equation:alphaBetaFormulaForVelocity} y a la linealidad de la derivada.
+  \end{proof}
+
+  \begin{theorem}
+    Las funciones \(\alpha\), \(\beta\) satisfacen el sistema de ecuaciones diferenciales
+    \begin{align}
+      \label{systemOfEquations:alphaBetaSystemOfDifferentialEquations}
+      \left\{
+        \begin{aligned}
+          \frac{d \alpha}{d t} &= \frac{q B}{m} \beta
+          \\
+          \frac{d \beta}{d t} &= - \frac{q B}{m} \alpha
+        \end{aligned}
+      \right.
+    \end{align}
+  \end{theorem}
+  \begin{proof}
+    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
+    Reemplazamos \(\vec{a}\), \(\vec{v} \times \vec{B}\) por sus fórmulas \eqref{equation:alphaBetaFormulaForAcceleration}, \eqref{equation:alphaBetaFormulaForCrossProduct} en función de \(\alpha\), \(\beta\).
+    Obtenemos
+    \begin{align}
+      \frac{d \alpha}{d t} \bar{b}_1 + \frac{d \beta}{d t} \bar{b}_2
+      &=
+      \frac{q B}{m} (\beta \bar{b}_1 - \alpha \bar{b}_2)
+    \end{align}
+    El sistema \eqref{systemOfEquations:alphaBetaSystemOfDifferentialEquations} se deduce usando que \(\bar{b}_1\), \(\bar{b}_2\) son vectores linealmente independientes.
+  \end{proof}
+
+  \begin{theorem}
+    Si la velocidad inicial, \(\vec{v}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la velocidad \(\vec{v}\) es constante.
+  \end{theorem}
+  \begin{proof}
+    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForModulusOfVelocity}, que dice \(
+      v_0^2
+      =
+      \alpha^2 + \beta^2
+      + (\vec{v}_0 \cdot \bar{B})^2
+    \)
+    .
+    Si \(\vec{v}_0\) es paralelo a \(\vec{B}\), entonces \(\vec{v}_0 = (\vec{v}_0 \cdot \bar{B}) \bar{B}\) y \(v_0^2 = (\vec{v}_0 \cdot \bar{B})^2\).
+    Junto a la primera ecuación, estas implican \(\alpha = \beta = 0\).
+    Por la ecuación \eqref{equation:alphaBetaFormulaForVelocity}, se sigue \(\vec{v} = (\vec{v}_0 \cdot \bar{B}) \bar{B} = \vec{v}_0\)
+  \end{proof}
+
+  En lo que sigue vamos a ignorar este caso degenerado, en el cual la velocidad inicial y el campo magnético son paralelos, y supondremos \(\vec{v}_0 \neq (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
+  Esto nos permite proyectar el vector \(\vec{v}_0\) sobre el plano ortogonal al campo magnético \(\vec{B}\).
+  El resultado es el vector proyección \(\vec{\pi}_0 = \vec{v}_0 - (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
+  Que tiene módulo positivo \(\pi_0 = (v_0^2 - (\vec{v}_0 \cdot \bar{B})^2)^{1 / 2}\), y por eso puede ser regularizado \(\bar{\pi}_0 = \vec{\pi}_0 / \pi_0\).
+  Este vector es importante, y en el siguiente teorema lo vemos por primera vez.
+
+  \begin{theorem}
+    \label{theorem:alphaBetaDescribeCircularMotion}
+    Existe un ángulo \(\theta = \theta(t)\) tal que \(\alpha = \pi_0 \cos \theta\), \(\beta = \pi_0 \sin \theta\).
+  \end{theorem}
+  \begin{proof}
+    La ecuación \ref{equation:alphaBetaFormulaForModulusOfVelocity} nos dice que \(\pi_0^2 = v_0^2 - (\vec{v}_0 \cdot \bar{B})^2 = \alpha^2 + \beta^2\).
+    Se deduce la ecuación de una circunferencia \(\alpha^2 + \beta^2 = \pi_0^2\) de radio \(\pi_0\).
+    Luego, para cada tiempo \(t\) existe un ángulo \(\theta = \theta(t)\) tal que \(\alpha = \pi_0 \cos \theta\) y \(\beta = \pi_0 \sin \theta\).
+  \end{proof}
+
+  \begin{theorem}
+    \label{theorem:thetaDifferentialEquation}
+    La velocidad angular \(\omega = \frac{d \theta}{d t}\) es \(\omega = \frac{q B}{m}\).
+  \end{theorem}
+  \begin{proof}
+    Partimos del sistema de ecuaciones diferenciales \eqref{systemOfEquations:alphaBetaSystemOfDifferentialEquations}.
+    Reemplazando \(\alpha = \pi_0 \cos \theta\), \(\beta = \pi_0 \sin \theta\), y usando la regla de la cadena, obtenemos
+    \begin{align}
+      \left\{
+        \begin{aligned}
+          (\pi_0 \sin \theta) \frac{d \theta}{d t}
+          &=
+          \frac{q B}{m} (\pi_0 \sin \theta)
+          \\
+          (- \pi_0 \cos \theta) \frac{d \theta}{d t}
+          &=
+          \frac{q B}{m} (- \pi_0 \cos \theta)
+        \end{aligned}
+      \right.
+    \end{align}
+    Conjuntamente, estas dos ecuaciones implican \(\omega = \frac{q B}{m}\).
+  \end{proof}
+
+  Esta es la segunda vez que aparece el vector proyección \(\vec{pi}\).
+  Aquí es importante que sea nonulo, porque nos permite usarlo para entender los vectores que viven en el plano ortogonal a \(\vec{B}\).
+
+  \begin{theorem}
+    \label{theorem:constantsThatDefineTheSolution_b1b2theta0}
+    La base \(\{\bar{b}_1, \bar{b}_2\}\) del plano ortogonal a \(\vec{B}\), puede elegirse como
+    \begin{align}
+      \label{equation:basisVectorsb1b2}
+      &\bar{b}_1
+      =
+      \bar{\pi}_0
+      &
+      &\bar{b}_2
+      =
+      \bar{B}
+      \times
+      \bar{\pi}_0
+    \end{align}
+    Además, de este modo puede elegirse el valor inicial de \(\theta\) como 
+    \begin{align}
+      \theta_0 = 0
+    \end{align}
+  \end{theorem}
+  \begin{proof}
+    En efecto.
+    El vector \(\bar{b}_1 = \bar{\pi}_0\) es unitario y ortogonal a \(\vec{B}\).
+    Un buen candidato.
+    Por otro lado, el vector \(\bar{b}_2\) queda inmediatamente determinado por la restricción que impusimos sobre la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) de \(\realNumbers^3\).
+    Al especificar que esta tiene que estar orientada positivamente, se verifica \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
+    Y esta última ecuación define a \(\bar{b}_2\).
+
+    Por otro lado, si volvemos a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}, para el instante \(t = 0\) dice
+    \(\vec{v}_0 = \alpha_0 \bar{b}_1 + \beta_0 \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
+    Reemplazando \(\alpha\), \(\beta\) por sus expresiones en función de \(\theta\), obtenemos
+    \begin{align}
+      \vec{v}_0
+      =
+      \pi_0 \cos \theta_0 \bar{b}_1
+      + \pi_0 \sin \theta_0 \bar{b}_2
+      + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+    \end{align}
+    Pero \(\vec{\pi}_0 = \vec{v}_0 - (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
+    Entonces
+    \(
+      \bar{\pi}_0
+      =
+      \cos \theta_0 \bar{b}_1
+      + \sin \theta_0 \bar{b}_2
+    \)
+    .
+    Aquí se aprecia que \(\theta_0 = 0\) es una elección viable para el ángulo inicial.
+  \end{proof}
+
+  \begin{theorem}
+    \label{theorem:thetaSolution}
+    El ángulo es \(\theta = \omega t\).
+  \end{theorem}
+  \begin{proof}
+    Es una consecuencia trivial de \ref{theorem:thetaDifferentialEquation} y \ref{theorem:constantsThatDefineTheSolution_b1b2theta0}.
+  \end{proof}
+
+  \begin{theorem}
+    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\), donde el campo magnético es constante, está dada por
+    \begin{align}
+      \vec{r} - \vec{r}_0
+      =
+      - \frac{\sin \omega t}{\omega}
+      \vec{\pi}_0
+      + \frac{\cos \omega t}{\omega}
+      \bar{B}
+      \times
+      \vec{\pi}_0
+      + t (\vec{v}_0 \cdot \bar{B}) \bar{B}
+    \end{align}
+  \end{theorem}
+  \begin{proof}
+    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForVelocity}
+    \begin{align}
+      \vec{v}
+      &=
+      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+    \end{align}
+    Reemplazamos \(\bar{b}_1\), \(\bar{b}_2\) por los vectores que propusimos en \ref{theorem:constantsThatDefineTheSolution_b1b2theta0}
+    \begin{align}
+      \vec{v}
+      &=
+      \alpha \bar{\pi} + \beta \bar{B} \times \bar{\pi} + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+    \end{align}
+    Reemplazamos \(\alpha\), \(\beta\) por las expresiones en función de \(\theta\) que obtuvimos en \ref{theorem:alphaBetaDescribeCircularMotion}
+    \begin{align}
+      \vec{v}
+      &=
+      (\pi_0 \cos \theta) \bar{\pi}_0 + (\pi_0 \sin \theta) \bar{B} \times \bar{\pi}_0 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \\
+      &=
+      (\cos \theta) \vec{\pi}_0 + (\sin \theta) \bar{B} \times \vec{\pi}_0 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+    \end{align}
+    Reemplazamos \(\theta\) por \(\omega t\), usando el teorema \ref{theorem:thetaSolution}
+    \begin{align}
+      \vec{v}
+      &=
+      (\cos \omega t) \vec{\pi}_0
+      + (\sin \omega t) \bar{B} \times \vec{\pi}_0
+      + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+    \end{align}
+    Integrando con respecto a \(t\) obtenemos el resultado que deseamos. 
+  \end{proof}
+
+  Observar que esta última fórmula también funciona en el caso en que \(\vec{v}_0\) sea paralelo a \(\vec{B}\).
+  Allí, sencillamente \(\vec{\pi}_0 = 0\).
+
+  \begin{theorem}
+    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{E} + q \vec{v} \times \vec{B}\), donde el campo eléctrico \(\vec{E}\) y el campo magnético \(\vec{B}\) son constantes, es
+    \begin{align}
+      \vec{r} - \vec{r}_0
+      &=
+      \left(
+        \frac{q}{m} \vec{E} \frac{t^2}{2}
+        + \vec{v}_0 t
+      \right)
+      +
+      \left(
+        - \frac{\sin \omega t}{\omega}
+        \vec{\pi}_0
+        + \frac{\cos \omega t}{\omega}
+        \bar{B}
+        \times
+        \vec{\pi}_0
+        + t (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \right)
+    \end{align}
+    
+  \end{theorem}
+  \end{document}
