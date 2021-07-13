@@ -11,7 +11,7 @@
 *.log
 *.synctex.gz
 
-# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6 6-1
+# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6 6-1 6-2
 **/_python_cas/ejercicio_9/**/*.csv
 **/_c/ejercicio_12/**/*.csv
 **/_cpp_y_numlibs/ejercicio_5/**/*.dat
@@ -20,12 +20,14 @@
 **/_cpp_y_numlibs/ejercicio_8/**/*.dat
 **/_MD/ejercicio_1/**/Datos*
 **/_MD/ejercicio_1/**/*.dat
+**/_MD/ejercicio_2/**/*.dat
 
 # Imágenes del ejercicio 3-9 3-11 3-12 6-1
 **/_python_cas/ejercicio_9/**/*.png
 **/_python_cas/ejercicio_11/**/*.png
 **/_python_cas/ejercicio_12/**/*.png
 **/_MD/ejercicio_1/**/*.png
+**/_MD/ejercicio_2/**/*.png
 
 # Archivos de compilación de C/C++
 *.out
@@ -35,3 +37,6 @@
 
 # Entornos de ejecución de Python
 **/_MD/ejercicio_1/python/env/*
+
+# Documentos .pdf
+**/\[Berkeley\ Physics\ Course\]\ Vol.\ 2.\ Electricity\ and\ Magnetism.pdf
