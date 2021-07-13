@@ -1,26 +1,20 @@
+# SISTEMA DE UNIDADES PARA EXPRESAR MAGNITUDES
 units real
+
+###################################################################
+# TIPOS DE PARTÍCULAS, Y DE INTERACCIONES, USADAS EN LA SIMULACIÓN
+atom_style atomic
+variable argon equal 1  # solo hay un tipo de partículas
+pair_style lj/cut 12.0
+
+###################################################################
+# ESTRUCTURAS DE DATOS QUE DEBEN CREAR LOS PROCESADORES
+neighbor 5.0 bin
+
+################################################################################
+# CAJA DE SIMULACIÓN
 boundary p p p
 
-atom_style atomic
-variable argonMass equal 39.948
-
-
-variable epsilon_A1vA1 equal 0.2432088
-variable sigma_A1vA1 equal 3.432
-variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
-
-################################################################################
-#tipos con que se asocian los atomos 
-variable argonType equal 1
-
-################################################################################
-# SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION ###########################
-################################################################################
-variable Temperatura equal 300.0
-
-#Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req ¿?
-
-#caja del sistema
 variable xlo equal 0.0
 variable xhi equal 300.0
 variable ylo equal 0.0
@@ -28,184 +22,166 @@ variable yhi equal 100.0
 variable zlo equal 0.0
 variable zhi equal 300.0
 
+region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
+
+create_box 1 CAJA_SISTEMA
+
+################################################################################
+# PARAMETROS DE CONTROL DE LA SIMULACION
+variable DTime equal 5.0
+timestep ${DTime}
 
 variable MoleculasAInsertar equal 10000
 
-variable VolumenCaja equal (${xhi}-${xlo})*(${yhi}-${ylo})*(${zhi}-${zlo})
+thermo 0
+thermo_style custom step temp ke pe etotal press vol density
 
+################################################################################
+# PARAMETROS DE CONTROL DE LA EQUILIBRACIÓN
 #Hacemos algunos pasos de integracion para equilibrar el sistema
 #durante la equilibracion, la temperatura aumenta linealmente desde
 #"TemperaturaIniEquilibracion" hasta el valor final "Temperatura"
 
 variable TemperaturaIniEquilibracion equal 10.0
+variable Temperatura equal 300.0
 variable PasosEquilibracion equal 1e4
 
-
+################################################################################
+# PARÁMETROS DE CONTROL DE LA PRODUCCIÓN
 variable PasosProduccion equal 2e4
 
-
-variable DTime equal 5.0
-
-
-
-#Directorio en el que se van a guardar los archivos de salida
-variable DirectorioOut string ./DatosArgonLJ_Temp${Temperatura}_Vol${VolumenCaja}/
-#creamos el directorio DirectorioOut
-shell 'mkdir --parents' ${DirectorioOut}
-
-variable Prefix string Z
-
-variable NombreDeBase string ${Prefix}Argon_NumMol_${MoleculasAInsertar}_Temp${Temperatura}&
-PasEqui${PasosEquilibracion}PasProd${PasosProduccion}Dt${DTime}
-#variable NombreDeBase string ${Prefix}prueba
+###################################################################
+# INTERACCIÓN ENTRE PARES DE PARTÍCULAS
+# coeficientes de LJ para la interaccion entre las particulas
+# por default lammps usa una regla de mezclado geometrica de Lorentz-Bertelot 
+# (llamada geometric en lammps)
+variable epsilon equal 0.2432088
+variable sigma equal 3.432
+variable cutoff equal 2.5*${sigma}
+pair_coeff ${argon} ${argon} ${epsilon} ${sigma} ${cutoff}
 
 
-
-
-variable NumFigurasParaMovie equal 200
-variable NumFigurasPNG equal 1
-variable NumFigurasXYZ equal 1
-variable NumDatos equal 1000
-variable NumEstado equal 1
-
-
-
-##No modificar esto que sigue
-variable NumTotalPasos equal ${PasosProduccion}+${PasosEquilibracion}
-variable PasosGuardarFigurasParaMovie equal ${PasosProduccion}/${NumFigurasParaMovie}
-variable PasosGuardarFigurasPNG equal ${PasosProduccion}/${NumFigurasPNG}
-variable PasosGuardarFigurasXYZ equal ${PasosProduccion}/${NumFigurasXYZ}
-variable PasosDatos equal ${PasosProduccion}/${NumDatos}
-variable PasosEstado equal ${PasosProduccion}/${NumEstado}
-##
-
-#esto lo pongo para poder definir variables que usen info de 
-#atomos individuales, como en
-#variable MiVariable equal x[34]
-atom_modify map array
-
-timestep ${DTime}
-
-region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
-
-create_box 1 CAJA_SISTEMA 
+#Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req ¿?
 
 ################################################################################
-# SECCCION DE INSERCION DE ATOMOS EN EL SISTEMA ################################
-################################################################################
-create_atoms 1 random 10000 1244 NULL
+# INSERCION DE ATOMOS EN EL SISTEMA
+# masa del argón
+mass ${argon} 39.948
 
-#las variables que siguen a continuacion tienen una etiqueta An, donde n corre desde 1 hasta
-#NumTiposAtomos 
-group Gr_A1 type ${argonType}
+# creamos las partículas al azar
+create_atoms 1 random ${MoleculasAInsertar} 1244 NULL
 
-mass ${argonType} ${argonMass}
+# por si hay átomos demasiado próximos entre sí al comenzar la simulación
+# (lo cual la inestabilizaría)
+group argonGroup type ${argon}
+delete_atoms overlap ${sigma} argonGroup argonGroup
 
-
-
-
-
-
-
-pair_style lj/cut 12.0 
-#pair_modify     mix arithmetic
-#coeficientes de LJ para la interaccion entre las particulas
-#por default lammps usa una regla de mezclado geometrica de Lorentz-Bertelot 
-#(llamada geometric en lammps)
-pair_coeff ${argonType} ${argonType} ${epsilon_A1vA1} ${sigma_A1vA1} ${cutoff_A1vA1}
-
-#por si hay átomos demasiado próximos entre sí al comenzar la simulación
-#(lo cual la inestabilizaría)
-delete_atoms overlap ${sigma_A1vA1} Gr_A1 Gr_A1
-
-
-
-
-#El numero real de particulas podria ser menor que lo definido en MoleculasAInsertar.
-#Por eso calculamos cuantas moleculas se insertaron realmente
+# El numero real de particulas podria ser menor que lo definido en MoleculasAInsertar.
+# Por eso calculamos cuantas moleculas se insertaron realmente
 variable NumTotMoleculas equal $(count(all))
 
+# seteamos la velocidad inicial de las partículas,
+# de forma consistente con la temperatura TemperaturaIniEquilibracion
 velocity all create ${TemperaturaIniEquilibracion} 234985122
 
 
-neighbor	5.0 bin
+################################################################################
+# EQUILIBRACIÓN
 
-###XXX###########################################################################################################
-###########################################AQUI TERMOSTATOS######################################################
-#################################################################################################################
-
-#IMPORTANT NOTE: A Nose-Hoover thermostat will not work well for arbitrary values of Tdamp. 
-#If Tdamp is too small,  the temperature can fluctuate wildly; if it is too large, the temperature 
-#will take a very long time to equilibrate. A good choice for many models is a Tdamp of around 100 timesteps. 
-#Note that this is NOT the same as 100 time units for most units settings.
+# IMPORTANT NOTE: A Nose-Hoover thermostat will not work well for arbitrary values of Tdamp. 
+# If Tdamp is too small,  the temperature can fluctuate wildly; if it is too large, the temperature 
+# will take a very long time to equilibrate. A good choice for many models is a Tdamp of around 100 timesteps. 
+# Note that this is NOT the same as 100 time units for most units settings.
 
 variable TDamp equal 100.0*${DTime}
+fix termostato_equilibracion all nvt temp ${TemperaturaIniEquilibracion} ${Temperatura} ${TDamp} 
 
-fix termostato_eq all nvt temp ${TemperaturaIniEquilibracion} ${Temperatura} ${TDamp} 
 
+# guardamos las posiciones iniciales.
+# Util para poder editar la condición inicial con un visualizador molecular
+# dump dump_inicial_posiciones all xyz ${PasosEquilibracion} ${DirectorioOut}${NombreDeBase}_INI.*.xyz
 
-#guardamos las posiciones iniciales. Util para poder editar la ci con un visualizador molecular
-#dump dump_inicial_posiciones all xyz ${PasosEquilibracion} ${DirectorioOut}${NombreDeBase}_INI.*.xyz 
-
-#dump_modify      dump_inicial_posiciones sort id
-
-# ESCUPE MUCHO CONTENIDO A LA TERMINAL, SOLÍA NO ESTAR COMENTADO
-thermo ${PasosDatos}
-thermo_style custom step temp ke pe etotal press vol density
+#dump_modify dump_inicial_posiciones sort id
 
 #Hacemos la equilibracion
 run ${PasosEquilibracion}
 
 
+################################################################################
+# RESETEO
 #undump dump_inicial_posiciones
-unfix  termostato_eq
+unfix  termostato_equilibracion
 
-#Reseteamos el termostato ya a la temperatura deseada 
-
-fix termostato all nvt temp ${Temperatura} ${Temperatura} ${TDamp} 
-
-
-###XXX################################################################################################################
-#####################################SECCCION DE GUARDADO DE DATOS E IMAGENES#########################################
-######################################################################################################################
 reset_timestep 0
 
 
-
-#dump		dump_posiciones all xyz ${PasosGuardarFigurasXYZ} ${DirectorioOut}${NombreDeBase}Pos.*.xyz 
-#dump_modify dump_posiciones element Ar
-
-
+################################################################################
+# PRODUCCIÓN
+fix termostato all nvt temp ${Temperatura} ${Temperatura} ${TDamp} 
 
 
-# # Generar movie
-# variable color string type
-# variable diameter string type
-# dump dump_movie all movie ${PasosGuardarFigurasParaMovie} &
-#   ${DirectorioOut}${NombreDeBase}.mpg &
-#   ${color} ${diameter} &
-#   size 1200 1200 &
-#   zoom 2.5 &
-#   axes no 0 0 &
-#   box no 0"
+# #############################################################################
+# # SECCCION DE GUARDADO DE DATOS E IMAGENES
 
+# #Directorio en el que se van a guardar los archivos de salida
+# shell 'mkdir --parents' dat
+
+# variable Prefix string Z
+
+# variable NombreDeBase string ${Prefix}Argon_NumMol_${MoleculasAInsertar}_Temp${Temperatura}&
+# PasEqui${PasosEquilibracion}PasProd${PasosProduccion}Dt${DTime}
+# #variable NombreDeBase string ${Prefix}prueba
 
 
 
 
-
-#Definimos algunas variables utiles para el output de la info termodinamica
-variable tiempo equal time
-variable TemperaturaMedida equal temp
-variable EnergiaTot equal etotal
-variable EnergiaCinTot equal ke
-
-
-compute TemperaturaComp all temp
+# variable NumFigurasParaMovie equal 200
+# variable NumFigurasPNG equal 1
+# variable NumFigurasXYZ equal 1
+# variable NumDatos equal 1000
+# variable NumEstado equal 1
 
 
-variable Volumen equal vol
-variable DensidadMasica_gr_cc equal density
+
+# ##No modificar esto que sigue
+# variable NumTotalPasos equal ${PasosProduccion}+${PasosEquilibracion}
+# variable PasosGuardarFigurasParaMovie equal ${PasosProduccion}/${NumFigurasParaMovie}
+# variable PasosGuardarFigurasPNG equal ${PasosProduccion}/${NumFigurasPNG}
+# variable PasosGuardarFigurasXYZ equal ${PasosProduccion}/${NumFigurasXYZ}
+# variable PasosDatos equal ${PasosProduccion}/${NumDatos}
+# variable PasosEstado equal ${PasosProduccion}/${NumEstado}
+# ##
+
+
+# #dump dump_posiciones all xyz ${PasosGuardarFigurasXYZ} ${DirectorioOut}${NombreDeBase}Pos.*.xyz 
+# #dump_modify dump_posiciones element Ar
+
+
+
+
+# # # Generar movie
+# # variable color string type
+# # variable diameter string type
+# # dump dump_movie all movie ${PasosGuardarFigurasParaMovie} &
+# #   ${DirectorioOut}${NombreDeBase}.mpg &
+# #   ${color} ${diameter} &
+# #   size 1200 1200 &
+# #   zoom 2.5 &
+# #   axes no 0 0 &
+# #   box no 0"
+
+# #Definimos algunas variables utiles para el output de la info termodinamica
+# variable tiempo equal time
+# variable TemperaturaMedida equal temp
+# variable EnergiaTot equal etotal
+# variable EnergiaCinTot equal ke
+
+
+# compute TemperaturaComp all temp
+
+
+# variable Volumen equal vol
+# variable DensidadMasica_gr_cc equal density
 
 
 
@@ -226,40 +202,35 @@ fix PrintPresion all print ${PasosDatos} "${tiempo} ${presion}" &
   title "#Tiempo [fms]     Presion [Atm]" &
   screen no &
 
-#para imprimir una variable que va cambiando durante la simulacion usar "fix print" en vez de "print" solo...
-#aunque el manual de lammps nos dice que el comando esta pensado para usarse con equal style variables:
-#"...See the variable command for a description of equal style variables which are the most useful ones 
-#to use with the fix print command..."
+# fix printTermodinamica all print ${PasosDatos} &
+#   "${tiempo} ${TemperaturaMedida} ${EnergiaTot} ${EnergiaCinTot} ${presion} ${Volumen} ${DensidadMasica_gr_cc}" &
+#   file ${DirectorioOut}${NombreDeBase}__termodinamica &
+#   title "#tiempo [fms]     Temperatura [K]    EnergiaTotal [Kcal/mol]   EnergiaCineticaTotal [Kcal/mol]   Presion [Atm]   Volumen [ang**3]  Densidad[g cm**-3]" &
+#   screen no &
 
-fix printTermodinamica all print ${PasosDatos} &
-  "${tiempo} ${TemperaturaMedida} ${EnergiaTot} ${EnergiaCinTot} ${presion} ${Volumen} ${DensidadMasica_gr_cc}" &
-  file ${DirectorioOut}${NombreDeBase}__termodinamica &
-  title "#tiempo [fms]     Temperatura [K]    EnergiaTotal [Kcal/mol]   EnergiaCineticaTotal [Kcal/mol]   Presion [Atm]   Volumen [ang**3]  Densidad[g cm**-3]" &
-  screen no &
+# fix PrintDensidad all print ${PasosDatos} "${tiempo} ${DensidadMasica_gr_cc}" &
+#   file ${DirectorioOut}${NombreDeBase}__densidad_gr_cc &
+#   title "#Tiempo [fms]     Densidad [gr_cc]" &
+#   screen no &
 
-fix PrintDensidad all print ${PasosDatos} "${tiempo} ${DensidadMasica_gr_cc}" &
-  file ${DirectorioOut}${NombreDeBase}__densidad_gr_cc &
-  title "#Tiempo [fms]     Densidad [gr_cc]" &
-  screen no &
+# #definimos variables promediadas para computar el punto en el espacio de fases
+# variable DensidadMoleculas equal ${NumTotMoleculas}/vol
 
-#definimos variables promediadas para computar el punto en el espacio de fases
-variable DensidadMoleculas equal ${NumTotMoleculas}/vol
-
-variable NumAvogadro equal 6.02214e23
-#Volumen molar en litros/mol 
-variable VolumenMolar equal 1e-27*${NumAvogadro}*vol/${NumTotMoleculas}
+# variable NumAvogadro equal 6.02214e23
+# #Volumen molar en litros/mol 
+# variable VolumenMolar equal 1e-27*${NumAvogadro}*vol/${NumTotMoleculas}
 
 
-fix PrintVolumenMolar all print ${PasosDatos} "${tiempo} ${VolumenMolar}" &
-  file ${DirectorioOut}${NombreDeBase}__vol_molar &
-  title "#Tiempo [fms]    VolumenMolar [lts/mol]" &
-  screen no &
+# fix PrintVolumenMolar all print ${PasosDatos} "${tiempo} ${VolumenMolar}" &
+#   file ${DirectorioOut}${NombreDeBase}__vol_molar &
+#   title "#Tiempo [fms]    VolumenMolar [lts/mol]" &
+#   screen no &
 
-#calculamos el promedio de la presion durante toda la etapa de produccion
-fix PresionMedia all ave/time 1 ${PasosEstado} ${PasosEstado} &
-  v_VolumenMolar v_DensidadMasica_gr_cc v_presion v_DensidadMoleculas v_TemperaturaMedida &
-  file ${DirectorioOut}/${NombreDeBase}__promedios &
-  title1 "#[litros/mol] [gr/cc] [atm] [ang**-3] [K]"
+# #calculamos el promedio de la presion durante toda la etapa de produccion
+# fix PresionMedia all ave/time 1 ${PasosEstado} ${PasosEstado} &
+#   v_VolumenMolar v_DensidadMasica_gr_cc v_presion v_DensidadMoleculas v_TemperaturaMedida &
+#   file ${DirectorioOut}/${NombreDeBase}__promedios &
+#   title1 "#[litros/mol] [gr/cc] [atm] [ang**-3] [K]"
 
 run ${PasosProduccion}
 
