@@ -17,10 +17,6 @@ variable argonType equal 1
 
 variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
 
-#variable auxiliar para definir desde la linea de comandos
-variable from_extern equal v_extern
-
-
 ###XXX################################################################################################################
 #####################################SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION###############################
 ######################################################################################################################
