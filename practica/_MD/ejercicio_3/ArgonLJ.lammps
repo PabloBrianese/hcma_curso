@@ -16,7 +16,6 @@ variable epsilon_A1vA1 equal 0.2432088
 variable sigma_A1vA1 equal 3.432
 variable cota_max_mol_size equal ${sigma_A1vA1}
 variable argonMass equal 39.948
-variable ChemSymb string 'Ar' 
 
 ###XXX#########################################################################################
 #tipos con que se asocian los atomos 
@@ -200,7 +199,7 @@ reset_timestep 0
 
 
 #dump		dump_posiciones all xyz ${PasosGuardarFigurasXYZ} ${DirectorioOut}${NombreDeBase}Pos.*.xyz 
-#dump_modify dump_posiciones element ${ChemSymb}
+#dump_modify dump_posiciones element Ar
 
 
 
