@@ -1,12 +1,13 @@
 units real
 boundary p p p
-dimension 3
+
 atom_style atomic
+variable argonMass equal 39.948
+
 
 variable epsilon_A1vA1 equal 0.2432088
 variable sigma_A1vA1 equal 3.432
 variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
-variable argonMass equal 39.948
 
 ################################################################################
 #tipos con que se asocian los atomos 
