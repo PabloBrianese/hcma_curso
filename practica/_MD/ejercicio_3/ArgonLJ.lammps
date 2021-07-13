@@ -1,14 +1,7 @@
-#version del script para moleculas con 1 tipo de atomo
-
 units real
 boundary	p p p
 dimension 3
 atom_style atomic
-
-
-
-#Las moléculas parametrizadas hasta aqui son
-#argon
 
 #cota_max_mol_size se usa para poner un separador en los bordes de la caja del sistema
 # para evitar problemas por la condición de contorno periodica
@@ -27,9 +20,6 @@ variable argonType equal 1
 
 variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
 
-
-#Poner la variable "GenerarMovie" en on/off segun se quiera o no generar la movie
-variable GenerarMovie string "off"
 
 #Poner en "Si" si la cond inicial se crea con programa externo
 variable crear_CI string "No"
@@ -204,11 +194,16 @@ reset_timestep 0
 
 
 
-
-if "${GenerarMovie}==on" then &
-"dump		dump_movie all movie ${PasosGuardarFigurasParaMovie} ${DirectorioOut}${NombreDeBase}.mpg type type size 1200 1200 &
-zoom 2.5 axes no 0 0 box no 0"
-		
+# # Generar movie
+# variable color string type
+# variable diameter string type
+# dump dump_movie all movie ${PasosGuardarFigurasParaMovie} &
+#   ${DirectorioOut}${NombreDeBase}.mpg &
+#   ${color} ${diameter} &
+#   size 1200 1200 &
+#   zoom 2.5 &
+#   axes no 0 0 &
+#   box no 0"
 
 
 
