@@ -8,18 +8,24 @@ atom_style atomic
 
 
 #Las moléculas parametrizadas hasta aqui son
+#helio
 #argon
+
+
+###TO_SET###
 variable MOLECULA string "argon"
 
 #cota_max_mol_size se usa para poner un separador en los bordes de la caja del sistema para evitar problemas por la 
 #cond de cont periodica
-variable NumAtomosEnMol equal 1
-variable NumTiposAtomos equal 1
-variable epsilon_A1vA1 equal 0.2432088
-variable sigma_A1vA1 equal 3.432
-variable cota_max_mol_size equal ${sigma_A1vA1}
-variable MasaA1 equal 39.948
-variable ChemSymb string 'Ar' 
+if "${MOLECULA}==helio" then "variable NumAtomosEnMol equal 1" "variable NumTiposAtomos equal 1" &
+"variable epsilon_A1vA1 equal 0.0202674" "variable sigma_A1vA1 equal 2.576" &
+"variable cota_max_mol_size equal ${sigma_A1vA1}" "variable MasaA1 equal 4.003" &
+"variable ChemSymb string 'He'" 
+
+if "${MOLECULA}==argon" then "variable NumAtomosEnMol equal 1" "variable NumTiposAtomos equal 1" &
+"variable epsilon_A1vA1 equal 0.2432088" "variable sigma_A1vA1 equal 3.432" &
+"variable cota_max_mol_size equal ${sigma_A1vA1}" "variable MasaA1 equal 39.948" &
+"variable ChemSymb string 'Ar'" 
 
 ###XXX#########################################################################################
 #las variables que siguen a continuacion tienen una etiqueta An, donde n corre desde 1 hasta
@@ -87,8 +93,8 @@ variable DTime equal 5.0
 
 #Directorio en el que se van a guardar los archivos de salida
 variable DirectorioOut string ./DatosArgonLJ_Temp${Temperatura}_Vol${VolumenCaja}/
-#creamos el directorio DirectorioOut
-shell 'mkdir --parents' ${DirectorioOut}
+#creamos el directorio DirectorioOut (si es que no existe...) Ojo, NO crea subdirectorios...
+shell mkdir ${DirectorioOut}
 
 variable Prefix string Z
 
@@ -172,7 +178,7 @@ neighbor	5.0 bin
 #################################################################################################################
 
 #IMPORTANT NOTE: A Nose-Hoover thermostat will not work well for arbitrary values of Tdamp. 
-#If Tdamp is too small,  the temperature can fluctuate wildly; if it is too large, the temperature 
+#If Tdamp is too small, the temperature can fluctuate wildly; if it is too large, the temperature 
 #will take a very long time to equilibrate. A good choice for many models is a Tdamp of around 100 timesteps. 
 #Note that this is NOT the same as 100 time units for most units settings.
 
@@ -186,9 +192,8 @@ fix termostato_eq all nvt temp ${TemperaturaIniEquilibracion} ${Temperatura} ${T
 
 #dump_modify      dump_inicial_posiciones sort id
 
-# ESCUPE MUCHO CONTENIDO A LA TERMINAL, SOLÍA NO ESTAR COMENTADO
-# thermo ${PasosDatos}
-# thermo_style custom step temp ke pe etotal press vol density
+thermo ${PasosDatos}
+thermo_style     custom step temp ke pe etotal press vol density
 
 #Hacemos la equilibracion
 run ${PasosEquilibracion}
@@ -253,10 +258,8 @@ compute              pres all reduce sum c_stress_peratom[1] c_stress_peratom[2]
 variable     presion equal -(c_pres[1]+c_pres[2]+c_pres[3])/(3*v_Volumen)
 
 
-fix PrintPresion all print ${PasosDatos} "${tiempo} ${presion}" &
-  file ${DirectorioOut}${NombreDeBase}__presion &
-  title "#Tiempo [fms]     Presion [Atm]" &
-  screen no &
+fix PrintPresion all print ${PasosDatos} "${tiempo} ${presion}" screen no &
+file ${DirectorioOut}${NombreDeBase}__presion title "#Tiempo [fms]     Presion [Atm]"
 
 #para imprimir una variable que va cambiando durante la simulacion usar "fix print" en vez de "print" solo...
 #aunque el manual de lammps nos dice que el comando esta pensado para usarse con equal style variables:
@@ -264,15 +267,13 @@ fix PrintPresion all print ${PasosDatos} "${tiempo} ${presion}" &
 #to use with the fix print command..."
 
 fix printTermodinamica all print ${PasosDatos} &
-  "${tiempo} ${TemperaturaMedida} ${EnergiaTot} ${EnergiaCinTot} ${presion} ${Volumen} ${DensidadMasica_gr_cc}" &
-  file ${DirectorioOut}${NombreDeBase}__termodinamica &
-  title "#tiempo [fms]     Temperatura [K]    EnergiaTotal [Kcal/mol]   EnergiaCineticaTotal [Kcal/mol]   Presion [Atm]   Volumen [ang**3]  Densidad[g cm**-3]" &
-  screen no &
+"${tiempo} ${TemperaturaMedida} ${EnergiaTot} ${EnergiaCinTot} ${presion} ${Volumen} ${DensidadMasica_gr_cc}" &
+file ${DirectorioOut}${NombreDeBase}__termodinamica screen no &
+title "#tiempo [fms]     Temperatura [K]    EnergiaTotal [Kcal/mol]   EnergiaCineticaTotal [Kcal/mol]   Presion [Atm]   Volumen [ang**3]  Densidad[g cm**-3]"
 
-fix PrintDensidad all print ${PasosDatos} "${tiempo} ${DensidadMasica_gr_cc}" &
-  file ${DirectorioOut}${NombreDeBase}__densidad_gr_cc &
-  title "#Tiempo [fms]     Densidad [gr_cc]" &
-  screen no &
+
+fix PrintDensidad all print ${PasosDatos} "${tiempo} ${DensidadMasica_gr_cc}" screen no &
+file ${DirectorioOut}${NombreDeBase}__densidad_gr_cc title "#Tiempo [fms]     Densidad [gr_cc]"
 
 #definimos variables promediadas para computar el punto en el espacio de fases
 variable DensidadMoleculas equal ${NumTotMoleculas}/vol
@@ -282,16 +283,11 @@ variable NumAvogadro equal 6.02214e23
 variable VolumenMolar equal 1e-27*${NumAvogadro}*vol/${NumTotMoleculas}
 
 
-fix PrintVolumenMolar all print ${PasosDatos} "${tiempo} ${VolumenMolar}" &
-  file ${DirectorioOut}${NombreDeBase}__vol_molar &
-  title "#Tiempo [fms]    VolumenMolar [lts/mol]" &
-  screen no &
+fix PrintVolumenMolar all print ${PasosDatos} "${tiempo} ${VolumenMolar}" screen no &
+file ${DirectorioOut}${NombreDeBase}__vol_molar title "#Tiempo [fms]    VolumenMolar [lts/mol]"
 
 #calculamos el promedio de la presion durante toda la etapa de produccion
-fix PresionMedia all ave/time 1 ${PasosEstado} ${PasosEstado} &
-  v_VolumenMolar v_DensidadMasica_gr_cc v_presion v_DensidadMoleculas v_TemperaturaMedida &
-  file ${DirectorioOut}/${NombreDeBase}__promedios &
-  title1 "#[litros/mol] [gr/cc] [atm] [ang**-3] [K]"
+fix PresionMedia all ave/time 1 ${PasosEstado} ${PasosEstado} v_VolumenMolar v_DensidadMasica_gr_cc v_presion v_DensidadMoleculas v_TemperaturaMedida  file ${DirectorioOut}/${NombreDeBase}__promedios title1 "#[litros/mol] [gr/cc] [atm] [ang**-3] [K]"
 
 run ${PasosProduccion}
 
