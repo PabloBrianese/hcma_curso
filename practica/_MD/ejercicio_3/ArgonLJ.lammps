@@ -19,7 +19,7 @@ variable argonMass equal 39.948
 
 ###XXX#########################################################################################
 #tipos con que se asocian los atomos 
-variable TipoA1 equal 1
+variable argonType equal 1
 
 
 
@@ -123,9 +123,9 @@ create_box 1 CAJA_SISTEMA
 create_atoms 1 random 10000 1244 NULL
 #las variables que siguen a continuacion tienen una etiqueta An, donde n corre desde 1 hasta
 #NumTiposAtomos 
-group Gr_A1 type ${TipoA1}
+group Gr_A1 type ${argonType}
 
-mass ${TipoA1} ${argonMass}
+mass ${argonType} ${argonMass}
 
 
 
@@ -138,7 +138,7 @@ pair_style lj/cut 12.0
 #coeficientes de LJ para la interaccion entre las particulas
 #por default lammps usa una regla de mezclado geometrica de Lorentz-Bertelot 
 #(llamada geometric en lammps)
-pair_coeff ${TipoA1} ${TipoA1} ${epsilon_A1vA1} ${sigma_A1vA1} ${cutoff_A1vA1}
+pair_coeff ${argonType} ${argonType} ${epsilon_A1vA1} ${sigma_A1vA1} ${cutoff_A1vA1}
 
 #por si hay átomos demasiado próximos entre sí al comenzar la simulación
 #(lo cual la inestabilizaría)
