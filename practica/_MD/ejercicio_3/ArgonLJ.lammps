@@ -3,12 +3,9 @@ boundary p p p
 dimension 3
 atom_style atomic
 
-#cota_max_mol_size se usa para poner un separador en los bordes de la caja del sistema
-# para evitar problemas por la condición de contorno periodica
 variable epsilon_A1vA1 equal 0.2432088
 variable sigma_A1vA1 equal 3.432
 variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
-variable cota_max_mol_size equal ${sigma_A1vA1}
 variable argonMass equal 39.948
 
 ################################################################################
