@@ -13,7 +13,7 @@ neighbor 5.0 bin
 
 ################################################################################
 # CAJA DE SIMULACIÓN
-boundary f f f
+boundary p p p
 
 variable xlo equal 0.0
 variable xhi equal 300.0
