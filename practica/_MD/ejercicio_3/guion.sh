@@ -1,5 +1,3 @@
 #!/usr/bin/bash
 
-lmp_ubuntu \
-  -log none\
-  -in ArgonLJ.lammps
+lmp_ubuntu -in ArgonLJ.lammps
