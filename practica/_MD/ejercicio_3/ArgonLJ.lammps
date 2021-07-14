@@ -1,5 +1,5 @@
 units real
-boundary p p p
+boundary	p p p
 dimension 3
 atom_style atomic
 
@@ -11,7 +11,7 @@ variable cutoff_A1vA1 equal 2.5*${sigma_A1vA1}
 variable cota_max_mol_size equal ${sigma_A1vA1}
 variable argonMass equal 39.948
 
-################################################################################
+###XXX#########################################################################################
 #tipos con que se asocian los atomos 
 variable argonType equal 1
 
@@ -20,7 +20,7 @@ variable argonType equal 1
 ################################################################################
 variable Temperatura equal 300.0
 
-#Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req ¿?
+#Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req
 
 #caja del sistema
 variable xlo equal 0.0
@@ -91,12 +91,12 @@ timestep ${DTime}
 region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
 
 create_box 1 CAJA_SISTEMA 
+###XXX################################################################################################################
+#####################################SECCCION DE INSERCION DE ATOMOS EN EL SISTEMA####################################
+######################################################################################################################
 
-################################################################################
-# SECCCION DE INSERCION DE ATOMOS EN EL SISTEMA ################################
-################################################################################
+
 create_atoms 1 random 10000 1244 NULL
-
 #las variables que siguen a continuacion tienen una etiqueta An, donde n corre desde 1 hasta
 #NumTiposAtomos 
 group Gr_A1 type ${argonType}
@@ -152,8 +152,8 @@ fix termostato_eq all nvt temp ${TemperaturaIniEquilibracion} ${Temperatura} ${T
 #dump_modify      dump_inicial_posiciones sort id
 
 # ESCUPE MUCHO CONTENIDO A LA TERMINAL, SOLÍA NO ESTAR COMENTADO
-thermo ${PasosDatos}
-thermo_style custom step temp ke pe etotal press vol density
+# thermo ${PasosDatos}
+# thermo_style custom step temp ke pe etotal press vol density
 
 #Hacemos la equilibracion
 run ${PasosEquilibracion}
