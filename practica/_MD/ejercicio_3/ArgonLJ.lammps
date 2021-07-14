@@ -26,7 +26,6 @@ region CAJA_SISTEMA block ${xlo} ${xhi} ${ylo} ${yhi} ${zlo} ${zhi}
 
 create_box 1 CAJA_SISTEMA
 
-fix walls all wall/reflect xlo EDGE xhi EDGE ylo EDGE yhi EDGE zlo EDGE zhi EDGE
 ################################################################################
 # PARAMETROS DE CONTROL DE LA SIMULACION
 variable DTime equal 5.0
@@ -186,22 +185,22 @@ fix termostato all nvt temp ${Temperatura} ${Temperatura} ${TDamp}
 
 
 
-# #Esto pretende calcular la presion de cada lado a partir del computo del
-# #stress por atomo. Adaptado del help del comando "compute stress/atom" de lammps...
+#Esto pretende calcular la presion de cada lado a partir del computo del
+#stress por atomo. Adaptado del help del comando "compute stress/atom" de lammps...
 
-# compute              stress_peratom all stress/atom TemperaturaComp
-# compute              pres all reduce sum c_stress_peratom[1] c_stress_peratom[2] c_stress_peratom[3]
-# #el factor 101325.0 es para pasar de atmosferas a pascales
-# #variable     presion equal -101325.0*(c_pres[1]+c_pres[2]+c_pres[3])/(3*v_Volumen)
+compute              stress_peratom all stress/atom TemperaturaComp
+compute              pres all reduce sum c_stress_peratom[1] c_stress_peratom[2] c_stress_peratom[3]
+#el factor 101325.0 es para pasar de atmosferas a pascales
+#variable     presion equal -101325.0*(c_pres[1]+c_pres[2]+c_pres[3])/(3*v_Volumen)
 
-# #presion en atmosferas
-# variable     presion equal -(c_pres[1]+c_pres[2]+c_pres[3])/(3*v_Volumen)
+#presion en atmosferas
+variable     presion equal -(c_pres[1]+c_pres[2]+c_pres[3])/(3*v_Volumen)
 
 
-# fix PrintPresion all print ${PasosDatos} "${tiempo} ${presion}" &
-#   file ${DirectorioOut}${NombreDeBase}__presion &
-#   title "#Tiempo [fms]     Presion [Atm]" &
-#   screen no &
+fix PrintPresion all print ${PasosDatos} "${tiempo} ${presion}" &
+  file ${DirectorioOut}${NombreDeBase}__presion &
+  title "#Tiempo [fms]     Presion [Atm]" &
+  screen no &
 
 # fix printTermodinamica all print ${PasosDatos} &
 #   "${tiempo} ${TemperaturaMedida} ${EnergiaTot} ${EnergiaCinTot} ${presion} ${Volumen} ${DensidadMasica_gr_cc}" &
