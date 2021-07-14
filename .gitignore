@@ -11,7 +11,7 @@
 *.log
 *.synctex.gz
 
-# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6 6-1 6-2
+# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6 6-1 6-2 6-3
 **/_python_cas/ejercicio_9/**/*.csv
 **/_c/ejercicio_12/**/*.csv
 **/_cpp_y_numlibs/ejercicio_5/**/*.dat
@@ -21,6 +21,7 @@
 **/_MD/ejercicio_1/**/Datos*
 **/_MD/ejercicio_1/**/*.dat
 **/_MD/ejercicio_2/**/*.dat
+**/_MD/ejercicio_3/**/Datos*
 
 # Imágenes del ejercicio 3-9 3-11 3-12 6-1
 **/_python_cas/ejercicio_9/**/*.png
@@ -37,6 +38,10 @@
 
 # Entornos de ejecución de Python
 **/_MD/ejercicio_1/python/env/*
+**/_MD/ejercicio_3/python/env/*
 
 # Documentos .pdf
 **/\[Berkeley\ Physics\ Course\]\ Vol.\ 2.\ Electricity\ and\ Magnetism.pdf
+
+# Arhivos de configuración de Visual Studio Code
+.vscode/*
