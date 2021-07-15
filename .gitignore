@@ -40,6 +40,9 @@
 **/_MD/ejercicio_1/python/env/*
 **/_MD/ejercicio_3/python/env/*
 
+# Archivos de interpretación de Python
+**/__pycache__/*
+
 # Documentos .pdf
 **/\[Berkeley\ Physics\ Course\]\ Vol.\ 2.\ Electricity\ and\ Magnetism.pdf
 
