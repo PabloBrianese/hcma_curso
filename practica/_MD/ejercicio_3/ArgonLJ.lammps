@@ -90,17 +90,18 @@ variable Temperatura index 300
 #Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req
 
 #caja del sistema
+variable side index 300
 variable xlo equal 0.0
-variable xhi equal 300.0
+variable xhi equal ${side}
 variable ylo equal 0.0
-variable yhi equal 100.0
+variable yhi equal ${side}
 variable zlo equal 0.0
-variable zhi equal 300.0
+variable zhi equal ${side}
 
 
 variable MoleculasAInsertar equal 10000
 
-variable VolumenCaja equal (${xhi}-${xlo})*(${yhi}-${ylo})*(${zhi}-${zlo})
+variable VolumenCaja equal round(${side}^3)
 
 #Hacemos algunos pasos de integracion para equilibrar el sistema
 #durante la equilibracion, la temperatura aumenta linealmente desde
