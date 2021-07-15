@@ -85,7 +85,7 @@ variable from_extern equal v_extern
 #####################################SECCCION DE PARAMETROS DE CONTROL DE LA SIMULACION###############################
 ######################################################################################################################
 #temp en K
-variable Temperatura index 300.0
+variable Temperatura index 300
 
 #Recordar que para el Fluido de LJ Req~1.122sigma o sigma ~ 0.891 Req
 
