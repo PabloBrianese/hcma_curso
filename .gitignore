@@ -49,3 +49,6 @@
 
 # Arhivos de configuración de Visual Studio Code
 .vscode/*
+
+# Slides de las clases
+practica/_OF/HCMA_clase_intro_CFD_1.pdf
