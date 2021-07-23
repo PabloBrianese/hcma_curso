@@ -4,6 +4,6 @@ g++ -o fourierSeriesSolution.out fourierSeriesSolution.cpp -lm
 
 ./fourierSeriesSolution.out > dat/fourierSeriesSolution.csv
 
-python3 fourierSeriesSolution.py
+python3 makeHeatmaps.py
 
 convert -delay 100 dat/timestep* dat/fourierSeriesSolution.gif

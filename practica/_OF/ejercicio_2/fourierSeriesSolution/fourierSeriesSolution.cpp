@@ -2,10 +2,11 @@
 #include <cmath>
 #include <array>
 
-constexpr auto order = 10;
-constexpr auto Lx = 1.0;
-constexpr auto Ly = 1.0;
-constexpr auto difussionCoefficient = 0.1;
+constexpr auto order = 100;
+constexpr auto Lx = 20.0;
+constexpr auto Ly = 10.0;
+constexpr auto difussionCoefficient = 4.0;
+constexpr auto dt = 0.01;
 
 auto concentration(double t, double x, double y, size_t order) {
     double concentration = 0.0;
@@ -24,13 +25,13 @@ auto concentration(double t, double x, double y, size_t order) {
 }
 
 int main() {
-    std::array<double, 10> ts;
-    for (auto i = 0; i < ts.size(); ++i) ts[i] = i * 0.1;
+    std::array<double, 20> ts;
+    for (auto i = 0; i < ts.size(); ++i) ts[i] = i * dt;
 
-    std::array<double, 10> xs;
+    std::array<double, 200> xs;
     for (auto i = 0; i < xs.size(); ++i) xs[i] = Ly * i / (double(xs.size()) - 1);
 
-    std::array<double, 10> ys;
+    std::array<double, 100> ys;
     for (auto i = 0; i < ys.size(); ++i) ys[i] = Ly * i / (double(ys.size()) - 1);
 
     std::cout << "t,x,y,z,concentration" << std::endl;

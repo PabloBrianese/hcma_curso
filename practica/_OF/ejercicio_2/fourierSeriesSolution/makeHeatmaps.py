@@ -15,4 +15,4 @@ import seaborn as sns
 for timestep in range(len(timesteps)):
     fig, ax = plt.subplots()
     sns.heatmap(timesteps[timestep], vmin=0.0, vmax=1.0, ax=ax)
-    fig.savefig(f"dat/timestep{timestep}.png")
+    fig.savefig(f"dat/timestep{timestep:03}.png")
