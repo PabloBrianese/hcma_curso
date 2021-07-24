@@ -39,7 +39,7 @@ int main() {
         ys[i] = Ly * double(i) / double(ys.size() - 1);
 
     cout << "t,x,y,z,concentration" << endl;
-    for (auto t : ts) for (auto x : xs) for (auto y : ys)
+    for (auto t : ts) for (auto y : ys) for (auto x : xs)
         cout
             << t << "," << x << "," << y << "," << 0.5 <<  "," << concentration(t, x, y, order)
             << endl;
