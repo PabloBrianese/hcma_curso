@@ -11,12 +11,12 @@ constexpr auto dt = 0.001;
 auto concentration(double t, double x, double y, size_t order) {
     double concentration = 0.0;
     for (auto m = 1; m < order; m += 2) {
-        auto ySineFactor = sin(m * M_PI * y / Ly);
+        const auto ySineFactor = sin(m * M_PI * y / Ly);
         for (auto n = 1; n < order; ++n) {
-            auto xSineFactor = sin(n * M_PI * x / Lx);
-            auto coefficient = 8 / (n * m * M_PI*M_PI);
-            auto lambda = - M_PI*M_PI * (n*n / (Lx*Lx) + m*m / (Ly*Ly));
-            auto tExponentialFactor = exp(lambda * difussionCoefficient * t);
+            const auto xSineFactor = sin(n * M_PI * x / Lx);
+            const auto coefficient = 8 / (n * m * M_PI*M_PI);
+            const auto lambda = - M_PI*M_PI * (n*n / (Lx*Lx) + m*m / (Ly*Ly));
+            const auto tExponentialFactor = exp(lambda * difussionCoefficient * t);
             concentration += coefficient * xSineFactor * ySineFactor * tExponentialFactor;
         }
     }
