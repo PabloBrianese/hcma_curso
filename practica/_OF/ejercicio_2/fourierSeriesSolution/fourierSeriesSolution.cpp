@@ -1,44 +1,108 @@
-#include <iostream>
+#include <cstdio>
 #include <cmath>
 #include <array>
 #include <vector>
 
 using namespace std;
 
-constexpr auto order = 100;
 constexpr auto Lx = 20.0;
 constexpr auto Ly = 10.0;
 constexpr auto difussionCoefficient = 4.0;
 constexpr auto dt = 1;
 
-auto concentration(double t, double x, double y, size_t order) {
-    double concentration = 0.5;
-    for (auto n = 1; n < order; ++n) {
-        const auto coefficient = 2.0 / (n * M_PI) * sin(n * M_PI_2);
-        const auto xCosFactor = cos(n * M_PI * x / Lx);
-        const auto lambda = - M_PI*M_PI * n*n / (Lx*Lx);
-        const auto tExpFactor = exp(lambda * difussionCoefficient * t);
-        concentration += coefficient * xCosFactor * tExpFactor;
+constexpr auto order = 200;
+
+constexpr auto k_max = (order - 1) / 2;
+constexpr auto ks {[]() constexpr {
+    array<int, k_max> result {};
+    for (auto k = 0; k < k_max; ++k) result[k] = k;
+
+    return result;
+}()};
+
+constexpr auto ns {[]() constexpr {
+    array<double, k_max> result {};
+    for (auto k : ks) result[k] = double(2 * k + 1);
+
+    return result;
+}()};
+
+constexpr auto signs {[]() constexpr {
+    array<int, k_max> result {};
+    for (auto k : ks) result[k] = (k % 2 == 0) ? 1 : - 1;
+
+    return result;
+}()};
+
+constexpr auto coefficients {[]() constexpr {
+    array<double, k_max> result {};
+    for (auto k : ks) result[k] = 2.0 / (ns[k] * M_PI);
+
+    return result;
+}()};
+
+constexpr auto reduced_lambdas {[]() constexpr {
+    array<double, k_max> result {};
+    for (auto k : ks) result[k] = M_PI * ns[k] / Lx;
+
+    return result;
+}()};
+
+constexpr auto lambdaDs {[]() constexpr {
+    array<double, k_max> result {};
+    for (auto k : ks) {
+        const auto lambda = - M_PI*M_PI * ns[k]*ns[k] / (Lx*Lx);
+        result[k] = lambda * difussionCoefficient;
     }
+
+    return result;
+}()};
+
+
+auto concentration(double t, double x) {
+    vector<double> xCosFactors;
+    xCosFactors.reserve(k_max);
+    for (auto k : ks) xCosFactors.push_back(cos(reduced_lambdas[k] * x));
+
+    vector<double> tExpFactors;
+    tExpFactors.reserve(k_max);
+    for (auto k : ks) tExpFactors.push_back(exp(lambdaDs[k] * t));
+
+    double concentration = 0.5;
+    for (auto k : ks)
+        concentration += signs[k] * coefficients[k] * xCosFactors[k] * tExpFactors[k];
 
     return concentration;
 }
 
+constexpr auto ts {[]() constexpr {
+    constexpr auto size = 20;
+    array<double, size> result {};
+    for (auto i = 0; i < size; ++i) result[i] = i * dt;
+
+    return result;
+}()};
+
+constexpr auto xs {[]() constexpr {
+    constexpr auto size = 200;
+    array<double, size> result {};
+    for (auto i = 0; i < size; ++i)
+        result[i] = Lx * double(i) / double(size - 1);
+
+    return result;
+}()};
+
+constexpr auto ys {[]() constexpr {
+    constexpr auto size = 100;
+    array<double, size> result {};
+    for (auto i = 0; i < size; ++i)
+        result[i] = Ly * double(i) / double(size - 1);
+    
+    return result;
+}()};
+
 int main() {
-    array<double, 20> ts;
-    for (auto i = 0; i < ts.size(); ++i) ts[i] = i * dt;
-
-    array<double, 200> xs;
-    for (auto i = 0; i < xs.size(); ++i)
-        xs[i] = Lx * double(i) / double(xs.size() - 1);
-
-    array<double, 100> ys;
-    for (auto i = 0; i < ys.size(); ++i)
-        ys[i] = Ly * double(i) / double(ys.size() - 1);
-
-    cout << "t,x,y,z,concentration" << endl;
+    printf("t,x,y,z,concentration\n");
     for (auto t : ts) for (auto y : ys) for (auto x : xs)
-        cout
-            << t << "," << x << "," << y << "," << 0.5 <<  "," << concentration(t, x, y, order)
-            << endl;
+        printf("%f,%f,%f,%f,%f\n", t, x, y, 0.5, concentration(t, x));
 }
