@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <array>
+#include <vector>
 
 using namespace std;
 
@@ -8,19 +9,16 @@ constexpr auto order = 100;
 constexpr auto Lx = 20.0;
 constexpr auto Ly = 10.0;
 constexpr auto difussionCoefficient = 4.0;
-constexpr auto dt = 0.001;
+constexpr auto dt = 1;
 
 auto concentration(double t, double x, double y, size_t order) {
-    double concentration = 0.0;
-    for (auto m = 1; m < order; m += 2) {
-        const auto ySineFactor = sin(m * M_PI * y / Ly);
-        for (auto n = 1; n < order; ++n) {
-            const auto xSineFactor = sin(n * M_PI * x / Lx);
-            const auto coefficient = 8 / (n * m * M_PI*M_PI);
-            const auto lambda = - M_PI*M_PI * (n*n / (Lx*Lx) + m*m / (Ly*Ly));
-            const auto tExponentialFactor = exp(lambda * difussionCoefficient * t);
-            concentration += coefficient * xSineFactor * ySineFactor * tExponentialFactor;
-        }
+    double concentration = 0.5;
+    for (auto n = 1; n < order; ++n) {
+        const auto coefficient = 2.0 / (n * M_PI) * sin(n * M_PI_2);
+        const auto xCosFactor = cos(n * M_PI * x / Lx);
+        const auto lambda = - M_PI*M_PI * n*n / (Lx*Lx);
+        const auto tExpFactor = exp(lambda * difussionCoefficient * t);
+        concentration += coefficient * xCosFactor * tExpFactor;
     }
 
     return concentration;
