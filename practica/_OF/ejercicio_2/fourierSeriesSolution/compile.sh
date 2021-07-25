@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-g++ -o fourierSeriesSolution.out fourierSeriesSolution.cpp -lm
+g++ -o fourierSeriesSolution.out -O3 fourierSeriesSolution.cpp -lm
