@@ -1,9 +1,9 @@
 #!/usr/bin/bash
 
-g++ -o fourierSeriesSolution.out fourierSeriesSolution.cpp -lm
+bash compile.sh
 
-./fourierSeriesSolution.out > dat/fourierSeriesSolution.csv
+bash makeDataFile.sh
 
 python3 makeHeatmaps.py
 
-convert -delay 100 dat/timestep* dat/fourierSeriesSolution.gif
+bash makeTimeEvolutionGIF.sh
