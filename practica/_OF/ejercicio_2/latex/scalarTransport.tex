@@ -493,16 +493,6 @@
         d y
       d x
     }
-    \\
-    &=
-    \frac{4}{L_x L_y} 
-    \int_0^{L_x}
-      \int_0^{L_y}
-        c(x, y, 0)
-        \cos\left( n \pi \frac{x}{L_x} \right)
-        \cos\left( m \pi \frac{y}{L_y} \right)
-      d y
-    d x
   \end{align}
   En nuestro caso, la condición inicial está dada por 
   \begin{align}
@@ -520,90 +510,165 @@
   \begin{align}
     D_{n, m}
     &=
-    \frac{4}{L_x L_y}
-    \int_0^{L_x / 2}
-      \int_0^{L_y}
-        \cos\left( n \pi \frac{x}{L_x} \right)
-        \cos\left( m \pi \frac{y}{L_y} \right)
-      d y
-    d x
-    \\
-    &=
-    \frac{4}{L_x L_y}
-    \int_0^{L_x / 2}
-      \cos\left( n \pi \frac{x}{L_x} \right)
-    d x
-    \int_0^{L_y}
-      \cos\left( m \pi \frac{y}{L_y} \right)
-    d y
-    \\
-    &=
-    \left\{
-      \begin{aligned}
-        &\frac{4}{L_x}
-        \int_0^{L_x / 2}
+    \frac{
+      \int_0^{L_x / 2}
+        \int_0^{L_y}
           \cos\left( n \pi \frac{x}{L_x} \right)
-        d x
+          \cos\left( m \pi \frac{y}{L_y} \right)
+        d y
+      d x
+    }{
+      \int_0^{L_x}
+        \int_0^{L_y}
+        \cos\left( n \pi \frac{x}{L_x} \right)^2
+        \cos\left( m \pi \frac{y}{L_y} \right)^2
+        d y
+      d x
+    }
+    \\
+    &=
+    \frac{
+      \int_0^{L_x / 2}
+        \cos\left( n \pi \frac{x}{L_x} \right)
+      d x
+      \int_0^{L_y}
+          \cos\left( m \pi \frac{y}{L_y} \right)
+      d y
+    }{
+      \int_0^{L_x}
+        \cos\left( n \pi \frac{x}{L_x} \right)^2
+      d x
+      \int_0^{L_y}
+        \cos\left( m \pi \frac{y}{L_y} \right)^2
+      d y
+    }
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+          \left. \frac{\sen(m \pi y / L_y)}{m \pi / L_y} \right\vert_0^{L_y}
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+          (L_y / 2)
+        }
+        &&\text{si } m \neq 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+          L_y
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+          L_y
+        }
         &&\text{si } m = 0
-        \\
-        &0
-        &&\text{si } m \neq 0
       \end{aligned}
     \right.
     \\
     &=
     \left\{
       \begin{aligned}
-        &\frac{4}{n \pi}
-        (- \sen(n \pi / 2))
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+        }
+        &&\text{si } m = 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2} d x
+        }{
+          \int_0^{L_x} d x
+        }
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+        }
         &&\text{si } m = 0 \text{ y } n \neq 0
-        \\
-        &2
-        &&\text{si } m = 0 \text{ y } n = 0
-        \\
-        &0
-        &&\text{si } m \neq 0
       \end{aligned}
     \right.
     \\
     &=
     \left\{
       \begin{aligned}
-        &\frac{4}{n \pi}
-        (-1)^{(n - 1) / 2 + 1}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{1}{2}
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &\frac{2}{L_x}
+        \left.
+          \frac{\sen(n \pi x / L_x)}{n \pi / L_x}
+        \right|_0^{L_x / 2}
+        &&\text{si } m = 0 \text{ y } n \neq 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{1}{2}
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &\frac{2 \sen(n \pi / 2)}{n \pi}
+        &&\text{si } m = 0 \text{ y } n \neq 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{1}{2}
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &0
+        &&\text{si } m = 0 \text{, y } n \neq 0 \text{ es par}
+        \\
+        &(- 1)^{\frac{n - 1}{2}} \frac{2}{n \pi}
         &&\text{si } m = 0 \text{, y } n \neq 0 \text{ es impar}
-        \\
-        &0
-        &&\text{si } m = 0 \text{, y } n \neq 0 \text{ es par}
-        \\
-        &2
-        &&\text{si } m = 0 \text{ y } n = 0
-        \\
-        &0
-        &&\text{si } m \neq 0
-      \end{aligned}
-    \right.
-    \\
-    &=
-    \left\{
-      \begin{aligned}
-        &\frac{4}{n \pi}
-        (-1)^{k + 1}
-        &&\text{si } m = 0 \text{, y } n = 2 k + 1 \text{ con } k \geq 1
-        \\
-        &0
-        &&\text{si } m = 0 \text{, y } n \neq 0 \text{ es par}
-        \\
-        &2
-        &&\text{si } m = 0 \text{ y } n = 0
-        \\
-        &0
-        &&\text{si } m \neq 0
       \end{aligned}
     \right.
   \end{align}
   
-  Por lo tanto
+  Por lo tanto % tengo un factor de 2 que está de más, y un signo - que está de más
   \begin{align}
     c(x, y, t)
     =
