@@ -1,0 +1,861 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+
+\newcommand{\realNumbers}{\mathbb{R}}
+
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
+
+% Math intervals %
+%%%%%%%%%%%%%%%%%%
+%\begin{}
+\usepackage{etoolbox}
+\newcommand{\leftOpenInterval}{\left]}
+\newcommand{\rightOpenInterval}{\right[}
+\newcommand{\leftClosedInterval}{\left[}
+\newcommand{\rightClosedInterval}{\right]}
+\newcommand{\interval}[3]{%
+  \ifstrequal{#1}{oo}{%
+    \leftOpenInterval #2, #3 \rightOpenInterval%
+  }{%
+    \ifstrequal{#1}{co}{%
+      \leftClosedInterval #2, #3 \rightOpenInterval%
+    }{%
+      \ifstrequal{#1}{oc}{
+        \leftOpenInterval #2, #3 \rightClosedInterval%
+      }{%
+        \ifstrequal{#1}{cc}{
+          \leftClosedInterval #2, #3 \rightClosedInterval
+        }{%
+        }%
+      }%
+    }%
+  }%
+}
+%\end{}
+% End math intervals %
+%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{lemma}{Lema}
+
+\title{Ecuación de Transporte}
+\author{Pablo Brianese}
+\begin{document}
+  \maketitle
+  \section{La ecuación de transporte escalar}
+  La ecuación de transporte se lee
+  \begin{align}
+    \frac{\partial c}{\partial t} = \nabla (D \nabla c) - \nabla \cdot (\vec{v} \cdot c) + S
+  \end{align}
+  \begin{itemize}
+    \item \(c\) es la variable de interés (concentración de especie para el transporte de masa, temperatura para el transporte de calor);
+    \item \(D\) es el coeficiente de difusión, este puede ser propio de la especie en el caso del movimiento de partículas o referirse a la difusividad térmica en el caso del transporte de calor;
+    \item \(\vec{v}\) es el campo de velocidades con que se mueve la cantidad.
+    Es una función del tiempo y del espacio.
+    Por ejemplo, en el caso de la advección,
+    \(c\) podría ser la concentración de sal en un río, y luego \(\vec{v}\) sería la velocidad del flujo de agua como función del tiempo y la ubicación.
+    En otro ejemplo, \(c\) podría ser la concentración de pequeñas burbujas en un lago calmo, y luego \(\vec{v}\) sería la velocidad de las burbujas subiendo hacia la superficie por flotación dependiendo del tiempo y de la ubicación de la burbuja.
+    \item \(S\) describe fuentes o sumideros para la cantidad \(c\).
+    Por ejemplo, para una especie química, \(S > 0\) quiere decir que una reacción química está creando más sustancia de esta especie, y \(S < 0\) quiere decir que una reacción química está destruyendo la especie.
+    Para el transporte de calor, \(S > 0\) podría ocurrir si se genera energía térmica mediante fricción.
+  \end{itemize}
+  
+  El lado derecho de la ecuación es la suma de tres contribuciones.
+  \begin{itemize}
+    \item La primera, \(\nabla \cdot (D \nabla c)\), describe la difusión.
+    Imaginemos que \(c\) es la concentración de un químico.
+    Cuando la concentración es baja en un lugar comparada con el área que lo rodea (es decir, se trata de un mínimo local de la concentración), la sustancia se difundirá desde los alrededores hacia en interior de dicho lugar, entonces la concentración aumentará.
+    De forma recíproca, si en este lugar la concentración es alta en comparación con los alrededores (es decir, se trata de un maximo local de la concentración), entonces la substancia se difundirá hacia el exterior de dicho lugar y la concentración decrecerá.
+    La difusión neta es proporcional al Laplaciano de la concentración si la difusividad \(D\) es constante.
+    \item La segunda contribución, \(- \nabla \cdot (\vec{v} \cdot c)\), describe la convección (o advección).
+    Imaginemos estar parados sobre el banco de un río, midiendo la salinidad del agua (cantidad de sal) cada segundo.
+    Río arriba, alguien arroja un balde de sal dentro del río.
+    Al rato, veríamos aumentar la salinidad súbitamente, luego caer, mientras pasa la zona de agua salada.
+    Por lo tanto, la concentración en una ubicación dada puede cambiar por el flujo.
+    \item La contribución final, \(S\), describe la creación o destrucción de una cantidad.
+    Y no requiere de mayor explicación.
+  \end{itemize}
+
+  \section{La ecuación de difusión}
+  En nuestro caso, tanto \(\vec{v}\) como \(S\) son nulos.
+  Además \(D\) es constante en el tiempo y no varía en el espacio.
+  Luego, debemos resolver la ecuación de difusión
+  \begin{align}
+    \label{equation:diffusion}
+    \frac{\partial c}{\partial t}
+    =
+    D \Delta c
+    =
+    D \frac{\partial^2 c}{\partial x^2} + D \frac{\partial^2 c}{\partial y^2}
+  \end{align}
+  Donde \(c = c(x, y, t)\) es una función de tres variables \(x\), \(y\), \(t\).
+  Aquí \(x\), \(y\) son las variables espaciales, de modo tal que \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\);
+  y \(t\) es la variable temporal, de modo tal que \(t \geq 0\).
+  Asumiremos una condición inicial \(c(x, y, 0)\) como dada.
+  Finalmente, impondremos condiciones de borde de Newmann homogéneas para nuestra solución.
+
+  La ecuación de difusión es idéntica a la ecuación del calor.
+  Para resolverla, seguimos una técnica de resolución que fue descubierta por Joseph Fourier y publicada en \emph{Théorie analytique de la chaleur} el año 1822.
+  El método de separación de variables.
+  Buscaremos soluciones \(s\) a la ecuación de difusión \eqref{equation:diffusion}, nonulas, que satisfagan las condiciones de borde pero que tengan la siguiente propiedad:
+  \(s\) es un producto en el cual la dependencia respecto de \(x\), \(y\), \(t\) está separada.
+  Esto es:
+  \begin{align}
+    \label{equation:separatedSolution}
+    s(x, y, t)
+    =
+    X(x) Y(y) T(t)
+  \end{align}
+  En este caso \(s \neq 0\) implica \(X \neq 0\), \(Y \neq 0\), \(T \neq 0\), también \(X Y \neq 0\), \(Y T \neq 0\), \(X T \neq 0\).
+  Luego, substituyendo la fórmula de separación \eqref{equation:separatedSolution} para \(s\) en la ecuación de difusión \eqref{equation:diffusion} se deriva
+  \begin{align}
+    \frac{\partial}{\partial t} X Y T
+    &=
+    D \left(
+      \frac{\partial^2}{\partial x^2} X Y T
+      +
+      \frac{\partial^2}{\partial y^2} X Y T
+    \right)
+    \\
+    X Y T'
+    &=
+    D \left(
+      X^{\prime\prime} Y T
+      +
+      X Y^{\prime\prime} T
+    \right)
+    \\
+    \frac{T'}{D T}
+    &=
+    \frac{X^{\prime\prime} Y + X Y^{\prime\prime}}{X Y}
+    \\
+    \label{equation:separatedDifferentialEquation}
+    \frac{T'}{D T}
+    &=
+    \frac{X^{\prime\prime}}{X}
+    +
+    \frac{Y^{\prime\prime}}{Y}
+  \end{align}
+  Dado que el lado derecho de \eqref{equation:separatedDifferentialEquation} depende solo de las variables espaciales y el lado izquierdo solo del tiempo, ambos lados son iguales a un valor constante \(\lambda \in \realNumbers\).
+  De este modo
+  \begin{align}
+    \label{equation:XYTLambda}
+    \frac{T'}{D T}
+    =
+    \frac{X''}{X} + \frac{Y''}{Y}
+    =
+    \lambda
+  \end{align}
+  Esto nos dice, por un lado, que la función \(T\), satisfaciendo la ecuación diferencial \(T' = \lambda D T\), es de la forma
+  \begin{align}
+    T(t) = e^{\lambda D t}
+  \end{align}
+  Por otro lado, derivando a ambos lados de esta ecuación \eqref{equation:XYTLambda} con respecto a \(x\), \(y\), se deduce
+  \begin{align}
+    \frac{d}{d x} \frac{X^{\prime\prime}}{X} 
+    =
+    \frac{d}{d y} \frac{Y^{\prime\prime}}{Y}
+    =
+    0
+    &&\Rightarrow
+    &&\frac{X^{\prime\prime}}{X} = \alpha
+    &&\frac{Y^{\prime\prime}}{Y} = \beta
+  \end{align}
+  para ciertas constantes \(\alpha, \beta \in \realNumbers\).
+  Resulta entonces que \(\alpha + \beta = \lambda\), y nos quedamos con un sistema de ecuaciones
+  \begin{align}
+    \label{equation:separatedDifussionEquation}
+    T = e^{(\alpha + \beta) D t}
+    && X^{\prime\prime} = \alpha X
+    && Y^{\prime\prime} = \beta Y
+  \end{align}
+  Que nos darán forma final de la solución \(s\), después de fijar las condiciones de borde.
+
+  De este modo obtenemos una familia de soluciones separadas \(\{s_i\}_i\) que nos permite escribir la solución general de la ecuación de difusión, \(c\), como una serie
+  \begin{align}
+    c = \sum_i D_i s_i
+    &&\text{donde}
+    &&D_i = \frac{\int_0^{L_y}\int_0^{L_x} c(x, y, 0) s_i(x, y, 0) d x d y}{\int_0^{L_y}\int_0^{L_x} s_i(x, y, 0)^2 d x d y}
+  \end{align}
+
+  \begin{lemma}
+    Si \(U = U(u)\) es una función nonula definida en un intervalo \(\interval{cc}{0}{L}\) que satisface las condiciones de borde \(U(0) = U(L) = 0\), y la ecuación diferencial \(U^{\prime\prime} = \gamma U\) para cierta constante \(\gamma \in \realNumbers\).
+    Entonces existe un entero positivo \(k\) tal que \(\gamma = - \pi^2 k^2 / L^2\), y \(U\) es de la forma \(U = \sen(n \pi u / L)\).
+  \end{lemma}
+
+  \section{Condiciones de borde de Dirichlet}
+  Sobre la solución separada \(s\), imponemos las condiciones de borde de Dirichlet para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t > 0\)
+  \begin{align}
+    \label{equation:DirichletBoundaryConditions}
+    s(0, y , t)
+    =
+    s(x, 0, t)
+    =
+    s(L_x, y, t)
+    =
+    s(x, L_y, t)
+    =
+    0
+  \end{align}
+  Estas \eqref{equation:DirichletBoundaryConditions} implican que la única solución \(s\) constante es la solución nula \(s = 0\).
+  Por eso podemos ignorar tal caso.
+  Substituyendo la fórmula de separación \eqref{equation:separatedSolution} para \(s\) en las condiciones de borde \eqref{equation:DirichletBoundaryConditions}, se deduce (usando \(s \neq 0\))
+  \begin{align}
+    &X(0) Y T
+    =
+    X Y(0) T
+    =
+    X(L_x) Y T
+    =
+    X Y(L_y) T
+    =
+    0
+    \\
+    \label{equation:separatedInitialConditions}
+    &\Rightarrow X(0) = Y(0) = X(L_x) = Y(L_y) = 0
+  \end{align}
+  Seguimos resolviendo las ecuaciones diferenciales lineales de segundo orden con coeficientes constantes \eqref{equation:separatedDifussionEquation}, usando estas condiciones de borde para ellas.
+  
+  Por un lado tenemos \(X^{\prime\prime} - \alpha X = 0\).
+  Su ecuación característica es \(r^2 - \alpha = 0\), y su discriminante es \(4 \alpha\).
+  Debemos considerar tres casos: \(\alpha > 0\) (el discriminante es positivo); \(\alpha = 0\) (el discriminante es nulo); \(\alpha < 0\) (el discriminante es negativo).
+  Podemos descartar aquellos que resulten en una solución nula \(X = 0\) porque llevan a otra solución nula \(s = 0\).
+  En el primer caso, \(\alpha > 0\), la solución de la ecuación diferencial es de la forma \(X = C_1 e^{\sqrt{\alpha} x} + C_2 e^{- \sqrt{\alpha} x}\).
+  Las condiciones iniciales \eqref{equation:separatedInitialConditions} implican que \(C_1 + C_2 = C_1 e^{\sqrt{\alpha} L_x} + C_2 e^{- \sqrt{\alpha} L_x} = 0\).
+  Luego \(C_1 = C_2 = 0\).
+  Podemos descartar este caso porque \(X = 0\).
+  En el segundo caso, \(\alpha = 0\), la solución a la ecuación diferencial es de la forma \(X = C_1 x + C_2\).
+  Las condiciones iniciales \eqref{equation:separatedInitialConditions} implican que \(C_2 = C_1 L_x + C_2 = 0\).
+  Luego \(C_1 = C_2 = 0\).
+  Podemos descartar este caso porque \(X = 0\).
+  En el tercer y último caso, \(\alpha < 0\), la solución a la ecuación diferencial es de la forma \(X = C_1 \cos(\sqrt{\abs{\alpha}} x) + C_2 \sin(\sqrt{\abs{\alpha}} x)\).
+  Las condiciones iniciales \eqref{equation:separatedInitialConditions} implican que \(C_1 = C_1 \cos(\sqrt{\abs{\alpha}} L_x) + C_2 \sin(\sqrt{\abs{\alpha}} L_x) = 0\).
+  Luego \(C_2 \sin(\sqrt{\abs{\alpha}} L_x) = 0\).
+  La alternativa \(C_2 = 0\) nos da nuevamente una solución nula \(X = 0\).
+  Por otro lado, la alternativa \(\sin(\sqrt{\abs{\alpha}} L_x) = 0\) nos dá un número infinito de soluciones
+  \begin{align}
+    X_n(x) = \sin(n \pi x / L_x)
+  \end{align}
+  parametrizadas por un número entero positivo \(n\) tal que \(\alpha = - n^2 \pi^2 / L_x^2\).
+
+  Repetir este análisis para la función \(Y\), usando la ecuación \(Y^{\prime\prime} - \beta Y = 0\) y las condiciones de borde \eqref{equation:separatedInitialConditions}, nos lleva a encontrar infinitas soluciones
+  \begin{align}
+    Y_m(y) = \sin(m \pi y / L_y)
+  \end{align}
+  parametrizadas por un número entero positivo \(m\) tal que \(\beta = - m^2 \pi^2 / L_y^2\).
+
+  Este análisis resuelve la ecuación de difusión en el caso especial en que la solución tiene sus dependencias separadas.
+  Resulta en una familia infinita de soluciones parametrizada por el par de enteros positivos \(n, m\)
+  \begin{align}
+    s_{n, m}(x, y, t)
+    =
+    \sin\left(n \pi \frac{x}{L_x} \right)
+    \sin\left(m \pi \frac{y}{L_y}\right)
+    \exp\left(
+      - \pi^2 \left(
+        \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}
+      \right)
+      D t
+    \right)
+  \end{align}
+  En general, la combinación lineal de soluciones a la ecuación de transporte \eqref{equation:diffusion} que satisfacen las condiciones de borde de Dirichlet \eqref{equation:DirichletBoundaryConditions}
+  también safisfacen ambas \eqref{equation:diffusion} y \eqref{equation:DirichletBoundaryConditions}.
+  Puede probarse que la solución a estas ecuaciones simultáneas, con condiciones iniciales \(c(x, y, 0)\),
+  está dada por la serie
+  \begin{align}
+    c(x, y, t)
+    =
+    \sum_{n \geq 1, m \geq 1}
+      D_{n, m}
+      \sin\left( n \pi \frac{x}{L_x} \right)
+      \sin\left( m \pi \frac{y}{L_y} \right)
+      \exp\left(
+        - \pi^2 \left(
+          \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}
+        \right)
+        D t
+      \right)
+  \end{align}
+  donde
+  \begin{align}
+    D_{n, m}
+    &=
+    \frac{
+      \int_0^{L_x}
+        \int_0^{L_y}
+          c(x, y, 0)
+          \sin\left( n \pi \frac{x}{L_x} \right)
+          \sin\left( m \pi \frac{y}{L_y} \right)
+        d y
+      d x
+    }{
+      \int_0^{L_x}
+        \int_0^{L_y}
+        \sin\left( n \pi \frac{x}{L_x} \right)^2
+          \sin\left( m \pi \frac{y}{L_y} \right)^2
+        d y
+      d x
+    }
+    \\
+    &=
+    \frac{4}{L_x L_y} 
+    \int_0^{L_x}
+      \int_0^{L_y}
+        c(x, y, 0)
+        \sin\left( n \pi \frac{x}{L_x} \right)
+        \sin\left( m \pi \frac{y}{L_y} \right)
+      d y
+    d x
+  \end{align}
+
+  En nuestro caso, la condición inicial está dada por 
+  \begin{align}
+    \label{equation:initialCondition}
+    c(x, y, 0)
+    =
+    \left\{
+      \begin{aligned}
+        1 &&\text{si } x \leq L_x /2 \\
+        0 &&\text{si } x > L_x / 2
+      \end{aligned}
+    \right.
+  \end{align}
+  de modo que
+  \begin{align}
+    D_{n, m}
+    &=
+    \frac{4}{L_x L_y}
+    \int_0^{L_x / 2}
+      \int_0^{L_y}
+        \sin\left( n \pi \frac{x}{L_x} \right)
+        \sin\left( m \pi \frac{y}{L_y} \right)
+      d y
+    d x
+    \\
+    &=
+    \frac{4}{L_x L_y}
+    \int_0^{L_x / 2}
+      \sin\left( n \pi \frac{x}{L_x} \right)
+    d x
+      \int_0^{L_y}
+        \sin\left( m \pi \frac{y}{L_y} \right)
+    d y
+    \\
+    &=
+    \frac{4}{L_x L_y}
+    \left( - \frac{L_x}{n \pi} \right)
+    \left( ((- 1)^m - 1) \frac{L_y}{m \pi} \right)
+    \\
+    &=
+    \frac{4}{n m \pi^2}
+    (1 - (- 1)^m)
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        \frac{8}{n m \pi^2}
+          &&\text{si } m \text{ es impar;}
+        \\
+        0
+          &&\text{si } m \text{ es par.}
+      \end{aligned}
+    \right.
+  \end{align}
+
+  \section{Condiciones de borde de Neumann}
+  Consideremos una solución separada nonula \(s = X Y T\).
+  Al ser nonula, resulta que también son nonulas las funciones \(X\), \(Y\), \(T\).
+  Ahora imponemos las condiciones de borde de Neumann para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t \geq 0\)
+  \begin{align}
+    \label{equation:NewmannBoundaryConditions}
+    \frac{\partial s}{\partial x} (0, y, t)
+    =
+    \frac{\partial s}{\partial x} (L_x, y, t)
+    =
+    \frac{\partial s}{\partial y} (x, 0, t)
+    =
+    \frac{\partial s}{\partial x} (x, L_y, t)
+    =
+    0
+  \end{align}
+  Substituyendo la fórmula de separación \(s = X Y T\) en las condiciones de borde de Newmann \eqref{equation:NewmannBoundaryConditions} se deduce (usando que \(X\), \(Y\), \(T\) son nonulas)
+  \begin{align}
+    X'(0) Y T
+    =
+    X'(L_x) Y T
+    =
+    X Y'(0) T
+    =
+    X Y'(L_y) T
+    =
+    0
+    \\
+    \Rightarrow
+    \label{equation:separatedNewmannBoundaryConditions}
+    X'(0)
+    =
+    X'(L_x)
+    =
+    Y'(0)
+    =
+    Y'(L_y)
+    =
+    0
+  \end{align}
+
+  Definimos una nueva función \(\tilde{s} = \frac{\partial^2 s}{\partial x \partial y}\).
+  Puede calcularse una fórmula de separación \(\tilde{s} = X' Y' T\).
+  Debemos considerar la posibilidad de que esta función sea nula.
+  Puede pasar que \(X' = 0\) o \(Y' = 0\), y tenemos que recorrer cada posibilidad.
+
+  Supongamos \(X' = Y' = 0\).
+  En este caso, prestando atención al sistema de ecuaciones \eqref{equation:separatedDifussionEquation}, se tiene \(\alpha = \beta = 0\), y la solución \(s\) es de la forma 
+  \begin{align}
+    \label{equation:bareSolution}
+    s(x, y, t) = 1
+  \end{align}
+
+  Supongamos \(X' \neq 0\), \(Y' = 0\).
+  En este caso, la función \(Y\) es de la forma \(Y = 1\).
+  Por su parte \(U = X'\) es una función nonula que satisface el sistema de ecuaciones \(U^{\prime\prime} = \alpha U\), \(U(0) = U(L_x) = 0\).
+  Esto implica que \(\alpha = - n^2 \pi^2 / L_x^2\), donde \(n\) es un entero positivo que parametriza la solución, y \(U\) es de la forma \(U = \sen(n \pi x / L_x)\).
+  Se deduce que \(X\) es de la forma \(X = \cos(n \pi x / L_x)\).
+  Finalmente, \(T\) es de la forma \(T = \exp(- (\pi^2 n^2 / L_x^2) D t)\).
+  Por lo tanto, la solución \(s\) está parametrizada por un entero positivo \(n\) y es de la forma
+  \begin{align}
+    \label{equation:alphaSolutions}
+    s_n(x, y, t)
+    =
+    \cos\left( n \pi \frac{x}{L_x} \right) \exp\left( - \pi^2 \frac{n^2}{L_x^2} D t \right)
+  \end{align}
+
+  Supongamos \(X' = 0\), \(Y' \neq 0\).
+  Como en el caso anterior, la solución \(s\) está parametrizada por un entero positivo \(m\) y es de la forma
+  \begin{align}
+    \label{equation:betaSolutions}
+    s_m(x, y, t)
+    =
+    \cos\left(m \pi \frac{y}{L_y}\right) \exp\left( - \pi^2 \frac{m^2}{L_y^2} D t \right)
+  \end{align}
+
+  Supongamos \(X' \neq 0\), \(Y' \neq 0\).
+  En este caso \(U = X'\), \(V = Y'\) son funciones nonulas que satisfacen el sistema de ecuaciones \(U^{\prime\prime} = \alpha U\), \(V^{\prime\prime} = \beta V\) con condiciones de borde de Dirichlet \(U(0) = U(L_x) = V(0) = V(L_y) = 0\).
+  Esto implica que \(\alpha = - n^2 \pi^2 / L_x^2\), \(\beta = - m^2 \pi^2 / L_y^2\), donde \(n\) y \(m\) son enteros positivos que parametrizan la solución; y \(U\), \(V\) son de la forma \(U = \sen(n \pi x / L_x)\), \(V = \sen(m \pi y / L_y)\).
+  Se deduce que \(X\), \(Y\) son de la forma \(X = \cos(n \pi x / L_x)\), \(Y = \cos(m \pi y / L_y)\).
+  Finalmente, \(T\) es de la forma \(T = \exp(- \pi^2 (n^2 / L_x^2 + m^2 / L_y^2) D t)\).
+  Por lo tanto, la solución \(s\) está parametrizada por dos enteros positivos \(n, m\), y es de la forma
+  \begin{align}
+    \label{equation:alphaBetaSolutions}
+    s_{n, m}(x, y, t)
+    =
+    \cos\left( n \pi \frac{x}{L_x} \right)
+    \cos\left( m \pi \frac{y}{L_y} \right)
+    \exp\left( - \pi^2 \left( \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2} \right) D t \right)
+  \end{align}
+
+  Podemos resumir los resultados
+  \eqref{equation:bareSolution}, \eqref{equation:alphaSolutions}, \eqref{equation:betaSolutions}, \eqref{equation:alphaBetaSolutions}
+  diciendo que las soluciones separadas \(s\) están parametrizadas por dos número naturales \(n, m\) (enteros nopositivos) y son de la forma
+  \begin{align}
+    \label{equation:totalSolution}
+    s_{n, m}(x, y, t)
+    =
+    \cos\left( n \pi \frac{x}{L_x} \right)
+    \cos\left( m \pi \frac{y}{L_y} \right)
+    \exp\left( - \pi^2 \left( \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2} \right) D t \right)
+  \end{align}
+  En general, la combinación lineal de soluciones a la ecuación de transporte \eqref{equation:diffusion} que satisfacen las condiciones de borde de Newmann \eqref{equation:NewmannBoundaryConditions} también satisfacen ambas \eqref{equation:diffusion} y \eqref{equation:NewmannBoundaryConditions}.
+  Puede probarse que la solución a estas ecuaciones simultáneas, con condiciones iniciales \(c(x, y, 0)\), está dada por la serie
+  \begin{align}
+    c(x, y, t)
+    =
+    \sum_{n \geq 0, m \geq 0}
+    D_{n, m}
+    \cos\left( n \pi \frac{x}{L_x} \right)
+    \cos\left( m \pi \frac{y}{L_y} \right)
+    \exp\left( - \pi^2 \left( \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2} \right) D t \right)
+  \end{align}
+  donde
+  \begin{align}
+    D_{n, m}
+    &=
+    \frac{
+      \int_0^{L_x}
+        \int_0^{L_y}
+          c(x, y, 0)
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          \cos\left( m \pi \frac{y}{L_y} \right)
+        d y
+      d x
+    }{
+      \int_0^{L_x}
+        \int_0^{L_y}
+        \cos\left( n \pi \frac{x}{L_x} \right)^2
+        \cos\left( m \pi \frac{y}{L_y} \right)^2
+        d y
+      d x
+    }
+  \end{align}
+  En nuestro caso, la condición inicial está dada por 
+  \begin{align}
+    \label{equation:initialCondition}
+    c(x, y, 0)
+    =
+    \left\{
+      \begin{aligned}
+        1 &&\text{si } x \leq L_x /2 \\
+        0 &&\text{si } x > L_x / 2
+      \end{aligned}
+    \right.
+  \end{align}
+  de modo que
+  \begin{align}
+    D_{n, m}
+    &=
+    \frac{
+      \int_0^{L_x / 2}
+        \int_0^{L_y}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          \cos\left( m \pi \frac{y}{L_y} \right)
+        d y
+      d x
+    }{
+      \int_0^{L_x}
+        \int_0^{L_y}
+        \cos\left( n \pi \frac{x}{L_x} \right)^2
+        \cos\left( m \pi \frac{y}{L_y} \right)^2
+        d y
+      d x
+    }
+    \\
+    &=
+    \frac{
+      \int_0^{L_x / 2}
+        \cos\left( n \pi \frac{x}{L_x} \right)
+      d x
+      \int_0^{L_y}
+          \cos\left( m \pi \frac{y}{L_y} \right)
+      d y
+    }{
+      \int_0^{L_x}
+        \cos\left( n \pi \frac{x}{L_x} \right)^2
+      d x
+      \int_0^{L_y}
+        \cos\left( m \pi \frac{y}{L_y} \right)^2
+      d y
+    }
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+          \left. \frac{\sen(m \pi y / L_y)}{m \pi / L_y} \right\vert_0^{L_y}
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+          (L_y / 2)
+        }
+        &&\text{si } m \neq 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+          L_y
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+          L_y
+        }
+        &&\text{si } m = 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+        }
+        &&\text{si } m = 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2} d x
+        }{
+          \int_0^{L_x} d x
+        }
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &\frac{
+          \int_0^{L_x / 2}
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          d x
+        }{
+          \int_0^{L_x}
+          \cos\left( n \pi \frac{x}{L_x} \right)^2
+          d x
+        }
+        &&\text{si } m = 0 \text{ y } n \neq 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{1}{2}
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &\frac{2}{L_x}
+        \left.
+          \frac{\sen(n \pi x / L_x)}{n \pi / L_x}
+        \right|_0^{L_x / 2}
+        &&\text{si } m = 0 \text{ y } n \neq 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{1}{2}
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &\frac{2 \sen(n \pi / 2)}{n \pi}
+        &&\text{si } m = 0 \text{ y } n \neq 0
+      \end{aligned}
+    \right.
+    \\
+    &=
+    \left\{
+      \begin{aligned}
+        &0
+        &&\text{si } m \neq 0
+        \\
+        &\frac{1}{2}
+        &&\text{si } m = 0 \text{ y } n = 0
+        \\
+        &0
+        &&\text{si } m = 0 \text{, y } n \neq 0 \text{ es par}
+        \\
+        &(- 1)^{\frac{n - 1}{2}} \frac{2}{n \pi}
+        &&\text{si } m = 0 \text{, y } n \neq 0 \text{ es impar}
+      \end{aligned}
+    \right.
+  \end{align}
+  
+  Por lo tanto % tengo un factor de 2 que está de más, y un signo - que está de más
+  \begin{align}
+    c(x, y, t)
+    =
+    2
+    +
+    \sum_{k = 1, n = 2 k + 1}^{\infty}
+    (-1)^{k + 1}
+    \frac{4}{n \pi}
+    \cos(n \pi x / L_x) \exp((- \pi^2 n^2 / L_x^2) D t)
+  \end{align}
+
+
+
+  \newpage
+  Como consecuencia de las condiciones de Newman separadas \eqref{equation:separatedNewmannBoundaryConditions}, satisface las condiciones de borde de Dirichlet para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t \geq 0\)
+  \begin{align}
+    X'(0) Y' T
+    =
+    X'(L_x) Y' T
+    =
+    X' Y'(0) T
+    =
+    X' Y'(L_x) T
+    =
+    0
+    \\
+    \Rightarrow
+    \label{equation:tildeDirichletBoundaryConditions}
+    \tilde{s}(0, y, t)
+    =
+    \tilde{s}(L_x, y, t)
+    =
+    \tilde{s}(x, 0, t)
+    =
+    \tilde{s}(x, L_y, t)
+    =
+    0
+  \end{align}
+  Además, \(\tilde{s}\) es una solución a la ecuación de difusión.
+  En efecto
+  \begin{align}
+    \label{equation:tildeDifussion}
+    \frac{\partial \tilde{s}}{\partial t}
+    =
+    \frac{\partial}{\partial t} \frac{\partial^2 s}{\partial x \partial y}
+    =
+    \frac{\partial^2}{\partial x \partial y} \frac{\partial s}{\partial t}
+    =
+    \frac{\partial^2}{\partial x \partial y} D \Delta s
+    =
+    D \Delta \frac{\partial^2 s}{\partial x \partial y}
+    =
+    D \Delta \tilde{s}
+  \end{align}
+
+  Substituyendo la fórmula de separación \(s = X Y T\) en la ecuación de difusión \eqref{equation:diffusion} se deriva
+  \begin{align}
+    \frac{\partial}{\partial t} X(x) Y(y) T(t)
+    &=
+    D \left(
+      \frac{\partial^2}{\partial x^2} X(x) Y(y) T(t)
+      +
+      \frac{\partial^2}{\partial y^2} X(x) Y(y) T(t)
+    \right)
+    \\
+    X(x) Y(y) T'(t)
+    &=
+    D \left(
+      X^{\prime\prime}(x) Y(y) T(t)
+      +
+      X(x) Y^{\prime\prime}(y) T(t)
+    \right)
+    \\
+    \frac{T'(t)}{D T(t)}
+    &=
+    \frac{X^{\prime\prime}(x) Y(y) + X(x) Y^{\prime\prime}(y)}{X(x) Y(y)}
+    \\
+    \label{equation:separatedDifferentialEquation}
+    \frac{T'(t)}{D T(t)}
+    &=
+    \frac{X^{\prime\prime}(x)}{X(x)}
+    +
+    \frac{Y^{\prime\prime}(y)}{Y(y)}
+  \end{align}
+  
+
+
+  Debemos contemplar la posibilidad de tener \(\tilde{s} = 0\).
+  En este caso \(X' = 0\) o \(Y' = 0\).
+
+  Dado nuestro trabajo en la sección de las condiciones de Dirichlet, se sigue que las ecuaciones \eqref{equation:tildeDirichletBoundaryConditions} y \eqref{equation:tildeDifussion}, implican
+  \begin{align}
+    X'(x) = \sin(n \pi x / L_x)
+    &&Y'(y) = \sin(m \pi y / L_y)
+    \\
+    \Rightarrow
+    X(x) = \frac{L_x}{n \pi} \cos(n \pi x / L_x)
+    && Y(y) = \frac{L_y}{m \pi} \cos(m \pi y / L_y)
+  \end{align}
+  Esto nos dá un número infinito de soluciones parametrizadas por un par de números enteros positivos \(n, m\)
+  \begin{align}
+    s_{n, m}(x, y, t)
+    =
+    \cos\left( n \pi \frac{x}{L_x} \right) \cos\left(m \pi \frac{y}{L_y} \right) \exp\left( - \pi^2 \left( \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2} \right) D t \right)
+  \end{align}
+  Soluciones separadas a la ecuación de difusión \eqref{equation:diffusion} con condiciones de borde de Newmann homogéneas \eqref{equation:NewmannBoundaryConditions}.
+
+  %Papo de las soluciones constantes con n = 0 o m = 0
+
+  Como en el caso anterior, la combinación lineal de soluciones a la ecuación de difusión \eqref{equation:diffusion} que satisfacen las condiciones de borde de Newmann \eqref{equation:NewmannBoundaryConditions} también satisfacen ambas \eqref{equation:diffusion} y \eqref{equation:NewmannBoundaryConditions}.
+  Puede probarse que la solución a estas ecuaciones simultáneas, con condiciones iniciales \(c(x, y, 0)\), está dada por la serie
+  \begin{align}
+    c(x, y, t)
+    =
+    \sum_{n \geq 1, m \geq 1}
+      D_{n, m}
+      \cos\left( n \pi \frac{x}{L_x} \right)
+      \cos\left( m \pi \frac{y}{L_y} \right)
+      \exp\left(
+        - \pi^2 \left(
+          \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}
+        \right)
+        D t
+      \right)
+  \end{align}
+  donde
+  \begin{align}
+    D_{n, m}
+    &=
+    \frac{
+      \int_0^{L_x}
+        \int_0^{L_y}
+          c(x, y, 0)
+          \cos\left( n \pi \frac{x}{L_x} \right)
+          \cos\left( m \pi \frac{y}{L_y} \right)
+        d y
+      d x
+    }{
+      \int_0^{L_x}
+        \int_0^{L_y}
+        \cos\left( n \pi \frac{x}{L_x} \right)^2
+        \cos\left( m \pi \frac{y}{L_y} \right)^2
+        d y
+      d x
+    }
+    \\
+    &=
+    \frac{4}{L_x L_y} 
+    \int_0^{L_x}
+      \int_0^{L_y}
+        c(x, y, 0)
+        \cos\left( n \pi \frac{x}{L_x} \right)
+        \cos\left( m \pi \frac{y}{L_y} \right)
+      d y
+    d x
+  \end{align}
+
+  En nuestro caso, la condición inicial está dada por 
+  \begin{align}
+    \label{equation:initialCondition}
+    c(x, y, 0)
+    =
+    \left\{
+      \begin{aligned}
+        1 &&\text{si } x \leq L_x /2 \\
+        0 &&\text{si } x > L_x / 2
+      \end{aligned}
+    \right.
+  \end{align}
+  de modo que
+  \begin{align}
+    D_{n, m}
+    &=
+    \frac{4}{L_x L_y} 
+    \int_0^{L_x / 2}
+      \int_0^{L_y}
+        \cos\left( n \pi \frac{x}{L_x} \right)
+        \cos\left( m \pi \frac{y}{L_y} \right)
+      d y
+    d x
+  \end{align}
+  
+
+\end{document}

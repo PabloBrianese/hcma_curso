@@ -11,7 +11,7 @@
 *.log
 *.synctex.gz
 
-# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6 6-1 6-2 6-3 7-1
+# Archivos de datos del ejercicio 3-9 4-12 5-5 5-6 6-1 6-2 6-3 7-1 7-2
 **/_python_cas/ejercicio_9/**/*.csv
 **/_c/ejercicio_12/**/*.csv
 **/_cpp_y_numlibs/ejercicio_5/**/*.dat
@@ -23,6 +23,9 @@
 **/_MD/ejercicio_2/**/*.dat
 **/_MD/ejercicio_3/**/Datos*
 **/_OF/*.dat
+**/_OF/ejercicio_2/fourierSeriesSolution/dat/*.png
+**/_OF/ejercicio_2/fourierSeriesSolution/dat/*.csv
+
 
 # Imágenes del ejercicio 3-9 3-11 3-12 6-1
 **/_python_cas/ejercicio_9/**/*.png
@@ -48,7 +51,10 @@
 **/\[Berkeley\ Physics\ Course\]\ Vol.\ 2.\ Electricity\ and\ Magnetism.pdf
 
 # Arhivos de configuración de Visual Studio Code
-.vscode/*
+**/.vscode/*
+
+# Archivos de registro de ipynb
+**/.ipynb_checkpoints/*
 
 # Slides de las clases
 practica/_OF/HCMA_clase_intro_CFD_1.pdf
