@@ -5,7 +5,7 @@ df = pd.read_csv("dat/fourierSeriesSolution.csv")
 timesteps = []
 for t_val in df.t.drop_duplicates():
     timesteps.append(
-        df.loc[df.t == t_val].drop(columns=["t", "z"]).pivot("y", "x", "concentration")
+        df.loc[df.t == t_val].drop(columns=["t"]).pivot("y", "x", "concentration")
     )
 
 

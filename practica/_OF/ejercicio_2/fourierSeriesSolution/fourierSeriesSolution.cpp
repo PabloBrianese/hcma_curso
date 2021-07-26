@@ -5,12 +5,17 @@
 
 using namespace std;
 
+// PDE parameters
+constexpr auto difussionCoefficient = 4.0;
+
+// Domain data
 constexpr auto Lx = 20.0;
 constexpr auto Ly = 10.0;
-constexpr auto difussionCoefficient = 4.0;
-constexpr auto dt = 1;
 
+// Fourier series approximation order
 constexpr auto order = 200;
+
+// BEGIN Concentration computation
 
 constexpr auto k_max = (order - 1) / 2;
 constexpr auto ks {[]() constexpr {
@@ -75,10 +80,14 @@ auto concentration(double t, double x) {
     return concentration;
 }
 
+// END Concentration computation
+
+// BEGIN Domain Modelling
+
 constexpr auto ts {[]() constexpr {
     constexpr auto size = 20;
     array<double, size> result {};
-    for (auto i = 0; i < size; ++i) result[i] = i * dt;
+    for (auto i = 0; i < size; ++i) result[i] = double(i);
 
     return result;
 }()};
@@ -101,8 +110,10 @@ constexpr auto ys {[]() constexpr {
     return result;
 }()};
 
+// END Domain modelling
+
 int main() {
-    printf("t,x,y,z,concentration\n");
+    printf("t,x,y,concentration\n");
     for (auto t : ts) for (auto y : ys) for (auto x : xs)
-        printf("%f,%f,%f,%f,%f\n", t, x, y, 0.5, concentration(t, x));
+        printf("%f,%f,%f,%f\n", t, x, y, concentration(t, x));
 }
