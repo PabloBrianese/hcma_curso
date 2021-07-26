@@ -1,17 +1,19 @@
 \documentclass{article}
 \usepackage[spanish]{babel}
-\usepackage{etoolbox}
 \usepackage{mathtools}
 \usepackage{amssymb}
+\usepackage{amsthm}
 \usepackage{hyperref}
 
 \newcommand{\realNumbers}{\mathbb{R}}
 
-\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
-\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}
 
 % Math intervals %
 %%%%%%%%%%%%%%%%%%
+%\begin{}
+\usepackage{etoolbox}
 \newcommand{\leftOpenInterval}{\left]}
 \newcommand{\rightOpenInterval}{\right[}
 \newcommand{\leftClosedInterval}{\left[}
@@ -34,9 +36,11 @@
     }%
   }%
 }
+%\end{}
 % End math intervals %
 %%%%%%%%%%%%%%%%%%%%%%
 
+\newtheorem{lemma}{Lema}
 
 \title{Ecuación de Transporte}
 \author{Pablo Brianese}
@@ -52,14 +56,12 @@
     \item \(D\) es el coeficiente de difusión, este puede ser propio de la especie en el caso del movimiento de partículas o referirse a la difusividad térmica en el caso del transporte de calor;
     \item \(\vec{v}\) es el campo de velocidades con que se mueve la cantidad.
     Es una función del tiempo y del espacio.
-    Por ejemplo, en el caso de la advección
-    \footnote{Definición de advección}
-    ,
+    Por ejemplo, en el caso de la advección,
     \(c\) podría ser la concentración de sal en un río, y luego \(\vec{v}\) sería la velocidad del flujo de agua como función del tiempo y la ubicación.
     En otro ejemplo, \(c\) podría ser la concentración de pequeñas burbujas en un lago calmo, y luego \(\vec{v}\) sería la velocidad de las burbujas subiendo hacia la superficie por flotación dependiendo del tiempo y de la ubicación de la burbuja.
     \item \(S\) describe fuentes o sumideros para la cantidad \(c\).
-    \item Por ejemplo, para una especie química, \(S > 0\) quiere decir que una reacción química está creando más sustancia de esta especie, y \(S < 0\) quiere decir que una reacción química está destruyendo la especie.
-    Para el transporte de calor, \(R > 0\) podría ocurrir si se genera energía térmica mediante fricción.
+    Por ejemplo, para una especie química, \(S > 0\) quiere decir que una reacción química está creando más sustancia de esta especie, y \(S < 0\) quiere decir que una reacción química está destruyendo la especie.
+    Para el transporte de calor, \(S > 0\) podría ocurrir si se genera energía térmica mediante fricción.
   \end{itemize}
   
   El lado derecho de la ecuación es la suma de tres contribuciones.
@@ -75,14 +77,13 @@
     Al rato, veríamos aumentar la salinidad súbitamente, luego caer, mientras pasa la zona de agua salada.
     Por lo tanto, la concentración en una ubicación dada puede cambiar por el flujo.
     \item La contribución final, \(S\), describe la creación o destrucción de una cantidad.
-    Por ejemplo, si \(c\) es la concentración de una molécula, entonces \(S\) describe como la molécula puede ser creada o destruída por reacciones químicas.
-    \(S\) puede ser una función de \(c\) o de otros parámetros.
+    Y no requiere de mayor explicación.
   \end{itemize}
 
   \section{La ecuación de difusión}
   En nuestro caso, tanto \(\vec{v}\) como \(S\) son nulos.
   Además \(D\) es constante en el tiempo y no varía en el espacio.
-  Luego, debemos resolver la ecuación
+  Luego, debemos resolver la ecuación de difusión
   \begin{align}
     \label{equation:diffusion}
     \frac{\partial c}{\partial t}
@@ -95,13 +96,12 @@
   Aquí \(x\), \(y\) son las variables espaciales, de modo tal que \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\);
   y \(t\) es la variable temporal, de modo tal que \(t \geq 0\).
   Asumiremos una condición inicial \(c(x, y, 0)\) como dada.
-  Finalmente, debemos fijar condiciones de borde para nuestra solución.
-  La resolveremos en con dos condiciones de borde distintas, las condiciones de borde de Dirichlet y las condiciones de borde de Newmann, en ambos casos serán homogéneas.
+  Finalmente, impondremos condiciones de borde de Newmann homogéneas para nuestra solución.
 
   La ecuación de difusión es idéntica a la ecuación del calor.
   Para resolverla, seguimos una técnica de resolución que fue descubierta por Joseph Fourier y publicada en \emph{Théorie analytique de la chaleur} el año 1822.
   El método de separación de variables.
-  Buscaremos soluciones \(s\) a la ecuación de difusión \eqref{equation:diffusion}, distintas de la solución identicamente nula, que satisfagan las condiciones de borde pero que tengan la siguiente propiedad:
+  Buscaremos soluciones \(s\) a la ecuación de difusión \eqref{equation:diffusion}, nonulas, que satisfagan las condiciones de borde pero que tengan la siguiente propiedad:
   \(s\) es un producto en el cual la dependencia respecto de \(x\), \(y\), \(t\) está separada.
   Esto es:
   \begin{align}
@@ -110,42 +110,43 @@
     =
     X(x) Y(y) T(t)
   \end{align}
-  Substituyendo esta fórmula de separación \eqref{equation:separatedSolution} para \(s\) en la ecuación de difusión \eqref{equation:diffusion} se deriva
+  En este caso \(s \neq 0\) implica \(X \neq 0\), \(Y \neq 0\), \(T \neq 0\), también \(X Y \neq 0\), \(Y T \neq 0\), \(X T \neq 0\).
+  Luego, substituyendo la fórmula de separación \eqref{equation:separatedSolution} para \(s\) en la ecuación de difusión \eqref{equation:diffusion} se deriva
   \begin{align}
-    \frac{\partial}{\partial t} X(x) Y(y) T(t)
+    \frac{\partial}{\partial t} X Y T
     &=
     D \left(
-      \frac{\partial^2}{\partial x^2} X(x) Y(y) T(t)
+      \frac{\partial^2}{\partial x^2} X Y T
       +
-      \frac{\partial^2}{\partial y^2} X(x) Y(y) T(t)
+      \frac{\partial^2}{\partial y^2} X Y T
     \right)
     \\
-    X(x) Y(y) T'(t)
+    X Y T'
     &=
     D \left(
-      X^{\prime\prime}(x) Y(y) T(t)
+      X^{\prime\prime} Y T
       +
-      X(x) Y^{\prime\prime}(y) T(t)
+      X Y^{\prime\prime} T
     \right)
     \\
-    \frac{T'(t)}{D T(t)}
+    \frac{T'}{D T}
     &=
-    \frac{X^{\prime\prime}(x) Y(y) + X(x) Y^{\prime\prime}(y)}{X(x) Y(y)}
+    \frac{X^{\prime\prime} Y + X Y^{\prime\prime}}{X Y}
     \\
     \label{equation:separatedDifferentialEquation}
-    \frac{T'(t)}{D T(t)}
+    \frac{T'}{D T}
     &=
-    \frac{X^{\prime\prime}(x)}{X(x)}
+    \frac{X^{\prime\prime}}{X}
     +
-    \frac{Y^{\prime\prime}(y)}{Y(y)}
+    \frac{Y^{\prime\prime}}{Y}
   \end{align}
   Dado que el lado derecho de \eqref{equation:separatedDifferentialEquation} depende solo de las variables espaciales y el lado izquierdo solo del tiempo, ambos lados son iguales a un valor constante \(\lambda \in \realNumbers\).
   De este modo
   \begin{align}
     \label{equation:XYTLambda}
-    \frac{T'(t)}{D T(t)}
+    \frac{T'}{D T}
     =
-    \frac{X''(x)}{X(x)} + \frac{Y''(y)}{Y(y)}
+    \frac{X''}{X} + \frac{Y''}{Y}
     =
     \lambda
   \end{align}
@@ -155,14 +156,14 @@
   \end{align}
   Por otro lado, derivando a ambos lados de esta ecuación \eqref{equation:XYTLambda} con respecto a \(x\), \(y\), se deduce
   \begin{align}
-    \frac{d}{d x} \frac{X^{\prime\prime}(x)}{X(x)} 
+    \frac{d}{d x} \frac{X^{\prime\prime}}{X} 
     =
-    \frac{d}{d y} \frac{Y^{\prime\prime}(y)}{Y(y)}
+    \frac{d}{d y} \frac{Y^{\prime\prime}}{Y}
     =
     0
     &&\Rightarrow
-    &&\frac{X^{\prime\prime}(x)}{X(x)} = \alpha
-    &&\frac{Y^{\prime\prime}(y)}{Y(y)} = \beta
+    &&\frac{X^{\prime\prime}}{X} = \alpha
+    &&\frac{Y^{\prime\prime}}{Y} = \beta
   \end{align}
   para ciertas constantes \(\alpha, \beta \in \realNumbers\).
   Resulta entonces que \(\alpha + \beta = \lambda\), y nos quedamos con un sistema de ecuaciones
@@ -180,6 +181,11 @@
     &&\text{donde}
     &&D_i = \frac{\int_0^{L_y}\int_0^{L_x} c(x, y, 0) s_i(x, y, 0) d x d y}{\int_0^{L_y}\int_0^{L_x} s_i(x, y, 0)^2 d x d y}
   \end{align}
+
+  \begin{lemma}
+    Si \(U = U(u)\) es una función nonula definida en un intervalo \(\interval{cc}{0}{L}\) que satisface las condiciones de borde \(U(0) = U(L) = 0\), y la ecuación diferencial \(U^{\prime\prime} = \gamma U\) para cierta constante \(\gamma \in \realNumbers\).
+    Entonces existe un entero positivo \(k\) tal que \(\gamma = - \pi^2 k^2 / L^2\), y \(U\) es de la forma \(U = \sen(n \pi u / L)\).
+  \end{lemma}
 
   \section{Condiciones de borde de Dirichlet}
   Sobre la solución separada \(s\), imponemos las condiciones de borde de Dirichlet para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t > 0\)
