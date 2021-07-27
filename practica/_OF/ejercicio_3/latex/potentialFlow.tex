@@ -100,4 +100,12 @@
   \end{enumerate}
   Por lo tanto, sólo necesitamos resolver la ecuación de Laplace en \(U\), y luego tomar el gradiente de la solución
   ¡este será \(\vec{v}\)!
+
+  \emph{¿Y si} \(U\) \emph{fuera el semiplano superior?}
+  Se sabe resolver nuestro problema en este dominio.
+  Aquí el fluído se mueve a velocidad constante a lo largo de las líneas horizontales (líneas de corriente).
+  Con mayor precisión:
+  \(\phi\) es constante a lo largo de cualquier línea vertical, y cambia linealmente en la dirección horizontal.
+  Aquí \(\phi(x, y) = C x\) para alguna constante \(C\).
+  Por lo tanto \(\vec{v} = \nabla \phi\), que es perpendicular a \(\{\phi = \text{const}\}\), es horizontal, y constante.
 \end{document}
