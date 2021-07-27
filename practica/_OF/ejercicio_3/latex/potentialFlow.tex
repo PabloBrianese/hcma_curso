@@ -1,0 +1,103 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% Math Symbols
+\newcommand{\realNumbers}{\mathbb{R}}
+\newcommand{\complexNumbers}{\mathbb{C}}
+
+% Math intervals %
+%%%%%%%%%%%%%%%%%%
+%\begin{}
+  \usepackage{etoolbox}
+  \newcommand{\leftOpenInterval}{\left]}
+  \newcommand{\rightOpenInterval}{\right[}
+  \newcommand{\leftClosedInterval}{\left[}
+  \newcommand{\rightClosedInterval}{\right]}
+  \newcommand{\interval}[3]{%
+    \ifstrequal{#1}{oo}{%
+      \leftOpenInterval #2, #3 \rightOpenInterval%
+    }{%
+      \ifstrequal{#1}{co}{%
+        \leftClosedInterval #2, #3 \rightOpenInterval%
+      }{%
+        \ifstrequal{#1}{oc}{
+          \leftOpenInterval #2, #3 \rightClosedInterval%
+        }{%
+          \ifstrequal{#1}{cc}{
+            \leftClosedInterval #2, #3 \rightClosedInterval
+          }{%
+          }%
+        }%
+      }%
+    }%
+  }
+  %\end{}
+  % End math intervals %
+  %%%%%%%%%%%%%%%%%%%%%%
+  
+
+% Theorem Environments
+%\begin{}
+\newtheorem{theorem}{Teorema}
+\newtheorem{proposition}{Proposición}
+\newtheorem{problem}{Problema}
+\newtheorem{definition}{Definición}
+%\end{}
+
+% Unit Vectors
+%\begin{}
+\usepackage{bm}
+\newcommand{\uveci}{{\bm{\hat{\textnormal{\bfseries\i}}}}}
+\newcommand{\uvecj}{{\bm{\hat{\textnormal{\bfseries\j}}}}}
+\newcommand{\uvecn}{{\bm{\hat{\textnormal{\bfseries n}}}}}
+%\end{}
+
+\title{Aplicaciones conformes en la dinámica de fluídos bidimensional}
+\begin{document}
+  \maketitle
+  \begin{definition}
+    Sea \(f : U \rightarrow \complexNumbers\) una función holomorfa definida en un abierto \(U \subseteq \complexNumbers\).
+    Decimos que \(f\) es conforme en \(z_0 \in U\) si \(f'(z_0)\) si \(f'(z_0) \neq 0\).
+  \end{definition}
+
+  La propiedad de las aplicaciones conformes que resulta asombrosa es que preservan ángulos.
+  En particular, sean \(\gamma_1, \gamma_2 : \interval{cc}{a}{b} \rightarrow U\) curvas que se encuentran en \(z_0 \in U\) (es decir, \(z_0 = \gamma_1(t_1) = \gamma_2(t_2)\), para algunos \(t_1, t_2 \in \interval{cc}{a}{b}\)).
+  Sea \(\theta\) el ángulo entre las tangentes de \(\gamma_1\) y \(\gamma_2\) en \(z_0\) (es decir, el ángulo entre \(\gamma_1'(t_1)\) y \(\gamma_2'(t_2)\)).
+  Entonces, las imágenes por \(f\) de las curvas \(f(\gamma_1)\) y \(f(\gamma_2)\), que obviamente pasan por \(f(z_0)\) (\(f(z_0) = f(\gamma(t_1)) = f(\gamma_2(t_2))\)), también tienen tangentes en \(f(z_0)\) tales que \(\theta\) es el ángulo entre ellas (tal como en la preimagen de \(f\)).
+  
+  En otras palabras, cuando \(f\) es conforme y \(\gamma_1(t_1) = \gamma_2(t_2) = z_0\), entonces \(\text{ángulo}(\gamma_1'(t_1), \gamma_2'(t_2)) = \text{ángulo}((f(\gamma_1))'(t_1), (f(\gamma_2))'(t_2))\).
+
+  \begin{proposition}
+    Si \(f: U \rightarrow V\) es una biyección conforme, entonces también \(f^{-1} : V \rightarrow U\) es conforme.
+  \end{proposition}
+  \begin{proof}[Prueba]
+    \({f^{-1} (f (z)) = z} \Rightarrow {(f^{- 1})'(f(z)) f'(z) = 1} \Rightarrow {(f^{-1})'(f(z)) = 1 / f'(z) \neq 0}\)
+  \end{proof}
+
+  Por estas razones, las aplicaciones conformes pueden ser muy útiles a la hora de resolver ecuaciones en derivadas parciales sobre dominios bidimensionales.
+  Como ejemplo, consideraremos el siguiente problema de caracter general en la mecánica de fluidos:
+
+  \begin{problem}
+    Supongamos que tenemos un problema de mecánica de fluidos en un dominio abierto bidimensional \(U \subseteq \complexNumbers\), tal que el fluido en cualquier \(x \in U\) tiene velocidad \(\vec{v}(x)\).
+    Supongamos que el flujo es:
+    incompresible (es decir \(\nabla \cdot \vec{v} = 0\)), irrotacional (es decir \(\nabla \times \vec{v} = 0\)), y estacionario (es decir, \(\vec{v}\) no depende del tiempo).
+    Suponemos además la condición de borde \(\vec{v}(x) \cdot \vec{n}(x) = 0\) \((\forall x \in \partial U)\), es decir, que \(\vec{v}(x)\) es tangente a \(\partial U\) para todo \(x \in \partial U\).
+    Tenemos que derivar el valor de \(\vec{v}\).
+  \end{problem}
+
+  Si \(U\) no tiene agujeros, el hecho que el flujo sea irrotacional implica que existe un potencial \(\phi : U \rightarrow \realNumbers\) para la velocidad tal que \(\vec{v} = \nabla \phi\) sobre \(U\).
+  Es decir, la velocidad que deseamos es el gradiente de una función.
+  Vamos a las condiciones sobre el flujo \(\vec{v}\) y reemplazamos este campo por \(\nabla \phi\) (en todas las condiciones salvo por \(\nabla \times \vec{v} = 0\), dado que ya la hemos usado).
+  Tenemos que encontrar \(\phi : U \rightarrow \realNumbers\), tal que
+  \begin{enumerate}
+    \item \(\nabla \cdot \nabla \phi = \Delta \phi = 0\), es decir, ¡\(\phi\) satisface la ecuación de Laplace!
+    \item \(\nabla \phi \cdot \vec{n} = 0\) sobre \(\partial U\).
+    Es decir, \(\phi\) no cambia en la dirección de la frontera.
+    Esta es en realidad una condición sobre un ángulo: los vectores \(\nabla \phi\) y \(\vec{n}\) tienen que ser perpendiculares en \(\partial U\).
+  \end{enumerate}
+  Por lo tanto, sólo necesitamos resolver la ecuación de Laplace en \(U\), y luego tomar el gradiente de la solución
+  ¡este será \(\vec{v}\)!
+\end{document}
