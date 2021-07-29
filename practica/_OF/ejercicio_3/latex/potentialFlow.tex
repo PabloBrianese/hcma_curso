@@ -7,6 +7,7 @@
 % Math Symbols
 \newcommand{\realNumbers}{\mathbb{R}}
 \newcommand{\complexNumbers}{\mathbb{C}}
+\newcommand{\upperHalfPlane}{\mathcal{H}}
 
 % Math intervals %
 %%%%%%%%%%%%%%%%%%
@@ -45,6 +46,8 @@
 \newtheorem{proposition}{Proposición}
 \newtheorem{problem}{Problema}
 \newtheorem{definition}{Definición}
+\theoremstyle{remark}
+\newtheorem{remark}{Observación}
 %\end{}
 
 % Unit Vectors
@@ -56,6 +59,7 @@
 %\end{}
 
 \title{Aplicaciones conformes en la dinámica de fluídos bidimensional}
+\author{Pablo Brianese}
 \begin{document}
   \maketitle
   \begin{definition}
@@ -101,11 +105,74 @@
   Por lo tanto, sólo necesitamos resolver la ecuación de Laplace en \(U\), y luego tomar el gradiente de la solución
   ¡este será \(\vec{v}\)!
 
-  \emph{¿Y si} \(U\) \emph{fuera el semiplano superior?}
+  \emph{¿Y si} \(U\) \emph{fuera el semiplano superior \(\upperHalfPlane\)?}
   Se sabe resolver nuestro problema en este dominio.
   Aquí el fluído se mueve a velocidad constante a lo largo de las líneas horizontales (líneas de corriente).
   Con mayor precisión:
   \(\phi\) es constante a lo largo de cualquier línea vertical, y cambia linealmente en la dirección horizontal.
   Aquí \(\phi(x, y) = C x\) para alguna constante \(C\).
   Por lo tanto \(\vec{v} = \nabla \phi\), que es perpendicular a \(\{\phi = \text{const}\}\), es horizontal, y constante.
+  Observar como de hecho se satisfacen las condiciones \(\Delta \phi = 0\) en \(U\), \(nabla \phi \cdot \vec{n} = 0\) en \(\partial U\), para este \(\phi(x, y) = C x\).
+
+  Aquí, \(\nabla \phi\) es ortogonal a \(\{\phi = \text{constant}\}\) de forma obvia
+  (porque \(\{\phi = \text{const}\}\) es una linea vertical, y sobre ella \(\frac{\partial \phi}{\partial y} = 0\), de modo tal que \(\nabla \phi\) es horizontal).
+  Pero esto sería cierto incluso si \(\{\phi = \text{const}\}\) fuera una curva (por el teorema de la función implícita).
+  Por lo tanto \(\vec{v} = \nabla \phi\) siempre es perpendicular a la curva de nivel \(\{\phi = \text{const}\}\).
+  Visto desde otro punto de vista: dado que \(\phi\) satisface la ecuación de Laplace, tiene una conjugada armónica \(\psi\), y, como sucede con las conjugadas armónicas (por las ecuaciones de Cauchy--Riemann \(\partial_x \phi = \partial_y \psi\), \(\partial_y \phi = - \partial_x \psi\)), tenemos que las curvas \(\{\phi = \text{const}\}\) y \(\{\psi = \text{const}\}\) son perpendiculares cuando se cruzan.
+  Y \(\{\psi = \text{const}\}\) ¡son exactamente las lineas de corriente (puede probarse)!
+
+  Mucho de lo anterior se sostiene para \(\phi : U \rightarrow \realNumbers\) con \(\Delta \phi = 0\), ¡sin importar que tan complejo sea el dominio \(U\)!
+  En particular, si \(\psi\) es el conjugado armónico de \(\phi\), entonces:
+  \begin{itemize}
+    \item las curvas \(\{\phi = \text{const}\}\) y \(\{\psi = \text{const}\}\) son ortogonales donde se encuentran (es decir, \(\nabla \phi \cdot \nabla \psi = 0\))
+    \item Claramente, por esto último tenemos que \(\vec{v} = \nabla \phi\) es tangente a \(\{\psi = \text{const}\}\).
+    \item Pero, aún mejor, \(\{\psi = \psi(z_0)\}\) es el camino que una partícula en la posición \(z_0\) seguirá en este flujo!
+    Por eso es que las curvas \(\{\psi = \text{const}\}\) reciben el nombre de líneas de corriente:
+    son los caminos que siguen las partículas que forman el fluído durante el flujo.
+  \end{itemize}
+
+  De este modo, ya el análisis complejo (la existencia de conjugados armónicos y las ecuaciones de Cauchy--Riemann) ha revelado mucho.
+  Ahora, las aplicaciones conformes nos ayudaran a tomar cualquier dominio \(U\) (sin agujeros), transformarlo de forma conforme en el semiplano superior, donde sabemos qué sucede con flujos incompresibles e irrotacionales, y luego transferir la solución de vuelta a \(U\).
+
+  Esto se basa en una observación simple y un teorema importante:
+  \begin{problem}
+    Sea \(\phi : U \rightarrow \realNumbers\) con \(\Delta \phi = 0\) en \(U\), y \(\nabla \phi \cdot \vec{n} = 0\) en \(\partial U\).
+    Hallar \(\phi\).
+  \end{problem}
+
+  \begin{remark}
+    Supongamos que podemos encontrar una aplicación holomorfa conforme \(f\) que transforme \(U\) en \(\upperHalfPlane\), y \(\partial U\) en \(\partial \upperHalfPlane = \realNumbers\).
+    Si \(\tilde{\phi} : \overline{\upperHalfPlane} \rightarrow \realNumbers\) satisface \(\nabla \tilde{\phi} = 0\) en \(\upperHalfPlane\) y \(\nabla \tilde{\phi} \cdot \vec{n} = 0\) en \(\partial \upperHalfPlane\), entonces \(\phi \coloneqq \tilde{\phi}(f) \) satisface \(\Delta \phi = 0\) en \(U\) y \(\nabla \phi \cdot \vec{n} = 0\) en \(\partial U\).
+
+    Por lo tanto, nuestra tarea se reduce a encontrar una \(f\) con estas propiedades;
+    luego \(\phi \coloneqq \tilde{\phi} \circ f\), y luego \(\vec{v} = \nabla \phi\).
+  \end{remark}
+
+  Observar que, dado que las aplicaciones conformes preservan ángulos, tenemos que \(\nabla \phi\) es perpendicular a \(\partial U\) porque \(\nabla \tilde{\phi}\) es perpendicular a \(\realNumbers\).
+
+  También, las curvas \(\{\tilde{\phi} = \text{const}\}\) se transforman en \(\{\phi = \text{const}\}\) via \(f^{- 1}\);
+  lo mismo vale para \(\psi\).
+  Por tanto, ¡las líneas de corriete \(\{\psi = \text{const}\}\) son solo las imágenes inversas de las lineas de corriente \(\{\tilde{\psi} = \text{const}\}\) (las líneas horizontales marcadas por la conjugada armónica de \(\tilde{\psi}\)) via \(f\)!
+  Es decir, para encontrar las lineas de corriente de nuestro flujo, solamente calculamos \(f^{- 1}(\text{línea horizontal})\).
+  Ni siquiera necesitamos calcular \(\psi\).
+  ¡Esto no debería sorprendernos!
+  \(\nabla \phi\) debe ser tangente a estas curvas de nivel, dado que \(f^{- 1}\) preserva ángulos, y que \(\nabla \tilde{\phi}\) era tangente a las líneas horizontales.
+  El flujo \(\vec{v} = \nabla \phi\) queda determinado por las condiciones
+  \begin{enumerate}
+    \item \(\phi \coloneqq \tilde{\phi}(f)\)
+    \item \(\vec{v} = \nabla \phi\)
+    \item \(\vec{v}\) es tangente a las líneas de corriente \(f^{- 1}(\text{línea horizontal})\)
+  \end{enumerate}
+
+  Finalmente, notar que las curvas \(\{\psi = \text{const}\}\) and \(\{\phi = \text{const}\}\) son perpendiculares, porque \(\phi\) and \(\psi\) son conjugados armónicos.
+  Esto también se deduce usando que \(f^{- 1}\) es conforme, y \(\{\tilde{\phi} = \text{const}\}\) es ortogonal a \(\{\tilde{\psi} = \text{const}\}\), de modo que también \(\{\phi = \text{const}\} = f^{- 1}(\{\tilde{\phi} = \text{const}\})\) es ortogonal a \(\{\psi = \text{const}\} = f^{- 1}(\{\tilde{\psi} = \text{const}\})\).
+
+  \begin{theorem}[Teorema de representación conforme de Riemann]
+    Si \(U \subseteq \complexNumbers\) es un dominio abierto simplemente conexo (sin agujeros), entonces existe una aplicación conforme \(f : U \rightarrow \upperHalfPlane\).
+  \end{theorem}
+  Es este el teorema que nos dice que la construcción que describimos antes tiene sentido;
+  sabemos que, sin importar que tan loco sea \(U\), mientras no tenga agujeros, ¡podemos transformarlo conformemente en el semiplano superior!
+  Por eso, el método que describimos para encontrar el flujo en un dominio \(U\) general siempre funcionará, mientras podamos encontrar una aplicación conforme \(f\) apropiada que transforme \(U\) en \(\upperHalfPlane\) (si no podemos encontrarla, esto se debe a nuestra incapacidad ¡siempre existe!)
+
+  En el caso del flujo exterior a un cilindro, podemos usar la función \(f(z) = z + r^2 / z\) para transformar la región \(U\) exterior al cilindro en el semiplano superior \(\upperHalfPlane\).
 \end{document}
