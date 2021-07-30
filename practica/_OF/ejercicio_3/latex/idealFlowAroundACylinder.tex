@@ -1,0 +1,179 @@
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{amsthm}
+
+% Math Symbols
+\newcommand{\realNumbers}{\mathbb{R}}
+\newcommand{\complexNumbers}{\mathbb{C}}
+\newcommand{\upperHalfPlane}{\mathcal{H}}
+
+% Math Paired Delimiters
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
+% Math intervals %
+%%%%%%%%%%%%%%%%%%
+%\begin{}
+\usepackage{etoolbox}
+\newcommand{\leftOpenInterval}{\left]}
+\newcommand{\rightOpenInterval}{\right[}
+\newcommand{\leftClosedInterval}{\left[}
+\newcommand{\rightClosedInterval}{\right]}
+\newcommand{\interval}[3]{%
+  \ifstrequal{#1}{oo}{%
+    \leftOpenInterval #2, #3 \rightOpenInterval%
+  }{%
+    \ifstrequal{#1}{co}{%
+      \leftClosedInterval #2, #3 \rightOpenInterval%
+    }{%
+      \ifstrequal{#1}{oc}{
+        \leftOpenInterval #2, #3 \rightClosedInterval%
+      }{%
+        \ifstrequal{#1}{cc}{
+          \leftClosedInterval #2, #3 \rightClosedInterval
+        }{%
+        }%
+      }%
+    }%
+  }%
+}
+%\end{}
+% End math intervals %
+%%%%%%%%%%%%%%%%%%%%%%
+
+% Theorem Environments
+%\begin{}
+\newtheorem{theorem}{Teorema}
+\newtheorem{proposition}{Proposición}
+\newtheorem{problem}{Problema}
+\newtheorem{definition}{Definición}
+\theoremstyle{remark}
+\newtheorem{remark}{Observación}
+%\end{}
+
+% Unit Vectors
+%\begin{}
+\usepackage{bm}
+\newcommand{\uveci}{{\bm{\hat{\textnormal{\bfseries\i}}}}}
+\newcommand{\uvecj}{{\bm{\hat{\textnormal{\bfseries\j}}}}}
+\newcommand{\uvecn}{{\bm{\hat{\textnormal{\bfseries n}}}}}
+%\end{}
+
+\title{Flujo ideal alrededor de un cilindro: potencial complejo}
+\author{Pablo Brianese}
+\begin{document}
+  \maketitle
+  Para el caso particular de un flujo irrotacional y no viscoso, la velocidad del fluído puede describirse (asumimos un sistema efectivamente bidimensional)
+  \begin{align}
+    \vec{v} = \vec{\nabla} \phi
+  \end{align}
+  donde \(\phi\) es el potencial de velocidades.
+  Si además el flujo es incompresible (\(\vec{\nabla} \cdot \vec{v} = 0\)), resulta
+  \begin{align}
+    \vec{\nabla}^2 \phi
+    =
+    \frac{\partial^2 \phi}{\partial x^2}
+    +
+    \frac{\partial^2 \phi}{\partial y^2}
+    =
+    0
+  \end{align}
+
+  En mecánica de fluídos se demuestra que, para que la condición de irrotacionalidad \(\vec{v} \times \vec{v} = 0\) se mantenga en el tiempo, es necesario que el fluido sea noviscoso.
+
+  Dado el portencial de velocidades, podemos formar con su armónica conjugada \(\psi\) la función analítica \(f(z) = \phi(x, y) + i \psi(x, y)\).
+  Las líneas \(\{\psi = \text{const}\}\) son trayectorias ortogonales a las líneas equipotenciales y son llamadas \emph{líneas de corriente}.
+  Es fácil ver que
+  \begin{align}
+    \vec{v}
+    &=
+    \vec{\nabla} \phi
+    \\
+    &=
+    \left( \frac{\partial \phi}{\partial x}, \frac{\partial \phi}{\partial y} \right)
+    \\
+    &=
+    \left( \frac{\partial \phi}{\partial x}, \frac{\partial \phi}{\partial y} \right)
+    \qquad
+    \text{por Cauchy--Riemann}
+    \\
+    &=
+    \overline{\frac{\partial f}{\partial x}}
+    \\
+    &=
+    \overline{f'(z)}
+  \end{align}
+  Es usual definir la \emph{velocidad compleja} \(q = \overline{f'}\).
+  Con lo cual \(\norm{\vec{v}} = \norm*{\overline{f'}} = \norm{f'}\).
+
+  Para el flujo irrotacional alrededor de un cilindro, el potencial complejo es \(f(z) = U_0 (z + R^2 / z)\), donde \(R\) es el radio del cilindro y \(U_0\) es la velocidad en el inlet.
+  En coordenadas reales el potencial complejo es
+  \begin{align}
+    f(x, y)
+    &=
+    U_0 \left( (x + i y) + R^2 / (x + i y) \right)
+    \\
+    &=
+    U_0 \left( (x + i y) + R^2 \frac{x - i y}{x^2 + y^2} \right)
+    \\
+    &=
+    U_0 \left( (x + i y) + \frac{R^2}{x^2 + y^2} (x - i y) \right)
+    \\
+    &=
+    U_0 \left( \left( 1 + \frac{R^2}{x^2 + y^2} \right) x + i \left( 1 - \frac{R^2}{x^2 + y^2} \right) y \right)
+    \\
+    &=
+    \left(
+      U_0 \left( 1 + \frac{R^2}{x^2 + y^2} \right) x,
+      U_0 \left( 1 - \frac{R^2}{x^2 + y^2} \right) y
+    \right)
+  \end{align}
+  y su derivada es
+  \begin{align}
+    f'(x, y)
+    &=
+    \left. \frac{d}{d z} U_0 \left( z + \frac{R^2}{z} \right) \right\vert_{z = x + i y}
+    \\
+    &=
+    U_0 \left( 1 - \frac{R^2}{(x + i y)^2} \right)
+    \\
+    &=
+    U_0 \left( 1 - \frac{R^2}{x^2 - y^2 + i 2 x y} \right)
+    \\
+    &=
+    U_0 \left( 1 - \frac{R^2}{(x^2 - y^2)^2 + 4 x^2 y^2} (x^2 - y^2 - i 2 x y) \right)
+    \\
+    &=
+    U_0 \left( 1 - \frac{R^2}{x^4 + 2 x^2 y^2 + y^4} (x^2 - y^2 - i 2 x y) \right)
+    \\
+    &=
+    U_0 \left( 1 - \frac{R^2}{(x^2 + y^2)^2} (x^2 - y^2 - i 2 x y) \right)
+    \\
+    &=
+    U_0 \left( 1 - \frac{R^2}{(x^2 + y^2)^2} (x^2 - y^2) + i \frac{R^2}{(x^2 + y^2)^2} (2 x y) \right)
+    \\
+    &=
+    \left(
+      U_0 \left( 1 - \frac{R^2}{(x^2 + y^2)^2} (x^2 - y^2) \right),
+      U_0 \frac{R^2}{(x^2 + y^2)^2} (2 x y)
+    \right)
+  \end{align}
+  Por lo tanto, el potencial de velocidades \(\phi\), la función de corriete \(\psi\), y el campo de velocidades \(\vec{v}\) son
+  \begin{align}
+    \phi(x, y)
+    &=
+    U_0 \left( 1 + \frac{R^2}{x^2 + y^2} \right) x \\
+    \psi(x, y)
+    &=
+    U_0 \left( 1 - \frac{R^2}{x^2 + y^2} \right) y
+    \\
+    \vec{v}(x, y)
+    &=
+    \left(
+      U_0 \left( 1 - \frac{R^2}{(x^2 + y^2)^2} (x^2 - y^2) \right),
+      U_0 \frac{R^2}{(x^2 + y^2)^2} (- 2 x y)
+    \right)
+  \end{align}
+  
+\end{document}

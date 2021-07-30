@@ -9,36 +9,38 @@
 \newcommand{\complexNumbers}{\mathbb{C}}
 \newcommand{\upperHalfPlane}{\mathcal{H}}
 
+% Math Paired Delimiters
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+
 % Math intervals %
 %%%%%%%%%%%%%%%%%%
 %\begin{}
-  \usepackage{etoolbox}
-  \newcommand{\leftOpenInterval}{\left]}
-  \newcommand{\rightOpenInterval}{\right[}
-  \newcommand{\leftClosedInterval}{\left[}
-  \newcommand{\rightClosedInterval}{\right]}
-  \newcommand{\interval}[3]{%
-    \ifstrequal{#1}{oo}{%
-      \leftOpenInterval #2, #3 \rightOpenInterval%
+\usepackage{etoolbox}
+\newcommand{\leftOpenInterval}{\left]}
+\newcommand{\rightOpenInterval}{\right[}
+\newcommand{\leftClosedInterval}{\left[}
+\newcommand{\rightClosedInterval}{\right]}
+\newcommand{\interval}[3]{%
+  \ifstrequal{#1}{oo}{%
+    \leftOpenInterval #2, #3 \rightOpenInterval%
+  }{%
+    \ifstrequal{#1}{co}{%
+      \leftClosedInterval #2, #3 \rightOpenInterval%
     }{%
-      \ifstrequal{#1}{co}{%
-        \leftClosedInterval #2, #3 \rightOpenInterval%
+      \ifstrequal{#1}{oc}{
+        \leftOpenInterval #2, #3 \rightClosedInterval%
       }{%
-        \ifstrequal{#1}{oc}{
-          \leftOpenInterval #2, #3 \rightClosedInterval%
+        \ifstrequal{#1}{cc}{
+          \leftClosedInterval #2, #3 \rightClosedInterval
         }{%
-          \ifstrequal{#1}{cc}{
-            \leftClosedInterval #2, #3 \rightClosedInterval
-          }{%
-          }%
         }%
       }%
     }%
-  }
-  %\end{}
-  % End math intervals %
-  %%%%%%%%%%%%%%%%%%%%%%
-  
+  }%
+}
+%\end{}
+% End math intervals %
+%%%%%%%%%%%%%%%%%%%%%%
 
 % Theorem Environments
 %\begin{}
@@ -58,7 +60,7 @@
 \newcommand{\uvecn}{{\bm{\hat{\textnormal{\bfseries n}}}}}
 %\end{}
 
-\title{Aplicaciones conformes en la dinámica de fluídos bidimensional}
+\title{Aplicaciones conformes en la dinámica de fluidos bidimensional}
 \author{Pablo Brianese}
 \begin{document}
   \maketitle
