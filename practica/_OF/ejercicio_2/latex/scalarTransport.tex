@@ -182,194 +182,9 @@
     &&D_i = \frac{\int_0^{L_y}\int_0^{L_x} c(x, y, 0) s_i(x, y, 0) d x d y}{\int_0^{L_y}\int_0^{L_x} s_i(x, y, 0)^2 d x d y}
   \end{align}
 
-  \begin{lemma}
-    Si \(U = U(u)\) es una función nonula definida en un intervalo \(\interval{cc}{0}{L}\) que satisface las condiciones de borde \(U(0) = U(L) = 0\), y la ecuación diferencial \(U^{\prime\prime} = \gamma U\) para cierta constante \(\gamma \in \realNumbers\).
-    Entonces existe un entero positivo \(k\) tal que \(\gamma = - \pi^2 k^2 / L^2\), y \(U\) es de la forma \(U = \sen(n \pi u / L)\).
-  \end{lemma}
-
-  \section{Condiciones de borde de Dirichlet}
-  Sobre la solución separada \(s\), imponemos las condiciones de borde de Dirichlet para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t > 0\)
-  \begin{align}
-    \label{equation:DirichletBoundaryConditions}
-    s(0, y , t)
-    =
-    s(x, 0, t)
-    =
-    s(L_x, y, t)
-    =
-    s(x, L_y, t)
-    =
-    0
-  \end{align}
-  Estas \eqref{equation:DirichletBoundaryConditions} implican que la única solución \(s\) constante es la solución nula \(s = 0\).
-  Por eso podemos ignorar tal caso.
-  Substituyendo la fórmula de separación \eqref{equation:separatedSolution} para \(s\) en las condiciones de borde \eqref{equation:DirichletBoundaryConditions}, se deduce (usando \(s \neq 0\))
-  \begin{align}
-    &X(0) Y T
-    =
-    X Y(0) T
-    =
-    X(L_x) Y T
-    =
-    X Y(L_y) T
-    =
-    0
-    \\
-    \label{equation:separatedInitialConditions}
-    &\Rightarrow X(0) = Y(0) = X(L_x) = Y(L_y) = 0
-  \end{align}
-  Seguimos resolviendo las ecuaciones diferenciales lineales de segundo orden con coeficientes constantes \eqref{equation:separatedDifussionEquation}, usando estas condiciones de borde para ellas.
-  
-  Por un lado tenemos \(X^{\prime\prime} - \alpha X = 0\).
-  Su ecuación característica es \(r^2 - \alpha = 0\), y su discriminante es \(4 \alpha\).
-  Debemos considerar tres casos: \(\alpha > 0\) (el discriminante es positivo); \(\alpha = 0\) (el discriminante es nulo); \(\alpha < 0\) (el discriminante es negativo).
-  Podemos descartar aquellos que resulten en una solución nula \(X = 0\) porque llevan a otra solución nula \(s = 0\).
-  En el primer caso, \(\alpha > 0\), la solución de la ecuación diferencial es de la forma \(X = C_1 e^{\sqrt{\alpha} x} + C_2 e^{- \sqrt{\alpha} x}\).
-  Las condiciones iniciales \eqref{equation:separatedInitialConditions} implican que \(C_1 + C_2 = C_1 e^{\sqrt{\alpha} L_x} + C_2 e^{- \sqrt{\alpha} L_x} = 0\).
-  Luego \(C_1 = C_2 = 0\).
-  Podemos descartar este caso porque \(X = 0\).
-  En el segundo caso, \(\alpha = 0\), la solución a la ecuación diferencial es de la forma \(X = C_1 x + C_2\).
-  Las condiciones iniciales \eqref{equation:separatedInitialConditions} implican que \(C_2 = C_1 L_x + C_2 = 0\).
-  Luego \(C_1 = C_2 = 0\).
-  Podemos descartar este caso porque \(X = 0\).
-  En el tercer y último caso, \(\alpha < 0\), la solución a la ecuación diferencial es de la forma \(X = C_1 \cos(\sqrt{\abs{\alpha}} x) + C_2 \sin(\sqrt{\abs{\alpha}} x)\).
-  Las condiciones iniciales \eqref{equation:separatedInitialConditions} implican que \(C_1 = C_1 \cos(\sqrt{\abs{\alpha}} L_x) + C_2 \sin(\sqrt{\abs{\alpha}} L_x) = 0\).
-  Luego \(C_2 \sin(\sqrt{\abs{\alpha}} L_x) = 0\).
-  La alternativa \(C_2 = 0\) nos da nuevamente una solución nula \(X = 0\).
-  Por otro lado, la alternativa \(\sin(\sqrt{\abs{\alpha}} L_x) = 0\) nos dá un número infinito de soluciones
-  \begin{align}
-    X_n(x) = \sin(n \pi x / L_x)
-  \end{align}
-  parametrizadas por un número entero positivo \(n\) tal que \(\alpha = - n^2 \pi^2 / L_x^2\).
-
-  Repetir este análisis para la función \(Y\), usando la ecuación \(Y^{\prime\prime} - \beta Y = 0\) y las condiciones de borde \eqref{equation:separatedInitialConditions}, nos lleva a encontrar infinitas soluciones
-  \begin{align}
-    Y_m(y) = \sin(m \pi y / L_y)
-  \end{align}
-  parametrizadas por un número entero positivo \(m\) tal que \(\beta = - m^2 \pi^2 / L_y^2\).
-
-  Este análisis resuelve la ecuación de difusión en el caso especial en que la solución tiene sus dependencias separadas.
-  Resulta en una familia infinita de soluciones parametrizada por el par de enteros positivos \(n, m\)
-  \begin{align}
-    s_{n, m}(x, y, t)
-    =
-    \sin\left(n \pi \frac{x}{L_x} \right)
-    \sin\left(m \pi \frac{y}{L_y}\right)
-    \exp\left(
-      - \pi^2 \left(
-        \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}
-      \right)
-      D t
-    \right)
-  \end{align}
-  En general, la combinación lineal de soluciones a la ecuación de transporte \eqref{equation:diffusion} que satisfacen las condiciones de borde de Dirichlet \eqref{equation:DirichletBoundaryConditions}
-  también safisfacen ambas \eqref{equation:diffusion} y \eqref{equation:DirichletBoundaryConditions}.
-  Puede probarse que la solución a estas ecuaciones simultáneas, con condiciones iniciales \(c(x, y, 0)\),
-  está dada por la serie
-  \begin{align}
-    c(x, y, t)
-    =
-    \sum_{n \geq 1, m \geq 1}
-      D_{n, m}
-      \sin\left( n \pi \frac{x}{L_x} \right)
-      \sin\left( m \pi \frac{y}{L_y} \right)
-      \exp\left(
-        - \pi^2 \left(
-          \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}
-        \right)
-        D t
-      \right)
-  \end{align}
-  donde
-  \begin{align}
-    D_{n, m}
-    &=
-    \frac{
-      \int_0^{L_x}
-        \int_0^{L_y}
-          c(x, y, 0)
-          \sin\left( n \pi \frac{x}{L_x} \right)
-          \sin\left( m \pi \frac{y}{L_y} \right)
-        d y
-      d x
-    }{
-      \int_0^{L_x}
-        \int_0^{L_y}
-        \sin\left( n \pi \frac{x}{L_x} \right)^2
-          \sin\left( m \pi \frac{y}{L_y} \right)^2
-        d y
-      d x
-    }
-    \\
-    &=
-    \frac{4}{L_x L_y} 
-    \int_0^{L_x}
-      \int_0^{L_y}
-        c(x, y, 0)
-        \sin\left( n \pi \frac{x}{L_x} \right)
-        \sin\left( m \pi \frac{y}{L_y} \right)
-      d y
-    d x
-  \end{align}
-
-  En nuestro caso, la condición inicial está dada por 
-  \begin{align}
-    \label{equation:initialCondition}
-    c(x, y, 0)
-    =
-    \left\{
-      \begin{aligned}
-        1 &&\text{si } x \leq L_x /2 \\
-        0 &&\text{si } x > L_x / 2
-      \end{aligned}
-    \right.
-  \end{align}
-  de modo que
-  \begin{align}
-    D_{n, m}
-    &=
-    \frac{4}{L_x L_y}
-    \int_0^{L_x / 2}
-      \int_0^{L_y}
-        \sin\left( n \pi \frac{x}{L_x} \right)
-        \sin\left( m \pi \frac{y}{L_y} \right)
-      d y
-    d x
-    \\
-    &=
-    \frac{4}{L_x L_y}
-    \int_0^{L_x / 2}
-      \sin\left( n \pi \frac{x}{L_x} \right)
-    d x
-      \int_0^{L_y}
-        \sin\left( m \pi \frac{y}{L_y} \right)
-    d y
-    \\
-    &=
-    \frac{4}{L_x L_y}
-    \left( - \frac{L_x}{n \pi} \right)
-    \left( ((- 1)^m - 1) \frac{L_y}{m \pi} \right)
-    \\
-    &=
-    \frac{4}{n m \pi^2}
-    (1 - (- 1)^m)
-    \\
-    &=
-    \left\{
-      \begin{aligned}
-        \frac{8}{n m \pi^2}
-          &&\text{si } m \text{ es impar;}
-        \\
-        0
-          &&\text{si } m \text{ es par.}
-      \end{aligned}
-    \right.
-  \end{align}
-
   \section{Condiciones de borde de Neumann}
-  Consideremos una solución separada nonula \(s = X Y T\).
-  Al ser nonula, resulta que también son nonulas las funciones \(X\), \(Y\), \(T\).
-  Ahora imponemos las condiciones de borde de Neumann para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t \geq 0\)
+  Buscamos soluciones separadas nonulas \(s = X Y T\).
+  Imponemos las condiciones de borde de Neumann para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t \geq 0\)
   \begin{align}
     \label{equation:NewmannBoundaryConditions}
     \frac{\partial s}{\partial x} (0, y, t)
@@ -382,7 +197,7 @@
     =
     0
   \end{align}
-  Substituyendo la fórmula de separación \(s = X Y T\) en las condiciones de borde de Newmann \eqref{equation:NewmannBoundaryConditions} se deduce (usando que \(X\), \(Y\), \(T\) son nonulas)
+  Substituyendo \(s = X Y T\) en estas condiciones de borde, se deduce
   \begin{align}
     X'(0) Y T
     =
@@ -393,8 +208,10 @@
     X Y'(L_y) T
     =
     0
-    \\
-    \Rightarrow
+  \end{align}
+  Al ser \(s \neq 0\), resultan ser nonulas las funciones \(X Y\), \(Y T\), \(X T\).
+  Luego
+  \begin{align}
     \label{equation:separatedNewmannBoundaryConditions}
     X'(0)
     =
@@ -407,9 +224,36 @@
     0
   \end{align}
 
-  Definimos una nueva función \(\tilde{s} = \frac{\partial^2 s}{\partial x \partial y}\).
-  Puede calcularse una fórmula de separación \(\tilde{s} = X' Y' T\).
-  Debemos considerar la posibilidad de que esta función sea nula.
+  Llegamos así a condiciones de borde de Dirichlet para funciones \(U = X'\), \(V = Y'\).
+  Además satisfacen las ecuaciones diferenciales \(U^{\prime\prime} = \alpha U\), \(V^{\prime\prime} = \beta V\), como puede verificarse derivando las ecuaciones \eqref{equation:separatedDifussionEquation}.
+  Nuestra principal herramienta para encontrar las soluciones \(s\) es hallar estas funciones \(U\), \(V\) usando el siguiente lema
+  \begin{lemma}
+    \label{lemma:sinusoidSolution}
+    Si \(U = U(u)\) es una función nonula definida en un intervalo \(\interval{cc}{0}{L}\) que satisface las condiciones de borde de Dirichlet \(U(0) = U(L) = 0\), y la ecuación diferencial \(U^{\prime\prime} = \gamma U\) para cierta constante \(\gamma \in \realNumbers\).
+    Entonces existe un entero positivo \(k\) tal que \(\gamma = - \pi^2 k^2 / L^2\), y \(U\) es de la forma \(U = \sen(n \pi u / L)\).
+  \end{lemma}
+  \begin{proof}
+    La ecuación característica de \(U^{\prime\prime} - \gamma U = 0\) es \(r^2 - \gamma = 0\), y su discriminante es \(4 \gamma\).
+    Debemos considerar tres casos: \(\gamma > 0\) (el discriminante es positivo); \(\gamma = 0\) (el discriminante es nulo); \(\gamma < 0\) (el discriminante es negativo).
+    Podremos descartar aquellos que resulten en una solución nula \(U = 0\), porque llevan a una contradicción con nuestra hipótesis \(U \neq 0\).
+    En el primer caso, \(\gamma > 0\), la solución de la ecuación diferencial es de la forma \(U = C_1 e^{\sqrt{\gamma} u} + C_2 e^{- \sqrt{\gamma} u}\).
+    Las condiciones de borde de Dirichlet \(U(0) = U(L) = 0\) implican que \(C_1 + C_2 = C_1 e^{\sqrt{\gamma} L} + C_2 e^{- \sqrt{\gamma} L} = 0\).
+    Luego \(C_1 = C_2 = 0\).
+    Podemos descartar este caso porque resulta \(U = 0\).
+    En el segundo caso, \(\gamma = 0\), la solución a la ecuación diferencial es de la forma \(U = C_1 u + C_2\).
+    Las condiciones de borde de Dirichlet \(U(0) = U(L) = 0\) implican que \(C_2 = C_1 L + C_2 = 0\).
+    Luego \(C_1 = C_2 = 0\).
+    Podemos descartar este caso porque resulta \(U = 0\).
+    En el tercer y último caso, \(\gamma < 0\), la solución a la ecuación diferencial es de la forma \(U = C_1 \cos(\sqrt{-\gamma} u) + C_2 \sin(\sqrt{- \gamma} u)\).
+    Las condiciones de borde de Dirichlet \(U(0) = U(L) = 0\) implican que \(C_1 = C_1 \cos(\sqrt{- \gamma} L) + C_2 \sin(\sqrt{- \gamma} L) = 0\).
+    Luego \(C_2 \sin(\sqrt{- \gamma} L_x) = 0\).
+    La alternativa \(C_2 = 0\) nos da nuevamente una solución nula \(U = 0\).
+    Por otro lado, la alternativa \(C_2 \neq 0\), nos dice que \(\sin(\sqrt{- \gamma} L) = 0\), de aquí resulta \(\sqrt{- \gamma} L = n \pi\) para un entero positivo \(n\).
+    Luego \(\gamma = - n^2 \pi^2 / L^2\), y \(U(u) = C_2 \sin(n \pi u / L)\).
+  \end{proof}
+
+
+  Por otra parte, este no siempre aplica.
   Puede pasar que \(X' = 0\) o \(Y' = 0\), y tenemos que recorrer cada posibilidad.
 
   Supongamos \(X' = Y' = 0\).
@@ -421,7 +265,7 @@
 
   Supongamos \(X' \neq 0\), \(Y' = 0\).
   En este caso, la función \(Y\) es de la forma \(Y = 1\).
-  Por su parte \(U = X'\) es una función nonula que satisface el sistema de ecuaciones \(U^{\prime\prime} = \alpha U\), \(U(0) = U(L_x) = 0\).
+  Por su parte, \(U = X'\) entra en las condiciones del lema \ref{lemma:sinusoidSolution}.
   Esto implica que \(\alpha = - n^2 \pi^2 / L_x^2\), donde \(n\) es un entero positivo que parametriza la solución, y \(U\) es de la forma \(U = \sen(n \pi x / L_x)\).
   Se deduce que \(X\) es de la forma \(X = \cos(n \pi x / L_x)\).
   Finalmente, \(T\) es de la forma \(T = \exp(- (\pi^2 n^2 / L_x^2) D t)\).
@@ -443,7 +287,7 @@
   \end{align}
 
   Supongamos \(X' \neq 0\), \(Y' \neq 0\).
-  En este caso \(U = X'\), \(V = Y'\) son funciones nonulas que satisfacen el sistema de ecuaciones \(U^{\prime\prime} = \alpha U\), \(V^{\prime\prime} = \beta V\) con condiciones de borde de Dirichlet \(U(0) = U(L_x) = V(0) = V(L_y) = 0\).
+  En este caso \(U = X'\), \(V = Y'\) entran en las condiciones del lema \ref{lemma:sinusoidSolution}.
   Esto implica que \(\alpha = - n^2 \pi^2 / L_x^2\), \(\beta = - m^2 \pi^2 / L_y^2\), donde \(n\) y \(m\) son enteros positivos que parametrizan la solución; y \(U\), \(V\) son de la forma \(U = \sen(n \pi x / L_x)\), \(V = \sen(m \pi y / L_y)\).
   Se deduce que \(X\), \(Y\) son de la forma \(X = \cos(n \pi x / L_x)\), \(Y = \cos(m \pi y / L_y)\).
   Finalmente, \(T\) es de la forma \(T = \exp(- \pi^2 (n^2 / L_x^2 + m^2 / L_y^2) D t)\).
@@ -685,177 +529,4 @@
     \frac{4}{n \pi}
     \cos(n \pi x / L_x) \exp((- \pi^2 n^2 / L_x^2) D t)
   \end{align}
-
-
-
-  \newpage
-  Como consecuencia de las condiciones de Newman separadas \eqref{equation:separatedNewmannBoundaryConditions}, satisface las condiciones de borde de Dirichlet para todo \(x \in \interval{cc}{0}{L_x}\), \(y \in \interval{cc}{0}{L_y}\), \(t \geq 0\)
-  \begin{align}
-    X'(0) Y' T
-    =
-    X'(L_x) Y' T
-    =
-    X' Y'(0) T
-    =
-    X' Y'(L_x) T
-    =
-    0
-    \\
-    \Rightarrow
-    \label{equation:tildeDirichletBoundaryConditions}
-    \tilde{s}(0, y, t)
-    =
-    \tilde{s}(L_x, y, t)
-    =
-    \tilde{s}(x, 0, t)
-    =
-    \tilde{s}(x, L_y, t)
-    =
-    0
-  \end{align}
-  Además, \(\tilde{s}\) es una solución a la ecuación de difusión.
-  En efecto
-  \begin{align}
-    \label{equation:tildeDifussion}
-    \frac{\partial \tilde{s}}{\partial t}
-    =
-    \frac{\partial}{\partial t} \frac{\partial^2 s}{\partial x \partial y}
-    =
-    \frac{\partial^2}{\partial x \partial y} \frac{\partial s}{\partial t}
-    =
-    \frac{\partial^2}{\partial x \partial y} D \Delta s
-    =
-    D \Delta \frac{\partial^2 s}{\partial x \partial y}
-    =
-    D \Delta \tilde{s}
-  \end{align}
-
-  Substituyendo la fórmula de separación \(s = X Y T\) en la ecuación de difusión \eqref{equation:diffusion} se deriva
-  \begin{align}
-    \frac{\partial}{\partial t} X(x) Y(y) T(t)
-    &=
-    D \left(
-      \frac{\partial^2}{\partial x^2} X(x) Y(y) T(t)
-      +
-      \frac{\partial^2}{\partial y^2} X(x) Y(y) T(t)
-    \right)
-    \\
-    X(x) Y(y) T'(t)
-    &=
-    D \left(
-      X^{\prime\prime}(x) Y(y) T(t)
-      +
-      X(x) Y^{\prime\prime}(y) T(t)
-    \right)
-    \\
-    \frac{T'(t)}{D T(t)}
-    &=
-    \frac{X^{\prime\prime}(x) Y(y) + X(x) Y^{\prime\prime}(y)}{X(x) Y(y)}
-    \\
-    \label{equation:separatedDifferentialEquation}
-    \frac{T'(t)}{D T(t)}
-    &=
-    \frac{X^{\prime\prime}(x)}{X(x)}
-    +
-    \frac{Y^{\prime\prime}(y)}{Y(y)}
-  \end{align}
-  
-
-
-  Debemos contemplar la posibilidad de tener \(\tilde{s} = 0\).
-  En este caso \(X' = 0\) o \(Y' = 0\).
-
-  Dado nuestro trabajo en la sección de las condiciones de Dirichlet, se sigue que las ecuaciones \eqref{equation:tildeDirichletBoundaryConditions} y \eqref{equation:tildeDifussion}, implican
-  \begin{align}
-    X'(x) = \sin(n \pi x / L_x)
-    &&Y'(y) = \sin(m \pi y / L_y)
-    \\
-    \Rightarrow
-    X(x) = \frac{L_x}{n \pi} \cos(n \pi x / L_x)
-    && Y(y) = \frac{L_y}{m \pi} \cos(m \pi y / L_y)
-  \end{align}
-  Esto nos dá un número infinito de soluciones parametrizadas por un par de números enteros positivos \(n, m\)
-  \begin{align}
-    s_{n, m}(x, y, t)
-    =
-    \cos\left( n \pi \frac{x}{L_x} \right) \cos\left(m \pi \frac{y}{L_y} \right) \exp\left( - \pi^2 \left( \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2} \right) D t \right)
-  \end{align}
-  Soluciones separadas a la ecuación de difusión \eqref{equation:diffusion} con condiciones de borde de Newmann homogéneas \eqref{equation:NewmannBoundaryConditions}.
-
-  %Papo de las soluciones constantes con n = 0 o m = 0
-
-  Como en el caso anterior, la combinación lineal de soluciones a la ecuación de difusión \eqref{equation:diffusion} que satisfacen las condiciones de borde de Newmann \eqref{equation:NewmannBoundaryConditions} también satisfacen ambas \eqref{equation:diffusion} y \eqref{equation:NewmannBoundaryConditions}.
-  Puede probarse que la solución a estas ecuaciones simultáneas, con condiciones iniciales \(c(x, y, 0)\), está dada por la serie
-  \begin{align}
-    c(x, y, t)
-    =
-    \sum_{n \geq 1, m \geq 1}
-      D_{n, m}
-      \cos\left( n \pi \frac{x}{L_x} \right)
-      \cos\left( m \pi \frac{y}{L_y} \right)
-      \exp\left(
-        - \pi^2 \left(
-          \frac{n^2}{L_x^2} + \frac{m^2}{L_y^2}
-        \right)
-        D t
-      \right)
-  \end{align}
-  donde
-  \begin{align}
-    D_{n, m}
-    &=
-    \frac{
-      \int_0^{L_x}
-        \int_0^{L_y}
-          c(x, y, 0)
-          \cos\left( n \pi \frac{x}{L_x} \right)
-          \cos\left( m \pi \frac{y}{L_y} \right)
-        d y
-      d x
-    }{
-      \int_0^{L_x}
-        \int_0^{L_y}
-        \cos\left( n \pi \frac{x}{L_x} \right)^2
-        \cos\left( m \pi \frac{y}{L_y} \right)^2
-        d y
-      d x
-    }
-    \\
-    &=
-    \frac{4}{L_x L_y} 
-    \int_0^{L_x}
-      \int_0^{L_y}
-        c(x, y, 0)
-        \cos\left( n \pi \frac{x}{L_x} \right)
-        \cos\left( m \pi \frac{y}{L_y} \right)
-      d y
-    d x
-  \end{align}
-
-  En nuestro caso, la condición inicial está dada por 
-  \begin{align}
-    \label{equation:initialCondition}
-    c(x, y, 0)
-    =
-    \left\{
-      \begin{aligned}
-        1 &&\text{si } x \leq L_x /2 \\
-        0 &&\text{si } x > L_x / 2
-      \end{aligned}
-    \right.
-  \end{align}
-  de modo que
-  \begin{align}
-    D_{n, m}
-    &=
-    \frac{4}{L_x L_y} 
-    \int_0^{L_x / 2}
-      \int_0^{L_y}
-        \cos\left( n \pi \frac{x}{L_x} \right)
-        \cos\left( m \pi \frac{y}{L_y} \right)
-      d y
-    d x
-  \end{align}
-  
-
 \end{document}
