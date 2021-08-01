@@ -1,1 +1,0 @@
-numberOfSubdomains 2;
