@@ -33,31 +33,24 @@
     En unidades SI.
   \end{physicalLaw}
 
-  Esta ecuación diferencial es lineal.
-  Eso nos permite resolverla primero analizando el campo eléctrico, y después el campo magnético.
-  Sabemos que cuando el campo elétrico es constante y el campo magnético es nulo
-  \begin{theorem}
-    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{E}\), donde el campo eléctrico \(\vec{E}\) es constante, está dada por \(\vec{r} = \frac{q}{m} \vec{E} \frac{t^2}{2} + \vec{v}_0 t + \vec{r}_0\).
-  \end{theorem}
-
-  Ahora buscamos la solución \(\vec{r}\), en el caso que el campo eléctrico es nulo y el campo magnético es constante, a la ecuación
+  Si derivamos esta ley con respecto al tiempo, asumiendo que los campos eléctrico y magnético son constantes, obtenemos una ecuación para la aceleración
   \begin{align}
-    m \vec{a}
-    &=
-    q \vec{v} \times \vec{B}
+    \label{equation:accelerationOfChargedParticleExposedToElectromagneticField}
+    m \vec{j} = q \vec{a} \times \vec{B}
   \end{align}
+  donde \(\vec{j} = d \vec{a} / d t\) es la llamada sobreaceleración de la partícula.
 
   \begin{theorem}
-    \label{theorem:velocity_dot_magneticFieldIsConstant}
-    El producto punto, \(\vec{v} \cdot \vec{B}\), es constante.
+    \label{theorem:acceleration_dot_magneticFieldIsConstant}
+    El producto punto, \(\vec{a} \cdot \vec{B}\), es constante.
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
-    Multiplicamos por el campo magnético para obtener \(m \vec{a} \cdot \vec{B} = q (\vec{v} \times \vec{B}) \cdot \vec{B}\).
+    Partimos de la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\).
+    Multiplicamos por el campo magnético para obtener \(m \vec{j} \cdot \vec{B} = q \vec{a} \times \vec{B} \cdot \vec{B}\).
     Porque el producto cruz \(\vec{v} \times \vec{B}\) es ortogonal a \(\vec{B}\), el lado derecho de la ecuación es nulo.
-    Resulta \(\vec{a} \cdot \vec{B} = 0\).
+    Resulta \(\vec{j} \cdot \vec{B} = 0\).
     Pero el producto punto es lineal, luego conmuta con la derivación.
-    Por lo tanto \(\frac{d}{d t} (\vec{v} \cdot \vec{B}) = 0\).
+    Por lo tanto \(\frac{d}{d t} (\vec{a} \cdot \vec{B}) = 0\).
   \end{proof}
 
   \begin{theorem}
@@ -106,7 +99,7 @@
   \begin{proof}
     \eqref{equation:alphaBetaFormulaForVelocity}
     es consecuencia de la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
-    La fórmula \(\vec{v} \cdot \bar{B} = \vec{v}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:velocity_dot_magneticFieldIsConstant}.
+    La fórmula \(\vec{v} \cdot \bar{B} = \vec{v}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:acceleration_dot_magneticFieldIsConstant}.
 
     \eqref{equation:alphaBetaFormulaForModulusOfVelocity}
     se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
