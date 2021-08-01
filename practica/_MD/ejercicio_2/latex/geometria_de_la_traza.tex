@@ -54,15 +54,15 @@
   \end{proof}
 
   \begin{theorem}
-    \label{theorem:modulusOfVelocityIsConstant}
-    El módulo de la velocidad, \(v\), es constante.
+    \label{theorem:modulusOfAccelerationIsConstant}
+    El módulo de la aceleración, \(a\), es constante.
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
-    Multiplicamos por la velocidad para obtener \(m \vec{a} \cdot \vec{v} = q (\vec{v} \times \vec{B}) \cdot \vec{v}\).
-    Porque el producto cruz \(\vec{v} \times \vec{B}\) es ortogonal a \(\vec{v}\), el lado derecho de la ecuación es nulo.
-    Resulta \(\vec{a} \cdot \vec{v} = 0\).
-    Esto nos permite calcular \(\frac{d}{d t} v^2 = 2 \vec{v} \cdot \frac{d \vec{v}}{d t} = 2 \vec{a} \cdot \vec{v} = 0\).
+    Partimos de la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\).
+    Multiplicamos por la aceleración para obtener \(m \vec{j} \cdot \vec{a} = q (\vec{a} \times \vec{B}) \cdot \vec{a}\).
+    Porque el producto cruz \(\vec{a} \times \vec{B}\) es ortogonal a \(\vec{a}\), el lado derecho de la ecuación es nulo.
+    Resulta \(\vec{j} \cdot \vec{a} = 0\).
+    Esto nos permite calcular \(\frac{d}{d t} a^2 = 2 \vec{a} \cdot \frac{d \vec{a}}{d t} = 2 \vec{a} \cdot \vec{j} = 0\).
   \end{proof}
 
   Fijemos una base ortonormal \(\{\bar{b}_1, \bar{b}_2\}\) del plano ortogonal a \(\vec{B}\).
@@ -103,7 +103,7 @@
 
     \eqref{equation:alphaBetaFormulaForModulusOfVelocity}
     se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
-    La igualdad \(v^2 = v_0^2\) se debe al teorema \ref{theorem:modulusOfVelocityIsConstant}.
+    La igualdad \(v^2 = v_0^2\) se debe al teorema \ref{theorem:modulusOfAccelerationIsConstant}.
 
     \eqref{equation:alphaBetaFormulaForCrossProduct}
     se debe a la orientación positiva de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
