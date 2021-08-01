@@ -24,4 +24,8 @@ for timestep in range(len(timesteps)):
     )
     ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.0f}"))
     ax.xaxis.set_major_formatter(ticker.StrMethodFormatter("{x:.0f}"))
+    ax.set_title("Solución usando series de Fourier")
+    ax.set_xlabel("indice x del nodo")
+    ax.set_ylabel("indice y del nodo")
+    plt.subplots_adjust(bottom=0.15)
     fig.savefig(f"dat/timestep{timestep:03}.png")
