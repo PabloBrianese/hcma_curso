@@ -20,4 +20,6 @@ import seaborn as sns
 for timestep in range(len(timesteps)):
     fig, ax = plt.subplots()
     sns.heatmap(timesteps[timestep], vmin=0.0, vmax=1.0, ax=ax)
+    ax.set_title("Simulación numérica usando OpenFOAM")
+    plt.subplots_adjust(bottom=0.15)
     fig.savefig(f"dat/timestep_{timestep:03}.png")
