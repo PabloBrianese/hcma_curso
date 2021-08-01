@@ -25,7 +25,7 @@
 **/_OF/*.dat
 **/_OF/ejercicio_2/fourierSeriesSolution/dat/*.png
 **/_OF/ejercicio_2/fourierSeriesSolution/dat/*.csv
-
+**/_OF/ejercicio_2/OpenFOAMSolution/dat/*.png
 
 # Imágenes del ejercicio 3-9 3-11 3-12 6-1
 **/_python_cas/ejercicio_9/**/*.png
