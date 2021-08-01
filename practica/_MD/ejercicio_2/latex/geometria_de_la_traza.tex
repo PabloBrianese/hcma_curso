@@ -39,6 +39,7 @@
     m \vec{j} = q \vec{a} \times \vec{B}
   \end{align}
   donde \(\vec{j} = d \vec{a} / d t\) es la llamada sobreaceleración de la partícula.
+  Para resolver esta ecuación suponemos además que ambos \(\vec{E}\), \(\vec{B}\) son nonulos.
 
   \begin{theorem}
     \label{theorem:acceleration_dot_magneticFieldIsConstant}
@@ -66,7 +67,7 @@
   \end{proof}
 
   Fijemos una base ortonormal \(\{\bar{b}_1, \bar{b}_2\}\) del plano ortogonal a \(\vec{B}\).
-  Esto nos permite definir dos escalares \(\alpha = \vec{v} \cdot \bar{b}_1\), \(\beta = \vec{v} \cdot \bar{b}_2\) que describen a la proyección ortogonal de \(\vec{v}\) sobre dicho plano.
+  Esto nos permite definir dos escalares \(\alpha = \vec{a} \cdot \bar{b}_1\), \(\beta = \vec{a} \cdot \bar{b}_2\) que describen a la proyección ortogonal de \(\vec{a}\) sobre dicho plano.
   Sin mayor esfuerzo \(\{\bar{b}_1, \bar{b}_2, \bar{B} = \vec{B} / B\}\) es una base ortonormal de \(\realNumbers^3\).
   Pediremos además que \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) esté orientada positivamente.
   Con mayor claridad, lo que pedimos es que se verifiquen las ecuaciones \(\bar{b}_1 \times \bar{b}_2 = \bar{B}\), \(\bar{b}_2 \times \bar{B} = \bar{b}_1\), \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
@@ -75,43 +76,42 @@
   \begin{theorem}
     Las variables \(\alpha\), \(\beta\) nos proveen las identidades
     \begin{align}
-      \label{equation:alphaBetaFormulaForVelocity}
-      \vec{v}
+      \label{equation:alphaBetaFormulaForAcceleration}
+      \vec{a}
       &=
-      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
       \\
-      \label{equation:alphaBetaFormulaForModulusOfVelocity}
-      v_0^2
+      \label{equation:alphaBetaFormulaForModulusOfAcceleration}
+      a_0^2
       &=
-      \alpha^2 + \beta^2 + (\vec{v}_0 \cdot \bar{B})^2
+      \alpha^2 + \beta^2 + (\vec{a}_0 \cdot \bar{B})^2
       \\
       \label{equation:alphaBetaFormulaForCrossProduct}
-      \vec{v} \times \vec{B}
+      \vec{a} \times \vec{B}
       &=
       B (- \alpha \bar{b}_2 + \beta \bar{b}_1)
       \\
-      \label{equation:alphaBetaFormulaForAcceleration}
-      \vec{a}
+      \label{equation:alphaBetaFormulaForJerk}
+      \vec{j}
       &=
       \frac{d \alpha}{d t} \bar{b}_1 + \frac{d \beta}{d t} \bar{b}_2
     \end{align}
   \end{theorem}
   \begin{proof}
-    \eqref{equation:alphaBetaFormulaForVelocity}
+    \eqref{equation:alphaBetaFormulaForAcceleration}
     es consecuencia de la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
-    La fórmula \(\vec{v} \cdot \bar{B} = \vec{v}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:acceleration_dot_magneticFieldIsConstant}.
+    La fórmula \(\vec{a} \cdot \bar{B} = \vec{a}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:acceleration_dot_magneticFieldIsConstant}.
 
-    \eqref{equation:alphaBetaFormulaForModulusOfVelocity}
-    se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
-    La igualdad \(v^2 = v_0^2\) se debe al teorema \ref{theorem:modulusOfAccelerationIsConstant}.
+    Todas las demás son consecuencia de esta primera ecuación \eqref{equation:alphaBetaFormulaForAcceleration}.
+
+    \eqref{equation:alphaBetaFormulaForModulusOfAcceleration}
+    se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\), y a la igualdad \(a^2 = a_0^2\) que se desprende del teorema teorema \ref{theorem:modulusOfAccelerationIsConstant}.
 
     \eqref{equation:alphaBetaFormulaForCrossProduct}
     se debe a la orientación positiva de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
-    Esta hace que \(\bar{b}_1 \times \bar{b}_2 = \bar{B}\), \(\bar{b}_2 \times \bar{B} = \bar{b}_1\), \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
-    Y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
 
-    \eqref{equation:alphaBetaFormulaForAcceleration}
-    se debe a la ecuación \eqref{equation:alphaBetaFormulaForVelocity} y a la linealidad de la derivada.
+    \eqref{equation:alphaBetaFormulaForJerk}
+    se debe a la linealidad de la derivada.
   \end{proof}
 
   \begin{theorem}
@@ -129,7 +129,7 @@
   \end{theorem}
   \begin{proof}
     Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
-    Reemplazamos \(\vec{a}\), \(\vec{v} \times \vec{B}\) por sus fórmulas \eqref{equation:alphaBetaFormulaForAcceleration}, \eqref{equation:alphaBetaFormulaForCrossProduct} en función de \(\alpha\), \(\beta\).
+    Reemplazamos \(\vec{a}\), \(\vec{v} \times \vec{B}\) por sus fórmulas \eqref{equation:alphaBetaFormulaForJerk}, \eqref{equation:alphaBetaFormulaForCrossProduct} en función de \(\alpha\), \(\beta\).
     Obtenemos
     \begin{align}
       \frac{d \alpha}{d t} \bar{b}_1 + \frac{d \beta}{d t} \bar{b}_2
@@ -143,7 +143,7 @@
     Si la velocidad inicial, \(\vec{v}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la velocidad \(\vec{v}\) es constante.
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForModulusOfVelocity}, que dice \(
+    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForModulusOfAcceleration}, que dice \(
       v_0^2
       =
       \alpha^2 + \beta^2
@@ -152,7 +152,7 @@
     .
     Si \(\vec{v}_0\) es paralelo a \(\vec{B}\), entonces \(\vec{v}_0 = (\vec{v}_0 \cdot \bar{B}) \bar{B}\) y \(v_0^2 = (\vec{v}_0 \cdot \bar{B})^2\).
     Junto a la primera ecuación, estas implican \(\alpha = \beta = 0\).
-    Por la ecuación \eqref{equation:alphaBetaFormulaForVelocity}, se sigue \(\vec{v} = (\vec{v}_0 \cdot \bar{B}) \bar{B} = \vec{v}_0\)
+    Por la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}, se sigue \(\vec{v} = (\vec{v}_0 \cdot \bar{B}) \bar{B} = \vec{v}_0\)
   \end{proof}
 
   En lo que sigue vamos a ignorar este caso degenerado, en el cual la velocidad inicial y el campo magnético son paralelos, y supondremos \(\vec{v}_0 \neq (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
@@ -166,7 +166,7 @@
     Existe un ángulo \(\theta = \theta(t)\) tal que \(\alpha = \pi_0 \cos \theta\), \(\beta = \pi_0 \sin \theta\).
   \end{theorem}
   \begin{proof}
-    La ecuación \ref{equation:alphaBetaFormulaForModulusOfVelocity} nos dice que \(\pi_0^2 = v_0^2 - (\vec{v}_0 \cdot \bar{B})^2 = \alpha^2 + \beta^2\).
+    La ecuación \ref{equation:alphaBetaFormulaForModulusOfAcceleration} nos dice que \(\pi_0^2 = v_0^2 - (\vec{v}_0 \cdot \bar{B})^2 = \alpha^2 + \beta^2\).
     Se deduce la ecuación de una circunferencia \(\alpha^2 + \beta^2 = \pi_0^2\) de radio \(\pi_0\).
     Luego, para cada tiempo \(t\) existe un ángulo \(\theta = \theta(t)\) tal que \(\alpha = \pi_0 \cos \theta\) y \(\beta = \pi_0 \sin \theta\).
   \end{proof}
@@ -225,7 +225,7 @@
     Al especificar que esta tiene que estar orientada positivamente, se verifica \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
     Y esta última ecuación define a \(\bar{b}_2\).
 
-    Por otro lado, si volvemos a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}, para el instante \(t = 0\) dice
+    Por otro lado, si volvemos a la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}, para el instante \(t = 0\) dice
     \(\vec{v}_0 = \alpha_0 \bar{b}_1 + \beta_0 \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
     Reemplazando \(\alpha\), \(\beta\) por sus expresiones en función de \(\theta\), obtenemos
     \begin{align}
@@ -270,7 +270,7 @@
     \end{align}
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForVelocity}
+    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}
     \begin{align}
       \vec{v}
       &=
