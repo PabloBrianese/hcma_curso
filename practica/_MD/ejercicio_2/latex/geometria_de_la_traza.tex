@@ -139,20 +139,41 @@
     El sistema \eqref{systemOfEquations:alphaBetaSystemOfDifferentialEquations} se deduce usando que \(\bar{b}_1\), \(\bar{b}_2\) son linealmente independientes.
   \end{proof}
 
+  El siguiente caso particular resulta muy interesante.
+  Su particularidad es que muestra una familia de trayectorias parabólicas en presencia de un campo magnético nonulo.
   \begin{theorem}
-    Si la velocidad inicial, \(\vec{v}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la velocidad \(\vec{v}\) es constante.
+    \label{theorem:initialAccelerationIsParallelToMagneticField}
+    Si la aceleración inicial, \(\vec{a}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la aceleración \(\vec{a}\) es constante.
   \end{theorem}
   \begin{proof}
     Partimos de la ecuación \eqref{equation:alphaBetaFormulaForModulusOfAcceleration}, que dice \(
-      v_0^2
+      a_0^2
       =
       \alpha^2 + \beta^2
-      + (\vec{v}_0 \cdot \bar{B})^2
-    \)
-    .
-    Si \(\vec{v}_0\) es paralelo a \(\vec{B}\), entonces \(\vec{v}_0 = (\vec{v}_0 \cdot \bar{B}) \bar{B}\) y \(v_0^2 = (\vec{v}_0 \cdot \bar{B})^2\).
+      + (\vec{a}_0 \cdot \bar{B})^2
+    \).
+    Si \(\vec{a}_0\) es paralelo a \(\vec{B}\), entonces \(\vec{a}_0 = (\vec{a}_0 \cdot \bar{B}) \bar{B}\) y \(a_0^2 = (\vec{a}_0 \cdot \bar{B})^2\).
     Junto a la primera ecuación, estas implican \(\alpha = \beta = 0\).
-    Por la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}, se sigue \(\vec{v} = (\vec{v}_0 \cdot \bar{B}) \bar{B} = \vec{v}_0\)
+    Por la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}, se sigue \(\vec{a} = (\vec{a}_0 \cdot \bar{B}) \bar{B} = \vec{a}_0\)
+  \end{proof}
+
+  \begin{theorem}
+    Si la aceleración inicial, \(\vec{a}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la solución a la ecuación diferencial \eqref{equation:movementOfChargedParticleExposedToElectromagneticField}
+    está dada por
+    \begin{align}
+      &\vec{r} - \vec{r_0}
+      =
+      \vec{a}_0 \frac{t^2}{2} + \vec{v}_0 t
+      && \text{donde}
+      && \vec{a}_0 = \frac{q}{m} \vec{E} + \frac{q}{m} \vec{v}_0 \times \vec{B}
+    \end{align}
+  \end{theorem}
+  \begin{proof}
+    Partimos del Teorema \ref{theorem:initialAccelerationIsParallelToMagneticField}.
+    La aceleración \(\vec{a}\) es constante.
+    Luego \(\vec{v} - \vec{v}_0 = \vec{a}_0 t\).
+    Integrar nuevamente arroja \(\vec{r} - \vec{r}_0 = \vec{a}_0 t^2 / 2 + \vec{v}_0 t\).
+    La fórmula para \(\vec{a}_0\) se deriva de la identidad \(m \vec{a}_0 = q \vec{E} + q \vec{v}_0 \times \vec{B}\).
   \end{proof}
 
   En lo que sigue vamos a ignorar este caso degenerado, en el cual la velocidad inicial y el campo magnético son paralelos, y supondremos \(\vec{v}_0 \neq (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
