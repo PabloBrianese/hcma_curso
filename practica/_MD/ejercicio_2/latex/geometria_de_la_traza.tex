@@ -276,53 +276,53 @@
   \end{proof}
 
   \begin{theorem}
-    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\), donde el campo magnético es constante, está dada por
+    La solución \(\vec{v}\) a la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\), donde el campo magnético es constante, está dada por
     \begin{align}
-      \vec{r} - \vec{r}_0
+      \vec{v} - \vec{v}_0
       =
-      - \frac{\sin \omega t}{\omega}
+      \frac{\sin \omega t}{\omega}
       \vec{\pi}_0
-      + \frac{\cos \omega t}{\omega}
+      - \frac{\cos \omega t}{\omega}
       \bar{B}
       \times
       \vec{\pi}_0
-      + t (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      + t (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
   \end{theorem}
   \begin{proof}
     Partimos de la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
-      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Reemplazamos \(\bar{b}_1\), \(\bar{b}_2\) por los vectores que propusimos en \ref{theorem:constantsThatDefineTheSolution_b1b2theta0}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
-      \alpha \bar{\pi} + \beta \bar{B} \times \bar{\pi} + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \alpha \bar{\pi} + \beta \bar{B} \times \bar{\pi} + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Reemplazamos \(\alpha\), \(\beta\) por las expresiones en función de \(\theta\) que obtuvimos en \ref{theorem:alphaBetaDescribeCircularMotion}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
-      (\pi_0 \cos \theta) \bar{\pi}_0 + (\pi_0 \sin \theta) \bar{B} \times \bar{\pi}_0 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      (\pi_0 \cos \theta) \bar{\pi}_0 + (\pi_0 \sin \theta) \bar{B} \times \bar{\pi}_0 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
       \\
       &=
-      (\cos \theta) \vec{\pi}_0 + (\sin \theta) \bar{B} \times \vec{\pi}_0 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      (\cos \theta) \vec{\pi}_0 + (\sin \theta) \bar{B} \times \vec{\pi}_0 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Reemplazamos \(\theta\) por \(\omega t\), usando el teorema \ref{theorem:thetaSolution}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
       (\cos \omega t) \vec{\pi}_0
       + (\sin \omega t) \bar{B} \times \vec{\pi}_0
-      + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Integrando con respecto a \(t\) obtenemos el resultado que deseamos. 
   \end{proof}
 
-  Observar que esta última fórmula también funciona en el caso en que \(\vec{v}_0\) sea paralelo a \(\vec{B}\).
+  Observar que esta última fórmula también funciona en el caso en que \(\vec{a}_0\) sea paralelo a \(\vec{B}\).
   Allí, sencillamente \(\vec{\pi}_0 = 0\).
 
   \begin{theorem}
