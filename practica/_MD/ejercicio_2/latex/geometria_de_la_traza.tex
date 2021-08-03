@@ -33,47 +33,41 @@
     En unidades SI.
   \end{physicalLaw}
 
-  Esta ecuación diferencial es lineal.
-  Eso nos permite resolverla primero analizando el campo eléctrico, y después el campo magnético.
-  Sabemos que cuando el campo elétrico es constante y el campo magnético es nulo
-  \begin{theorem}
-    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{E}\), donde el campo eléctrico \(\vec{E}\) es constante, está dada por \(\vec{r} = \frac{q}{m} \vec{E} \frac{t^2}{2} + \vec{v}_0 t + \vec{r}_0\).
-  \end{theorem}
-
-  Ahora buscamos la solución \(\vec{r}\), en el caso que el campo eléctrico es nulo y el campo magnético es constante, a la ecuación
+  Si derivamos esta ley con respecto al tiempo, asumiendo que los campos eléctrico y magnético son constantes, obtenemos una ecuación para la aceleración
   \begin{align}
-    m \vec{a}
-    &=
-    q \vec{v} \times \vec{B}
+    \label{equation:accelerationOfChargedParticleExposedToElectromagneticField}
+    m \vec{j} = q \vec{a} \times \vec{B}
   \end{align}
+  donde \(\vec{j} = d \vec{a} / d t\) es la llamada sobreaceleración de la partícula.
+  Para resolver esta ecuación suponemos además que ambos \(\vec{E}\), \(\vec{B}\) son nonulos.
 
   \begin{theorem}
-    \label{theorem:velocity_dot_magneticFieldIsConstant}
-    El producto punto, \(\vec{v} \cdot \vec{B}\), es constante.
+    \label{theorem:acceleration_dot_magneticFieldIsConstant}
+    El producto punto, \(\vec{a} \cdot \vec{B}\), es constante.
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
-    Multiplicamos por el campo magnético para obtener \(m \vec{a} \cdot \vec{B} = q (\vec{v} \times \vec{B}) \cdot \vec{B}\).
+    Partimos de la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\).
+    Multiplicamos por el campo magnético para obtener \(m \vec{j} \cdot \vec{B} = q \vec{a} \times \vec{B} \cdot \vec{B}\).
     Porque el producto cruz \(\vec{v} \times \vec{B}\) es ortogonal a \(\vec{B}\), el lado derecho de la ecuación es nulo.
-    Resulta \(\vec{a} \cdot \vec{B} = 0\).
+    Resulta \(\vec{j} \cdot \vec{B} = 0\).
     Pero el producto punto es lineal, luego conmuta con la derivación.
-    Por lo tanto \(\frac{d}{d t} (\vec{v} \cdot \vec{B}) = 0\).
+    Por lo tanto \(\frac{d}{d t} (\vec{a} \cdot \vec{B}) = 0\).
   \end{proof}
 
   \begin{theorem}
-    \label{theorem:modulusOfVelocityIsConstant}
-    El módulo de la velocidad, \(v\), es constante.
+    \label{theorem:modulusOfAccelerationIsConstant}
+    El módulo de la aceleración, \(a\), es constante.
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
-    Multiplicamos por la velocidad para obtener \(m \vec{a} \cdot \vec{v} = q (\vec{v} \times \vec{B}) \cdot \vec{v}\).
-    Porque el producto cruz \(\vec{v} \times \vec{B}\) es ortogonal a \(\vec{v}\), el lado derecho de la ecuación es nulo.
-    Resulta \(\vec{a} \cdot \vec{v} = 0\).
-    Esto nos permite calcular \(\frac{d}{d t} v^2 = 2 \vec{v} \cdot \frac{d \vec{v}}{d t} = 2 \vec{a} \cdot \vec{v} = 0\).
+    Partimos de la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\).
+    Multiplicamos por la aceleración para obtener \(m \vec{j} \cdot \vec{a} = q (\vec{a} \times \vec{B}) \cdot \vec{a}\).
+    Porque el producto cruz \(\vec{a} \times \vec{B}\) es ortogonal a \(\vec{a}\), el lado derecho de la ecuación es nulo.
+    Resulta \(\vec{j} \cdot \vec{a} = 0\).
+    Esto nos permite calcular \(\frac{d}{d t} a^2 = 2 \vec{a} \cdot \frac{d \vec{a}}{d t} = 2 \vec{a} \cdot \vec{j} = 0\).
   \end{proof}
 
   Fijemos una base ortonormal \(\{\bar{b}_1, \bar{b}_2\}\) del plano ortogonal a \(\vec{B}\).
-  Esto nos permite definir dos escalares \(\alpha = \vec{v} \cdot \bar{b}_1\), \(\beta = \vec{v} \cdot \bar{b}_2\) que describen a la proyección ortogonal de \(\vec{v}\) sobre dicho plano.
+  Esto nos permite definir dos escalares \(\alpha = \vec{a} \cdot \bar{b}_1\), \(\beta = \vec{a} \cdot \bar{b}_2\) que describen a la proyección ortogonal de \(\vec{a}\) sobre dicho plano.
   Sin mayor esfuerzo \(\{\bar{b}_1, \bar{b}_2, \bar{B} = \vec{B} / B\}\) es una base ortonormal de \(\realNumbers^3\).
   Pediremos además que \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) esté orientada positivamente.
   Con mayor claridad, lo que pedimos es que se verifiquen las ecuaciones \(\bar{b}_1 \times \bar{b}_2 = \bar{B}\), \(\bar{b}_2 \times \bar{B} = \bar{b}_1\), \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
@@ -82,43 +76,42 @@
   \begin{theorem}
     Las variables \(\alpha\), \(\beta\) nos proveen las identidades
     \begin{align}
-      \label{equation:alphaBetaFormulaForVelocity}
-      \vec{v}
+      \label{equation:alphaBetaFormulaForAcceleration}
+      \vec{a}
       &=
-      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
       \\
-      \label{equation:alphaBetaFormulaForModulusOfVelocity}
-      v_0^2
+      \label{equation:alphaBetaFormulaForModulusOfAcceleration}
+      a_0^2
       &=
-      \alpha^2 + \beta^2 + (\vec{v}_0 \cdot \bar{B})^2
+      \alpha^2 + \beta^2 + (\vec{a}_0 \cdot \bar{B})^2
       \\
       \label{equation:alphaBetaFormulaForCrossProduct}
-      \vec{v} \times \vec{B}
+      \vec{a} \times \vec{B}
       &=
       B (- \alpha \bar{b}_2 + \beta \bar{b}_1)
       \\
-      \label{equation:alphaBetaFormulaForAcceleration}
-      \vec{a}
+      \label{equation:alphaBetaFormulaForJerk}
+      \vec{j}
       &=
       \frac{d \alpha}{d t} \bar{b}_1 + \frac{d \beta}{d t} \bar{b}_2
     \end{align}
   \end{theorem}
   \begin{proof}
-    \eqref{equation:alphaBetaFormulaForVelocity}
+    \eqref{equation:alphaBetaFormulaForAcceleration}
     es consecuencia de la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
-    La fórmula \(\vec{v} \cdot \bar{B} = \vec{v}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:velocity_dot_magneticFieldIsConstant}.
+    La fórmula \(\vec{a} \cdot \bar{B} = \vec{a}_0 \cdot \bar{B}\) se debe al teorema \ref{theorem:acceleration_dot_magneticFieldIsConstant}.
 
-    \eqref{equation:alphaBetaFormulaForModulusOfVelocity}
-    se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\) y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
-    La igualdad \(v^2 = v_0^2\) se debe al teorema \ref{theorem:modulusOfVelocityIsConstant}.
+    Todas las demás son consecuencia de esta primera ecuación \eqref{equation:alphaBetaFormulaForAcceleration}.
+
+    \eqref{equation:alphaBetaFormulaForModulusOfAcceleration}
+    se debe a la ortonormalidad de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\), y a la igualdad \(a^2 = a_0^2\) que se desprende del teorema teorema \ref{theorem:modulusOfAccelerationIsConstant}.
 
     \eqref{equation:alphaBetaFormulaForCrossProduct}
     se debe a la orientación positiva de la base \(\{\bar{b}_1, \bar{b}_2, \bar{B}\}\).
-    Esta hace que \(\bar{b}_1 \times \bar{b}_2 = \bar{B}\), \(\bar{b}_2 \times \bar{B} = \bar{b}_1\), \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
-    Y a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}.
 
-    \eqref{equation:alphaBetaFormulaForAcceleration}
-    se debe a la ecuación \eqref{equation:alphaBetaFormulaForVelocity} y a la linealidad de la derivada.
+    \eqref{equation:alphaBetaFormulaForJerk}
+    se debe a la linealidad de la derivada.
   \end{proof}
 
   \begin{theorem}
@@ -135,37 +128,58 @@
     \end{align}
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\).
-    Reemplazamos \(\vec{a}\), \(\vec{v} \times \vec{B}\) por sus fórmulas \eqref{equation:alphaBetaFormulaForAcceleration}, \eqref{equation:alphaBetaFormulaForCrossProduct} en función de \(\alpha\), \(\beta\).
+    Partimos de la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\).
+    Reemplazamos \(\vec{j}\), \(\vec{a} \times \vec{B}\) por sus fórmulas \eqref{equation:alphaBetaFormulaForJerk}, \eqref{equation:alphaBetaFormulaForCrossProduct} en función de \(\alpha\), \(\beta\).
     Obtenemos
     \begin{align}
       \frac{d \alpha}{d t} \bar{b}_1 + \frac{d \beta}{d t} \bar{b}_2
       &=
       \frac{q B}{m} (\beta \bar{b}_1 - \alpha \bar{b}_2)
     \end{align}
-    El sistema \eqref{systemOfEquations:alphaBetaSystemOfDifferentialEquations} se deduce usando que \(\bar{b}_1\), \(\bar{b}_2\) son vectores linealmente independientes.
+    El sistema \eqref{systemOfEquations:alphaBetaSystemOfDifferentialEquations} se deduce usando que \(\bar{b}_1\), \(\bar{b}_2\) son linealmente independientes.
+  \end{proof}
+
+  El siguiente caso particular resulta muy interesante.
+  Su particularidad es que muestra una familia de trayectorias parabólicas en presencia de un campo magnético nonulo.
+  \begin{theorem}
+    \label{theorem:initialAccelerationIsParallelToMagneticField}
+    Si la aceleración inicial, \(\vec{a}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la aceleración \(\vec{a}\) es constante.
+  \end{theorem}
+  \begin{proof}
+    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForModulusOfAcceleration}, que dice \(
+      a_0^2
+      =
+      \alpha^2 + \beta^2
+      + (\vec{a}_0 \cdot \bar{B})^2
+    \).
+    Si \(\vec{a}_0\) es paralelo a \(\vec{B}\), entonces \(\vec{a}_0 = (\vec{a}_0 \cdot \bar{B}) \bar{B}\) y \(a_0^2 = (\vec{a}_0 \cdot \bar{B})^2\).
+    Junto a la primera ecuación, estas implican \(\alpha = \beta = 0\).
+    Por la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}, se sigue \(\vec{a} = (\vec{a}_0 \cdot \bar{B}) \bar{B} = \vec{a}_0\)
   \end{proof}
 
   \begin{theorem}
-    Si la velocidad inicial, \(\vec{v}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la velocidad \(\vec{v}\) es constante.
+    Si la aceleración inicial, \(\vec{a}_0\), es paralela al campo magnético, \(\vec{B}\), entonces la solución a la ecuación diferencial \eqref{equation:movementOfChargedParticleExposedToElectromagneticField}
+    está dada por
+    \begin{align}
+      &\vec{r} - \vec{r_0}
+      =
+      \vec{a}_0 \frac{t^2}{2} + \vec{v}_0 t
+      && \text{donde}
+      && \vec{a}_0 = \frac{q}{m} \vec{E} + \frac{q}{m} \vec{v}_0 \times \vec{B}
+    \end{align}
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForModulusOfVelocity}, que dice \(
-      v_0^2
-      =
-      \alpha^2 + \beta^2
-      + (\vec{v}_0 \cdot \bar{B})^2
-    \)
-    .
-    Si \(\vec{v}_0\) es paralelo a \(\vec{B}\), entonces \(\vec{v}_0 = (\vec{v}_0 \cdot \bar{B}) \bar{B}\) y \(v_0^2 = (\vec{v}_0 \cdot \bar{B})^2\).
-    Junto a la primera ecuación, estas implican \(\alpha = \beta = 0\).
-    Por la ecuación \eqref{equation:alphaBetaFormulaForVelocity}, se sigue \(\vec{v} = (\vec{v}_0 \cdot \bar{B}) \bar{B} = \vec{v}_0\)
+    Partimos del Teorema \ref{theorem:initialAccelerationIsParallelToMagneticField}.
+    La aceleración \(\vec{a}\) es constante.
+    Luego \(\vec{v} - \vec{v}_0 = \vec{a}_0 t\).
+    Integrar nuevamente arroja \(\vec{r} - \vec{r}_0 = \vec{a}_0 t^2 / 2 + \vec{v}_0 t\).
+    La fórmula para \(\vec{a}_0\) se deriva de la identidad \(m \vec{a}_0 = q \vec{E} + q \vec{v}_0 \times \vec{B}\).
   \end{proof}
 
-  En lo que sigue vamos a ignorar este caso degenerado, en el cual la velocidad inicial y el campo magnético son paralelos, y supondremos \(\vec{v}_0 \neq (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
-  Esto nos permite proyectar el vector \(\vec{v}_0\) sobre el plano ortogonal al campo magnético \(\vec{B}\).
-  El resultado es el vector proyección \(\vec{\pi}_0 = \vec{v}_0 - (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
-  Que tiene módulo positivo \(\pi_0 = (v_0^2 - (\vec{v}_0 \cdot \bar{B})^2)^{1 / 2}\), y por eso puede ser regularizado \(\bar{\pi}_0 = \vec{\pi}_0 / \pi_0\).
+  En lo que sigue vamos a ignorar este caso, en el cual la velocidad inicial y el campo magnético son paralelos, y supondremos \(\vec{a}_0 \neq (\vec{a}_0 \cdot \bar{B}) \bar{B}\).
+  Esto nos permite proyectar el vector \(\vec{a}_0\) sobre el plano ortogonal al campo magnético \(\vec{B}\).
+  El resultado es el vector proyección \(\vec{\pi}_0 = \vec{a}_0 - (\vec{a}_0 \cdot \bar{B}) \bar{B}\).
+  Que tiene módulo positivo \(\pi_0 = (a_0^2 - (\vec{a}_0 \cdot \bar{B})^2)^{1 / 2}\), y por eso puede ser regularizado \(\bar{\pi}_0 = \vec{\pi}_0 / \pi_0\).
   Este vector es importante, y en el siguiente teorema lo vemos por primera vez.
 
   \begin{theorem}
@@ -173,7 +187,7 @@
     Existe un ángulo \(\theta = \theta(t)\) tal que \(\alpha = \pi_0 \cos \theta\), \(\beta = \pi_0 \sin \theta\).
   \end{theorem}
   \begin{proof}
-    La ecuación \ref{equation:alphaBetaFormulaForModulusOfVelocity} nos dice que \(\pi_0^2 = v_0^2 - (\vec{v}_0 \cdot \bar{B})^2 = \alpha^2 + \beta^2\).
+    La ecuación \eqref{equation:alphaBetaFormulaForModulusOfAcceleration} nos dice que \(\pi_0^2 = a_0^2 - (\vec{a}_0 \cdot \bar{B})^2 = \alpha^2 + \beta^2\).
     Se deduce la ecuación de una circunferencia \(\alpha^2 + \beta^2 = \pi_0^2\) de radio \(\pi_0\).
     Luego, para cada tiempo \(t\) existe un ángulo \(\theta = \theta(t)\) tal que \(\alpha = \pi_0 \cos \theta\) y \(\beta = \pi_0 \sin \theta\).
   \end{proof}
@@ -201,8 +215,7 @@
     Conjuntamente, estas dos ecuaciones implican \(\omega = \frac{q B}{m}\).
   \end{proof}
 
-  Esta es la segunda vez que aparece el vector proyección \(\vec{pi}\).
-  Aquí es importante que sea nonulo, porque nos permite usarlo para entender los vectores que viven en el plano ortogonal a \(\vec{B}\).
+  En lo que sigue es importante que \(\vec{\pi}_0\) sea nonulo, porque nos permite usarlo para entender los vectores que viven en el plano ortogonal a \(\vec{B}\).
 
   \begin{theorem}
     \label{theorem:constantsThatDefineTheSolution_b1b2theta0}
@@ -232,17 +245,17 @@
     Al especificar que esta tiene que estar orientada positivamente, se verifica \(\bar{B} \times \bar{b}_1 = \bar{b}_2\).
     Y esta última ecuación define a \(\bar{b}_2\).
 
-    Por otro lado, si volvemos a la ecuación \eqref{equation:alphaBetaFormulaForVelocity}, para el instante \(t = 0\) dice
-    \(\vec{v}_0 = \alpha_0 \bar{b}_1 + \beta_0 \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
+    Por otro lado, si volvemos a la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}, para el instante \(t = 0\) dice
+    \(\vec{a}_0 = \alpha_0 \bar{b}_1 + \beta_0 \bar{b}_2 + (\vec{a}_0 \cdot \bar{B}) \bar{B}\).
     Reemplazando \(\alpha\), \(\beta\) por sus expresiones en función de \(\theta\), obtenemos
     \begin{align}
-      \vec{v}_0
+      \vec{a}_0
       =
       \pi_0 \cos \theta_0 \bar{b}_1
       + \pi_0 \sin \theta_0 \bar{b}_2
-      + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
-    Pero \(\vec{\pi}_0 = \vec{v}_0 - (\vec{v}_0 \cdot \bar{B}) \bar{B}\).
+    Pero \(\vec{\pi}_0 = \vec{a}_0 - (\vec{a}_0 \cdot \bar{B}) \bar{B}\).
     Entonces
     \(
       \bar{\pi}_0
@@ -263,75 +276,77 @@
   \end{proof}
 
   \begin{theorem}
-    La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{v} \times \vec{B}\), donde el campo magnético es constante, está dada por
+    La solución \(\vec{v}\) a la ecuación \(m \vec{j} = q \vec{a} \times \vec{B}\), donde el campo magnético es constante, está dada por
     \begin{align}
-      \vec{r} - \vec{r}_0
+      \vec{v} - \vec{v}_0
       =
-      - \frac{\sin \omega t}{\omega}
+      \frac{\sin \omega t}{\omega}
       \vec{\pi}_0
-      + \frac{\cos \omega t}{\omega}
+      - \frac{\cos \omega t}{\omega}
       \bar{B}
       \times
       \vec{\pi}_0
-      + t (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      + (\vec{a}_0 \cdot \bar{B}) \bar{B} t
     \end{align}
   \end{theorem}
   \begin{proof}
-    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForVelocity}
+    Partimos de la ecuación \eqref{equation:alphaBetaFormulaForAcceleration}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
-      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \alpha \bar{b}_1 + \beta \bar{b}_2 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Reemplazamos \(\bar{b}_1\), \(\bar{b}_2\) por los vectores que propusimos en \ref{theorem:constantsThatDefineTheSolution_b1b2theta0}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
-      \alpha \bar{\pi} + \beta \bar{B} \times \bar{\pi} + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      \alpha \bar{\pi} + \beta \bar{B} \times \bar{\pi} + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Reemplazamos \(\alpha\), \(\beta\) por las expresiones en función de \(\theta\) que obtuvimos en \ref{theorem:alphaBetaDescribeCircularMotion}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
-      (\pi_0 \cos \theta) \bar{\pi}_0 + (\pi_0 \sin \theta) \bar{B} \times \bar{\pi}_0 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      (\pi_0 \cos \theta) \bar{\pi}_0 + (\pi_0 \sin \theta) \bar{B} \times \bar{\pi}_0 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
       \\
       &=
-      (\cos \theta) \vec{\pi}_0 + (\sin \theta) \bar{B} \times \vec{\pi}_0 + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      (\cos \theta) \vec{\pi}_0 + (\sin \theta) \bar{B} \times \vec{\pi}_0 + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Reemplazamos \(\theta\) por \(\omega t\), usando el teorema \ref{theorem:thetaSolution}
     \begin{align}
-      \vec{v}
+      \vec{a}
       &=
       (\cos \omega t) \vec{\pi}_0
       + (\sin \omega t) \bar{B} \times \vec{\pi}_0
-      + (\vec{v}_0 \cdot \bar{B}) \bar{B}
+      + (\vec{a}_0 \cdot \bar{B}) \bar{B}
     \end{align}
     Integrando con respecto a \(t\) obtenemos el resultado que deseamos. 
   \end{proof}
-
-  Observar que esta última fórmula también funciona en el caso en que \(\vec{v}_0\) sea paralelo a \(\vec{B}\).
-  Allí, sencillamente \(\vec{\pi}_0 = 0\).
 
   \begin{theorem}
     La solución \(\vec{r}\) a la ecuación \(m \vec{a} = q \vec{E} + q \vec{v} \times \vec{B}\), donde el campo eléctrico \(\vec{E}\) y el campo magnético \(\vec{B}\) son constantes, es
     \begin{align}
       \vec{r} - \vec{r}_0
       &=
-      \left(
-        \frac{q}{m} \vec{E} \frac{t^2}{2}
-        + \vec{v}_0 t
-      \right)
-      +
-      \left(
-        - \frac{\sin \omega t}{\omega}
-        \vec{\pi}_0
-        + \frac{\cos \omega t}{\omega}
-        \bar{B}
-        \times
-        \vec{\pi}_0
-        + t (\vec{v}_0 \cdot \bar{B}) \bar{B}
-      \right)
+      - \frac{(\cos \omega t) \vec{\pi}_0 + (\sen \omega t) \bar{B} \times \vec{\pi}_0}{\omega^2}
+      + (\vec{a}_0 \cdot \bar{B}) \bar{B} \frac{t^2}{2}
+      + \vec{v_0} t
     \end{align}
-    
+    Donde
+    \begin{align}
+      \vec{\pi}_0
+      &=
+      \vec{a}_0 - (\vec{a}_0 \cdot \bar{B}) \bar{B}
+      \\
+      \vec{a}_0
+      &=
+      \frac{q}{m} \vec{E} + \frac{q}{m} \vec{v}_0 \times \vec{B}
+      \\
+      \bar{B}
+      &=
+      \vec{B} / B
+    \end{align}
   \end{theorem}
-  \end{document}
+
+  Observar que esta última fórmula también funciona en el caso en que \(\vec{a}_0\) sea paralelo a \(\vec{B}\).
+  Allí, sencillamente \(\vec{\pi}_0 = 0\).
+\end{document}
