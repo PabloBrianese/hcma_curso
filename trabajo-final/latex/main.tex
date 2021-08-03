@@ -1,0 +1,484 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage{biblatex}
+\usepackage{csquotes}
+\addbibresource{bibliography.bib}
+
+\usepackage[inline]{enumitem}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{physics}
+
+\usepackage{verbatim}
+\usepackage{listings}
+\lstset{
+    literate=%
+        {ó}{{\'o}}1
+        {ú}{{\'u}}1
+        {á}{{\'a}}1
+}
+
+\usepackage{hyperref}
+
+\DeclareMathOperator{\prob}{\mathbb{P}}
+\DeclareMathOperator{\concat}{||}
+\DeclareMathOperator{\bitand}{\&}
+\DeclareMathOperator{\bitor}{|}
+\newcommand{\ffield}{\mathbb{F}}
+
+\title{Generadores de Números Pseudo-Aleatorios}
+\author{Pablo Brianese}
+\date{Julio 2020}
+
+\begin{document}
+
+\maketitle
+
+\section{Introducción}
+En este trabajo exploraremos la librería estándar \verb#random# de C++, y particularmente uno de los algoritmos que nos ofrece para generar números pseudo-aleatorios: el motor Mersenne Twister \verb#mt19937#. 
+
+\section{Usos de la aleatoriedad}
+¿Por qué estamos interesados en el estudio de estos temas?
+
+\begin{itemize}
+    \item Existe una gran familia de algoritmos que utiliza generadores de números pseudo-aleatorios para alcanzar buenos resultados (al menos en un caso promedio), en ella encontramos encontramos:
+    \begin{itemize}
+        \item El llamado \emph{método de Monte Carlo} abarca una amplia clase de algoritmos que se basan en técnicas de muestreo aleatorio para obtener soluciones numéricas a problemas de \emph{optimización}, de \emph{integración numérica} y de \emph{muestreo} de distribuciones de probabilidad;
+        \item La familia de \emph{algoritmos genéticos} utiliza técnicas probabilísticas para obtener soluciones aproximadas a problemas de optimización y de \emph{búsqueda};
+        \item El algoritmo Zobrist (utilizado en programas que juegan juegos como el ajedrez y Go) y otros algoritmos de \emph{hashing} que transforman datos de tamaño variable en datos de tamaño fijo.
+    \end{itemize}
+    \item Generar \emph{permutaciones aleatorias} es de interés, por ejemplo se utilizan para \emph{evaluar algoritmos} de ordenamiento (\url{sortbenchmark.org}).
+    \item Las aplicaciones en \emph{estadística} son importantes:
+    \begin{itemize}
+        \item control de calidad en la industria manufacturera;
+        \item testeo de presencia de drogas en una muestra biológica;
+        \item exámenes para nuevos tratamientos médicos o drogas;
+        \item auditoría;
+        \item encuestas.
+    \end{itemize}
+    \item También son importantes las aplicaciones en \emph{criptografía}, pero nosotros no veremos técnicas relevantes.
+\end{itemize}
+
+En la página web \url{random.org} pueden encontrarse testimonios de muy diversos usuarios de números aleatorios.
+
+\section{La librería \texttt{<random>} de C++}
+La librería estándar \verb#<random># provee herramientas para la generación de números aleatorios, su uso en aplicaciones, y su estudio por expertos.
+
+En la conceptualización de esta librería, no hay simples generadores de números aleatorios.
+En cambio, su diseño fomenta la separación de dos tipos de funcionalidades.
+Por un lado encontramos los llamados \emph{motores}.
+Su finalidad es generar bits (ceros y unos) de forma impredecible, asegurando que la probabilidad de conseguir un bit 0 sea siempre igual a de conseguir un bit 1.
+Por el otro encontramos las \emph{distribuciones}, objetos que transforman secuencias generadas por un motor (u objetos similares, ya esclareceremos más adelante) en una sucesión de números que siga una distribución de probabilidad específica.
+
+La librería contiene mucho material, pero un usuario casual sólo necesita conocer algunos elementos para poder usarla.
+De la generación de bits se encargara el motor \verb#mt19937#, que implementa el algoritmo Mersenne Twister.
+Y las distribuciones básicas que podemos necesitar son \verb#uniform_int_distribution# y \verb#uniform_real_distribution#, que devuelven valores enteros o reales (respectivamente) con distribución uniforme en el rango que especifiquemos.
+El siguiente ejemplo sencillo hace uso de estos e imprime 16 números aleatorios
+
+\lstinputlisting[language=C++]{../src/hello_random_world.cpp}
+
+Este programa que presentamos tiene salida \emph{determinista}, y esto es así porque la sucesión generada por \verb#mt19937# es \emph{pseudo-aleatoria}.
+Es decir, dada una semilla, la suceción de números aleatorios generada por el motor será siempre la misma.
+Si este comportamiento no es deseable, queremos intencionalmente que la salida del algoritmo sea \emph{realmente estocástica}, la clase \verb#random_device# ayudará con la generación de semillas \emph{verdaderamente aleatorias} para nuestro motor.
+
+\lstinputlisting[language=C++]{../src/hello_nondeterministic_world.cpp}
+
+Esta clase \verb#random_device# que hemos utilizado es particular.
+Es un \emph{URBG (Uniform Random Bit Generator)}, pero no es un motor al igual que \verb#mt19937#.
+Este esta diseñado para ser una interfaz estándar para cualquier \emph{fuente ambiental/física de aleatoriedad} 
+(e.g., \texttt{/dev/random} o \texttt{/dev/urandom} en Linux; 
+e.g., un instrumento que capta ruido atmosférico;
+e.g, un generador de ruido por resistencia).
+Su funcionalidad sigue siendo similar a la de los motores, pero carecen de algunas características.
+
+\section{Motores}
+La librería incluye una cantidad de tipos de motor predefinidos.
+El tipo \verb#default_random_engine# depende de la implementación, es una caja negra para nosotros.
+Este es el que por diseño está orientado a un uso casual e inexperto, pero su uso no tiene ventajas claras por sobre \verb#mt19937#.
+Los demás 9 algoritmos son portables \emph{bit por bit} a través de toda plataforma:
+\begin{itemize}
+    \item generadores lineales congruenciales:
+    \begin{itemize}
+        \item \verb#minstd_rand0#
+        \item \verb#minstd_rand#
+    \end{itemize}
+    \item motores de tipo Mersenne twister:
+    \begin{itemize}
+        \item \verb#mt19937#
+        \item \verb#mt19937_64#
+    \end{itemize}
+    \item motores de tipo substracción con acarreo: 
+    \begin{itemize}
+        \item \verb#ranlux24_base#
+        \item \verb#ranlux48_base#
+    \end{itemize}
+    \item motores con descarte de bloques:
+    \begin{itemize}
+        \item \verb#ranlux24#
+        \item \verb#ranlux48#
+    \end{itemize}
+    \item motores con orden permutado:
+    \begin{itemize}
+        \item \verb#knuth_b#
+    \end{itemize}
+\end{itemize}
+
+Estos motores comparten varias propiedades, y las comparten en particular con \verb#mt19937#.
+Todos ellos son pseudo-aleatorios, su salida es determinista.
+Una instancia \verb#e# de un tipo de motor \verb#E#, produce una \emph{cadena de bits} de longitud $n > 0$ cada vez que se la llama \verb#e()# (por ejemplo, para \verb#mt19937# el número de bits es 32).
+Esta cadena de bits se codifica como un valor entero positivo de tipo (no-signado) \verb#E::result_type# para minimizar el tiempo de ejecución (para \verb#mt19937# este tipo es \verb#std::uint_fast32_t#).
+Es más eficiente hacerlo así que entregar los bits uno a uno.
+Además este entero pertenecerá al rango $[\verb#E::min()#, \dots, \verb#E::max()#]$ (para \verb#mt19937# este intervalo es $[0, \dots, 2^{32} - 1]$).
+Pero estas propiedades raramente son necesarias, un objeto motor debería ser usado casi exclusivamente como una \emph{fuente de aleatoriedad} (por ejemplo, para un objeto de \emph{distribución}).
+
+¿Por qué fueron elegidos estos algoritmos?
+Porque sus características (tiempo de ejecución, tamaño, calidad, etcétera) han sido estudiados cuidadosamente y están bien descriptos en referencias estándar (e.g. Knuth: TAOCP vol. 2).
+Más aún, sus características son diversas, y dependiendo de la aplicación en cuestión algunas pueden resultar más importantes que otras.
+Por eso, la elección de un tipo de motor involucra compromisos.
+Por ejemplo, los generadores congruenciales lineales son pequeños y veloces.
+Sin embargo, las sucesiones que producen son de menor calidad en comparaciones con las resultantes de generadores de tipo Mersenne twister, cuyo estado es $> 600 x$ mayor.
+
+\section{Distribuciones}
+Por el otro encontramos las \emph{distribuciones}, objetos que transforman secuencias generadas por un motor (u objetos similares, ya esclareceremos más adelante) en una sucesión de números que siga una distribución de probabilidad específica.
+Un objeto de \emph{ditribución} produce una variable aleatoria.
+Estas moldean las secuencias generadas por los URBG (y también por motores) en sucesiones de números que siguen una distribución de probabilidad específica.
+Al momento de instanciarlas debemos especificar el \emph{tipo} de los números que formaran la sucesión, y argumentos de construcción que especifican los \emph{parámetros} precisos que distinguen a esta variable aleatoria de otras en la misma familia.
+A modo de ejemplo, el siguiente código produce dos secuencias de 16 valores, de tipo double, que siguen distribuciones normales con distintos parámetros 
+
+\lstinputlisting[language=C++]{../src/random_normal.cpp}
+
+La librería contiene una cantidad de distribuciones predefinidas, organizadas en cinco grupos:
+\begin{itemize}
+    \item Distribuciones uniformes:
+    \begin{itemize}
+        \item \verb#uniform_int_distribution#
+        \item \verb#uniform_real_distribution#
+    \end{itemize}
+    \item Distribuciones de tipo Bernoulli:
+    \begin{itemize}
+        \item \verb#bernoulli_distribution#
+        \item \verb#binomial_distribution#
+        \item \verb#negative_binomial_distribution#
+        \item \verb#geometric_distribution#
+    \end{itemize}
+    \item Distribuciones de tipo Poisson:
+    \begin{itemize}
+        \item \verb#poisson_distribution#
+        \item \verb#exponential_distribution#
+        \item \verb#gamma_distribution#
+        \item \verb#weibull_distribution#
+        \item \verb#extreme_value_distribution#
+    \end{itemize}
+    \item Distribuciones de tipo Normal:
+    \begin{itemize}
+        \item \verb#normal_distribution#
+        \item \verb#lognormal_distribution#
+        \item \verb#chi_squared_distribution#
+        \item \verb#cauchy_distribution#
+        \item \verb#fisher_f_distribution#
+        \item \verb#student_t_distribution#
+    \end{itemize}
+    \item Distribuciones de muestreo:
+    \begin{itemize}
+        \item \verb#discrete_distribution#
+        \item \verb#piecewise_constant_distribution#
+        \item \verb#piecewise_linear_distribution#
+    \end{itemize}
+\end{itemize}
+
+Mientras que la mayoría de los motores de la librería estándar son portables bit por bit a través de las distintas plataformas, los resultados de las distribuciones no están determinados de ese modo.
+Esto permite, en cada implemetación, elegir los algoritmos apropiados para cada plataforma.
+
+\section{Funcionalidades importantes: interoperabilidad y extensibilidad}
+Un aspecto interesante de la biblioteca es que por diseño es extensible.
+Para quienes deseen ampliarla con sus propios motores y distribuciones, la biblioteca incluye seis plantillas de clases configurables de \emph{motores / adaptadores de motores}, además de una plantilla de función para nuevas \emph{distribuciones}.
+En la misma dirección, para que estas creaciones puedan interactuar sin fricciones con las presentes el la librería estándar, por diseño cualquier URBG (incluído cualquier motor) puede ser usado con cualquier distribución, sean estos y estas parte de la librería o de diseño personalizado.
+
+\section{Mersenne Twister}
+El algoritmo \emph{Mersenne Twister}, un generador de números pseudo aleatorios de propósito general muy popular, fue desarrollado en 1997 por Makoto Matsumoto y Takuji Nishimura.
+
+Una de las propiedades que dan testimonio de su calidad, es que está \emph{k-distribuído} con precisión de 32 bits para todo $1 \leq k \leq 623$.
+De forma precisa, denotemos por $x_i$ a la sucesión pseudo-aleatoria de enteros de $w$-bits ($w = 32$ en nuestro caso) generada y por $P$ a su período ($P = 2^{19937} - 1$).
+Si $\text{trunc}_v(x)$ es el número formado por los $v$ bits más significativos de $x$ ($1 \leq v \leq 32$), y consideramos $P$ de los vectores formados por $v \cdot k$ bits ($1 \leq k \leq 623$) dados por
+\begin{align}
+	&(\text{trunc}_v(x_i), \text{trunc}_v(x_{i + 1}), \dots, \text{trunc}_v(x_{i + k - 1}))
+	&& (0 \leq i < P)
+\end{align}
+Entonces, cada una de las $2^{v k}$ posibles combinaciones de bits ocurre el mismo número de veces en un período, excepto por la combinación nula ($0 \cdots 0$) que ocurre una vez menos.
+
+\section{Descripción del algoritmo}
+
+Utilizamos notación vectorial, como en $\mathbf{x}$ y $\mathbf{a}$, para denotar \emph{palabras}, vectores fila de dimensión $w$ sobre el cuerpo de dos elementos $\ffield_2 = \{0, 1\}$.
+Además, las identificamos con palabras de bits de longitud $w$ (estando el bit menos significativo del lado derecho), la unidad de datos propia de un procesador.
+
+El algoritmo MT genera una sucesión de palabras, que son consideradas enteros (no signados) pseudo-aleatorios entre $0$ y $2^w - 1$.
+
+El algoritmo esta basado en la siguiente relación de recurrencia lineal
+\begin{align} \label{recurrence_equation}
+    & \mathbf{x}_{k + n} := 
+        \mathbf{x}_{k + m} \oplus ((\mathbf{x}_k^u \concat \mathbf{x}_{k + 1}^l) A )
+    && (k = 0, 1, \dots)
+\end{align}
+La notación es como sigue.
+Varios símbolos representan constantes:
+un entero $n$, que es el grado de la recurrencia,
+un entero $r \in [0, \dots, w[$ (escondido en la definición de $\mathbf{x}_k^u$),
+un entero $m \in [1, \dots, n]$,
+y una matriz $A \in \ffield_2^{w \times w}$.
+Damos $\mathbf{x}_0, \mathbf{x}_1, \dots, \mathbf{x}_{n - 1}$ como semillas iniciales.
+Luego, el generador produce $\mathbf{x}_n$ siguiendo la recurrencia \ref{recurrence_equation} con $k = 0$.
+Reemplazando por $k = 1, 2, \dots$, el generador determina $\mathbf{x}_{n + 1}, \mathbf{x}_{n + 2}, \dots$.
+En el lado derecho de la recurrencia \ref{recurrence_equation}, $\mathbf{x}_k^u$ hace referencia a los $w - r$ bits más significativos de $\mathbf{x}_k$, y $\mathbf{x}_{k + 1}^l$ a los $r$ bits menos significativos de $\mathbf{x}_{k + 1}$.
+Así, si $\mathbf{x} = (x_{w - 1}, x_{w - 2}, \dots, x_0)$, entonces por definición $\mathbf{x}^u$ es el vector de $w - r$ bits $(x_{w - 1}, \dots, x_r)$ y $\mathbf{x}^l$ es el vector de $r$ bits $(x_{r - 1}, \dots, x_0)$.
+La expresión $(\mathbf{x}_k^l \concat \mathbf{x}_{k + 1}^l)$ representa su concatenación;
+a saber, esta es la palabra obtenida concatenando los $w - r$ bits más significativos de $\mathbf{x}_k$ y los $r$ bits menos significativos de $x_k$ en este orden.
+Luego la matriz $A$ multiplica por derecha a este vector.
+Finalmente sumamos $\mathbf{x}_{k + m}$ a este vector ($\oplus$ es la adición bit a bit módulo 2), y obtenemos el siguiente vector $\mathbf{x}_{k + n}$.
+
+La forma de la matriz $A$ fue elegida para que el cálculo del  producto sea muy veloz.
+Específicamente, tomando la matriz $w \times w$
+\begin{align}
+    A =
+    \left(\begin{aligned}
+        &&          &&1          &&       &&   \\
+        &&          &&           &&\ddots &&   \\
+        &&          &&           &&       &&1  \\
+        &&a_{w-1}   &&a_{w-2}    &&\cdots &&a_0
+    \end{aligned}\right)
+\end{align}
+el cálculo de $\mathbf{x} A$ puede hacerse utilizando operaciones sobre bits
+\begin{align} \label{matrix_alternative}
+    \mathbf{x} A = 
+    \left\{\begin{aligned}
+    & (\mathbf{x} \gg 1)  &&\text{si } x_0 = 0    \\
+    & (\mathbf{x} \gg 1) \oplus \mathbf{a} && \text{si } x_0 = 1
+    \end{aligned}\right.
+\end{align}
+donde $\mathbf{a} = (a_{w - 1}, a_{w - 2}, \dots, a_0)$, $\mathbf{x} = (x_{w - 1}, x_{w - 2}, \dots, x_0)$.
+Además, los vectores $\mathbf{x}_k^u$ y $\mathbf{x}_{k + 1}^l$ de la recurrencia \ref{recurrence_equation} pueden ser calculados con la operación de conjunción bit a bit.
+
+Para mejorar la $k$-distribución a una precisión de $v$ bits, multiplicamos cada palabra generada por una matriz $w \times w$ invertible $T$ adecuada (llamada \emph{templamiento}).
+Esta matriz queda determinada como transformación lineal $\mathbf{x} \mapsto \mathbf{x} T$ por las sucesivas transformaciones
+\begin{align}
+    \mathbf{y} &:=
+        \mathbf{x} \oplus (\mathbf{x} \gg u) \\
+    \mathbf{y} &:=
+        \mathbf{y} \oplus ((\mathbf{y} \ll s) \bitand \mathbf{b})    \\
+    \mathbf{y} &:=
+        \mathbf{y} \oplus ((\mathbf{y} \ll t) \bitand \mathbf{c})    \\
+    \mathbf{z} &:=
+        \mathbf{y} \oplus (y \gg l)
+\end{align}
+donde $l$, $s$, $t$, y $u$ son enteros, $\mathbf{b}$ y $\mathbf{c}$ son máscaras de bits adecuadas con el tamaño de una palabra, y $\mathbf{x} \gg u$ denota un corrimiento a derecha ($\mathbf{x} \ll u$ un corrimiento a izquierda) de $u$ bits.
+
+\section{Implementación en C}
+La implementación depende de dos clases de parámetros: \begin{enumerate*}
+    \item \emph{parámetros de período} que determinan el período:
+    parametros enteros $w$ (tamaño de palabra), $n$ (grado de la recursión), $m$ (término medio), $r$ (punto de separación de una palabra), y un parámetro vectorial $\mathbf{a}$ (la matriz $A$), y
+    \item \emph{parámetros de templamiento} para conseguir $k$-distribución con precisión de $v$ bits: parámetros enteros $l$, $u$, $s$, $t$, y los parámetros vectoriales $\mathbf{b}$, $\mathbf{c}$.
+\end{enumerate*}
+
+Los parámetros de período que especifican la relación de recurrencia \ref{recurrence_equation} se ingresan como directivas al preprocesador.
+El grado de la recursión es $n = 624$ y el término medio es $m = 397$.
+El punto de separación de una palabra elegido es $31 = 32 - 1$.
+Esto lo podemos ver en las elecciones de las máscaras superiores e inferiores como $\mathbf{u}$ igual a \verb#0x80000000# igual a $10000000000000000000000000000000$, y $\mathbf{l}$ igual a \verb#0x7fffffff# igual a $01111111111111111111111111111111$.
+Con estas máscaras, dadas palabras $\mathbf{x}$ y $\mathbf{z}$, podemos calcular el vector $\mathbf{x}^u \concat \mathbf{z}^l$.
+Por un lado $\mathbf{x} \bitand \mathbf{u}$ es igual a $(x_{w - 1} \bitand 1) (x_{w - 2} \bitand 0) \cdots (x_{0} \bitand 0)$ es igual a $x_{w-1} 0 \cdots 0$.
+Por otro $\mathbf{z} \bitand \mathbf{l}$ es igual a $(z_{w - 1} \bitand 0) (z_{w - 2} \bitand 1) \cdots (z_0 \bitand 1)$ es igual a $0 z_{w - 2} \cdots z_0$.
+Entonces $(\mathbf{x} \bitand \mathbf{u}) \bitor (\mathbf{z} \bitand \mathbf{l})$ es igual a $(x_{w - 1} \bitor 0) (0 \bitor z_{w - 2}) \cdots (0 \bitor z_0)$ es igual a $x_{w - 1} z_{w - 2} \cdots z_{0}$.
+El vector $\mathbf{a}$ que determina la matriz $A$ es $10011001000010001011000011011111$.
+
+\begin{verbatim}
+/* Period parameters */
+
+#define N 624
+#define M 397
+#define MATRIX_A 0x9908b0df   /* constant vector a */
+#define UPPER_MASK 0x80000000 /* most significant w-r bits */
+#define LOWER_MASK 0x7fffffff /* least significant r bits */
+\end{verbatim}
+
+Los parámetros de templamiento que especifican la transformación lineal $T$ también se ingresan como directivas al preprocesador.
+Los parámetros enteros son $u = 11$, $s = 7$, $t = 15$, $l = 18$.
+Los parámetros vectoriales son $\mathbf{b}$ igual a ${10011101001011000101011010000000}$, y $\mathbf{c}$ igual a ${11101111110001100000000000000000}$.
+
+\begin{verbatim}
+/* Tempering parameters */
+#define TEMPERING_MASK_B 0x9d2c5680
+#define TEMPERING_MASK_C 0xefc60000
+#define TEMPERING_SHIFT_U(y)  (y >> 11)
+#define TEMPERING_SHIFT_S(y)  (y << 7)
+#define TEMPERING_SHIFT_T(y)  (y << 15)
+#define TEMPERING_SHIFT_L(y)  (y >> 18)
+\end{verbatim}
+
+Para ejecutar la recurrencia necesitamos un área de trabajo, lugar en la memoria, de $n$ palabras ($624 \times 32 = 19968$ bits).
+Esto es, un arreglo $\mathbf{X} = (\mathbf{x}_0, \dots, \mathbf{x}_{n - 1})$ de enteros largos no-signados.
+Aquí estamos suponiendo que trabajamos con una arquitectura de 32 bits ($w = 32$).
+Para inicializar el algoritmo con una única palabra (entero no-signado largo) ¡y evitarnos econtrar una fuente de 623 de ellas! pasamos esta a un generador congruencial multiplicativo $\mathbf{x}_{i + 1} = 69069 \mathbf{x}_i \text{ mod } 2^{32}$ implementado en una función \verb#sgenrand#.
+
+Observar que la operación de conjunción lógica $\bitand$ con el entero no-signado \verb#0xffffffff# no tiene ningún efecto, porque este último es idéndicamente igual a 1 como vector de bits.
+
+\begin{verbatim}
+static unsigned long mt[N];  /* the array for the state vector */
+static int mti=N+1;  /* mti==N+1 means mt[N] is not initialized */
+
+/* initializing the array with NONZERO seed */
+void
+sgenrand(seed)
+     unsigned long seed;
+{
+  /* setting initial seeds to mt[N] using         */
+  /* the generator Line 25 of Table 1 in          */
+  /* [KNUTH 1981, The Art of Computer Programming */
+  /* Vol. 2 (2nd Ed.), pp102]                     */
+  mt[0] = seed & 0xffffffff;
+  for (mti = 1; mti < N; mti++)
+    mt[mti] = (69069 * mt[mti-1]) & 0xffffffff;
+}
+\end{verbatim}
+
+Ahora implementamos la función \verb#genrand# que actualiza el estado del generador y devuelve un número pseudo-aleatorio \verb#y#
+\begin{verbatim}
+unsigned long /* for integer generation */
+genrand()
+{
+  unsigned long y;
+\end{verbatim}
+
+La alternativa en el cálculo del producto matricial \ref{matrix_alternative} se codifica como un arreglo \verb#mag01# con dos entradas, una corresponde a la acción sobre un vector $\mathbf{x} = (x_{w - 1}, x_{w - 2}, \dots, x_0)$ en el caso $x_0 = 0$ y la otra al caso $x_0 = 1$.
+De este modo $x_0 = \mathbf{x} \bitand 1$ (interpretando vectores de bits como enteros no-signados y viceversa) y el producto $x A$ puede calcularse como $(\mathbf{x} \gg 1) \oplus \texttt{mag01}[\mathbf{x} \bitand 1]$.
+\begin{verbatim}
+  static unsigned long mag01[2]={0x0, MATRIX_A};
+  /* mag01[x] = x * MATRIX_A for x=0,1 */
+\end{verbatim}
+
+Para evitar el uso de una operación numérica compleja como tomar módulo, la función actualiza el estado sólo cada $n$ (= 624) llamadas.
+La primera vez que se la llama lo hace, porque al finalizar la inicialización con la función \verb#sgenrand# la variable auxiliar \verb#mti# tiene valor $n$.
+Además, se verifica la existencia de una semilla y de no haberla se escoge una por defecto.
+\begin{verbatim}
+  if (mti >= N) { /* generate N words at one time */
+    int kk;
+
+    if (mti == N+1)   /* if sgenrand() has not been called,  */
+      sgenrand(4357); /* a default initial seed is used      */
+\end{verbatim}
+
+Cada elemento del estado $\mathbf{X} = (\mathbf{x}_0, \dots, \mathbf{x}_{n - 1}) = (\mathbf{x}_k)$ es actualizado.
+Primero se actualizan aquellos tales que $\mathbf{k} + m < n$, es decir para los cuales $\mathbf{x}_{k + m}$ es un elemento del estado $\mathbf{X}$.
+Luego se actualizan aquellos tales que $n - m \leq \mathbf{k} < n - 1$, es decir para los cuales $\mathbf{x}_{k + (m - n)}$ es un elemento del estado $\mathbf{X}$.
+Finalmente se actualiza el vector $\mathbf{x}_{n - 1}$ de forma individual porque los índices $n - 1$ y $0$ a los que tenemos que acceder no son contiguos.
+
+Expliquemos de qué modo las actualizaciones siguen la recurrencia $\mathbf{x}_{k + n} := \mathbf{x}_{k + m} \oplus ((\mathbf{x}_k^u \concat \mathbf{x}_{k + 1}^l) A)$.
+Para hacerlo escribimos $\mathbf{X'} = (\mathbf{x'}_0, \mathbf{x'}_1, \dots, \mathbf{x'}_{n - 1})$ para referirnos al nuevo estado que reemplazará a $\mathbf{X}$.
+Antes que nada observamos es que $\mathbf{X}, \mathbf{X'}$ siguen un orden $\mathbf{x}_0, \dots, \mathbf{x}_{n - 1}, \mathbf{x'}_0, \dots, \mathbf{x'}_{n - 1}$ dentro de la sucesión de números pseudo-aleatorios generada por el algoritmo.
+Esto nos permite orientarnos a la hora de expresar la recurrencia.
+
+En el primer bucle \verb#for# tenemos $0 \leq k < n - m$.
+Aquí para calcular $\mathbf{x'}_k$ según la recurrencia necesitamos del miembro del orden que lo precede en $n$ posiciones $\mathbf{x}_k$ y de su sucesor $\mathbf{x}_{k + 1}$ (con $k + 1 \leq n - 1$ porque $k < n - m$);
+también necesitamos del elemento $\mathbf{x}_{k + m}$ que se encuentra $m$ posiciones por delante de $\mathbf{x}_k$ (con $k + m \leq n - 1$ porque $k < n - m$).
+Luego $\mathbf{x'}_k$ es igual a $\mathbf{x}_{k + m} \oplus (\mathbf{y} \gg 1) \oplus \texttt{mag01}[\mathbf{y} \bitand 1]$ siendo $\mathbf{y} = \mathbf{x}_k^u \concat \mathbf{x}_{k + 1}^l$.
+
+En el segundo bucle \verb#for# tenemos $n - m \leq k < n - 1$.
+Al igual que en el paso anterior, para calcular $\mathbf{x'}_k$ según la recurrencia necesitamos del miembro del orden que lo precede en $n$ posiciones $\mathbf{x}_k$ y de su sucesor $\mathbf{x}_{k + 1}$ (con $k + 1 \leq n - 1$ porque $k < n - 1$).
+A diferencia del caso anterior, el elemento que se encuentra $m$ posiciones por delante de $\mathbf{x}_k$ (siendo $n - m \leq k$) no pertenece al estado $\mathbf{X}$ si no a $\mathbf{X'}$ y es $\mathbf{x'}_{k + (m - n)}$ (con $0 \leq k + (m - n)$ porque $n - m \leq k$, y $k + (m - n) \leq n - 1$ porque $k \leq n - 1$).
+Aquí no hay ningún error y ningún problema, porque el primero de estos vectores que necesitamos es $\mathbf{x'}_{(n - m) + (m - n)} = \mathbf{x'}_0$ y se calcula en el paso anterior; y porque a partir de ahí el vector $\mathbf{x'}_{k + (m - n)}$ con $k + (m - n) < k$ fue calculado antes de llegar a $\mathbf{x'}_k$. 
+Luego $\mathbf{x'}_k$ es igual a $\mathbf{x'}_{k + (m - n)} \oplus (\mathbf{y} \gg 1) \oplus \texttt{mag01}[\mathbf{y} \bitand 1]$ siendo $\mathbf{y} = \mathbf{x}_k^u \concat \mathbf{x}_{k + 1}^l$.
+
+Finalmente, cuando para calcular el último vector $\mathbf{x'}_{n - 1}$ necesitamos del miembro del orden que lo precede en $n$ posiciones $\mathbf{x}_{n - 1}$ y de su sucesor $\mathbf{x'}_0$ (en este caso sus índices no son contiguos).
+También necesitamos el elemento $\mathbf{x'}_{m - 1}$ que se encuentra $m$ posiciones por delante de $\mathbf{x}_{n - 1}$.
+Luego $\mathbf{x'}_{n - 1}$ es igual a $\mathbf{x'}_{m - 1} \oplus (\mathbf{y} \gg 1) \oplus \texttt{mag01}[\mathbf{y} \bitand 1]$ siendo $\mathbf{y} = \mathbf{x}_{n - 1}^u \concat \mathbf{x'}_0^l$.
+
+\begin{verbatim}
+    for (kk = 0; kk < N-M; kk++) {
+      y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
+      mt[kk] = mt[kk+M] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
+    for(; kk < N-1; kk++) {
+      y = (mt[kk]&UPPER_MASK)|(mt[kk+1]&LOWER_MASK);
+      mt[kk] = mt[kk + (M-N)] ^ (y >> 1) ^ mag01[y & 0x1];
+    }
+  y = (mt[N-1]&UPPER_MASK) | (mt[0]&LOWER_MASK);
+  mt[N-1] = mt[M-1] ^ (y >> 1) ^ mag01[y & 0x1];
+\end{verbatim}
+
+El condicional termina reiniciando la variable auxiliar \verb#mti# a 0, lo cual hará que la proxima vez que llamemos a la función \verb#genrand# no volvamos a actualizar el estado.
+
+\begin{verbatim}
+  mti = 0;
+  }    
+\end{verbatim}
+
+Guardamos la palabra \verb#mt[mti]# en la variable \verb#y#, luego aumentamos la variable auxiliar \verb#mti# (que determina cuando volvemos a actualizar el estado del generador).
+Aplicamos la transformación de templamiento a \verb#mti# y devolvemos el resultado.
+
+\begin{verbatim}
+  y = mt[mti++];
+  y ^= TEMPERING_SHIFT_U(y);
+  y ^= TEMPERING_SHIFT_S(y) & TEMPERING_MASK_B;
+  y ^= TEMPERING_SHIFT_T(y) & TEMPERING_MASK_C;
+  y ^= TEMPERING_SHIFT_L(y);
+
+  return y; /* for integer generation */
+}
+\end{verbatim}
+
+Para explorar un poco estas funciones que describimos incluímos un pequeño programa que genera 1000 números aleatorios
+
+\begin{verbatim}
+/* this main() outputs first 1000 generated numbers */
+int main()
+{
+  sgenrand(4357); /* any nonzero integer can be used as a seed */
+  for (int j = 0; j < 1000; j++) {
+    printf("%lu ", genrand());
+    if (j % 8 == 7) printf("\n");
+  }
+  printf("\n");
+}
+\end{verbatim}
+
+\section{Referencias}
+
+Tipo: presentación;
+Título: \emph{rand() Considered Harmful}; 
+Autor: Stefan T. Lavavej; 
+Dónde: GoingNative 2013;
+Filminas: \url{https://onedrive.live.com/view.aspx?resid=E66E02DC83EFB165!312&cid=e66e02dc83efb165&lor=shortUrl}
+
+Tipo: presentación;
+Título: \emph{What C++ Programmers Need to Know about Header \textless random\textgreater};
+Autor: Walter E. Brown;
+Dónde: CppCon 2016;
+Filminas: \url{https://github.com/cppcon/cppcon2016}
+
+Tipo: presentación;
+Título: \emph{I Just Wanted a Random Integer!};
+Autor: Cheinan Marks;
+Dónde: CppCon 2016;
+Filminas: \url{https://github.com/cppcon/cppcon2016}
+
+Tipo: Seminario;
+Título: \emph{PCG: A Family of Better Random Number Generators};
+Autor: Melissa O'Neill;
+Dónde: Colloquium on Computer Systems Seminar Series, Universidad de Stanford;
+
+Tipo: página web;
+URL: \url{https://www.random.org}
+Autor: Mads Haar;
+
+Tipo: publicación académica;
+Título: \emph{Mersenne Twister: A 623-dimensionally equidistributed uniform pseudorandom number generator};
+Autores: Makoto Matsumoto y Takuji Nishimura;
+Dónde: ACM Transactions on Modeling and Computer Simulations: Special Issue on Uniform Random Number Generation (1998);
+URL: \url{http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf}
+
+Tipo: artículo;
+Título: \emph{Random Number Generation in C++11};
+Autor: Walter E. Brown;
+URL: \url{https://isocpp.org/files/papers/n3551.pdf}.
+\end{document}
